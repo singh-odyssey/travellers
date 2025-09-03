@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+
+# Build
+.next
+out
+
+# Next.js hosting
+.vercel
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Prisma
+prisma/dev.db
+prisma/*.db
+prisma/*.db-journal
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage
+.nyc_output
+
+# Caches
+.turbo
+.eslintcache
+.pnpm-store
