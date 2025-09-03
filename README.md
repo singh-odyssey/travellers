@@ -1,46 +1,22 @@
-# Wayfindr
+# Travellers
 
-Meet verified travellers. Make real connections.
+Find your people on the same path. Travellers helps you meet verified folks heading to your destination around the same time—safely and for free.
 
-## Features
-- Modern Next.js 14 app router
-- Email/password auth (credentials) with Prisma
-- Ticket upload + manual verification flow
-- Only verified travellers can see each other for the same destination/date-window
-- Tailwind CSS for a clean, responsive UI
-- SQLite by default (easy local dev). Switch to Postgres later without code changes.
+## What it is
+Upload your ticket privately, get verified, and discover other travellers bound for the same place and dates. Only verified profiles can see one another for overlapping trips.
 
-## Quickstart
+## Contributing
+Open source and community-built. See `CONTRIBUTING.md` to get started.
 
-1. Install dependencies
-```bash
-npm install
-```
-
-2. Configure env
-Create `.env` at project root:
-```
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="dev-secret-change"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-3. Setup database
-```bash
-npm run db:push
-```
-
-4. Start dev server
-```bash
-npm run dev
-```
-
-Open http://localhost:3000
+## Safety, simply
+- Tickets are used only for verification and never shown to others
+- Verified-only visibility for overlapping trips
+- Be kind and follow the Code of Conduct
 
 ## Tech
-See `TECH_STACK.md` for detailed choices and best practices.
+Next.js 14, Prisma, NextAuth, Tailwind CSS. See `TECH_STACK.md` for details.
 
 ## Open source
 - MIT License
 - PRs welcome. Please read `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
-A website where solo-travellers can meet other travellers travelling to same destination 
+ 
