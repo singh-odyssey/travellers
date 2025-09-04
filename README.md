@@ -1,46 +1,30 @@
-# Wayfindr
+# travellersmeet
 
 Meet verified travellers. Make real connections.
 
-## Features
-- Modern Next.js 14 app router
-- Email/password auth (credentials) with Prisma
-- Ticket upload + manual verification flow
-- Only verified travellers can see each other for the same destination/date-window
+travellersmeet helps solo travellers find and connect with others heading to the same destination around the same dates. Travellers upload a proof-of-travel ticket, get verified, and then become discoverable to other verified travellers for that trip window. Privacy-first: only verified users can view other verified profiles for matching destinations.
+
+## What’s inside
+- Next.js 14 (App Router) + TypeScript
+- Authentication with credentials (NextAuth v5) and Prisma
+- Ticket upload with a simple verification workflow
+- Matching by destination and date window (visibility only for verified users)
 - Tailwind CSS for a clean, responsive UI
-- SQLite by default (easy local dev). Switch to Postgres later without code changes.
+- PostgreSQL via Prisma
 
-## Quickstart
+## How it works (high level)
+1) Sign up or sign in with email and password
+2) Upload your ticket for the upcoming trip
+3) After verification, discover other verified travellers for the same destination/date window
 
-1. Install dependencies
-```bash
-npm install
-```
+## Project status
+Early-stage, under active development. Expect rapid changes.
 
-2. Configure env
-Create `.env` at project root:
-```
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="dev-secret-change"
-NEXTAUTH_URL="http://localhost:3000"
-```
+## Learn more
+- Tech stack and practices: `TECH_STACK.md`
+- Contributing guide (local setup, scripts, PR process): `CONTRIBUTING.md`
+- Code of Conduct: `CODE_OF_CONDUCT.md`
+- License: `LICENSE`
 
-3. Setup database
-```bash
-npm run db:push
-```
-
-4. Start dev server
-```bash
-npm run dev
-```
-
-Open http://localhost:3000
-
-## Tech
-See `TECH_STACK.md` for detailed choices and best practices.
-
-## Open source
-- MIT License
-- PRs welcome. Please read `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
-A website where solo-travellers can meet other travellers travelling to same destination 
+## Acknowledgements
+Built with the amazing Next.js, Prisma, and Tailwind ecosystems.

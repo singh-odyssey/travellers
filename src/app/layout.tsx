@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Wayfindr — Meet verified travellers",
+  title: "travellersmeet — Meet verified travellers",
   description: "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
 };
 
