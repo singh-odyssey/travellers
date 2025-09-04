@@ -1,0 +1,28 @@
+name: Issue Acknowledgement
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  acknowledge:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Comment with acknowledgement
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = `Thanks for opening this issue, @${issue.user.login}!\n\n` +
+              `We've received your report and will review it within 24 hours. ` +
+              `In the meantime, please ensure you've filled out all required details. ` +
+              `If you have more information (logs, screenshots, reproduction steps), feel free to add them here.\n\n` +
+              `— The maintainers`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body,
+            });

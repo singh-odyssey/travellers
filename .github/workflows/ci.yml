@@ -3,7 +3,6 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
 
 jobs:
   build-and-lint:
@@ -14,14 +13,19 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.18.0'
           cache: 'npm'
+      - name: Show versions
+        run: |
+          node -v
+          npm -v
+          npx eslint -v || true
       - name: Install dependencies
         run: npm ci
       - name: Generate Prisma client
         run: npx prisma generate
       - name: Lint
-        run: npm run lint
+        run: npm run lint -- --no-cache || (echo "Lint failed. Showing ESLint output with direct runner..." && npx eslint . --max-warnings=0 && exit 1)
       - name: Type check
         run: npx tsc --noEmit
       - name: Build
