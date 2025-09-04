@@ -3,7 +3,7 @@
 - Next.js 14 (App Router) — SSR, file-based routing, server actions where helpful
 - TypeScript — strict mode
 - Prisma ORM — schema-first, migrations, type-safe queries
-- SQLite for dev — portable, zero-config; can move to Postgres in prod
+- PostgreSQL — primary database via Prisma (local dev and production)
 - NextAuth v5 (Credentials) — session management
 - Tailwind CSS + @tailwindcss/forms — fast, accessible UI
 - Zod — request validation (to add for APIs)
@@ -22,7 +22,6 @@
 - Verify ticket ownership manually or build automated checks later (name/date consistency)
 
 ## Future improvements
-- Switch to Postgres
 - Real file storage via UploadThing or S3
 - Admin dashboard for ticket verification
 - Destination/date matching windows (e.g. +/- 3 days)
