@@ -1,5 +1,6 @@
+## fix #()
 ## Summary
-What changes are included in this PR? Why?
+What changes are included in this PR?
 
 ## Screenshots
 UI before/after if relevant.
@@ -13,5 +14,4 @@ Steps to verify the change locally.
 - [ ] Tests added/updated (if changing logic)
 - [ ] Docs updated (README/CONTRIBUTING as needed)
 
-## Related issues
-Link to any related issues.
+
