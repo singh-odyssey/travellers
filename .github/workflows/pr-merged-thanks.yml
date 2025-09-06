@@ -1,42 +1,36 @@
-name: PR Merged Thanks
+name: Auto Comment on PR Merge
 
-# Runs in the base repo context and works for PRs from forks.
-# Safe: does NOT check out code or run PR scripts; only posts a comment.
 on:
-  pull_request_target:
+  pull_request:
     types: [closed]
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
-  thank-you:
-    if: github.event.pull_request.merged == true
+  comment:
     runs-on: ubuntu-latest
     permissions:
-      issues: write        # to create a comment on the PR conversation
-      pull-requests: read
+      pull-requests: write
+    if: github.event.pull_request.merged == true
+
     steps:
-      - name: Thank contributor
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const pr = context.payload.pull_request;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-            const author = pr.user?.login ?? 'contributor';
-            if (/\[bot\]$/.test(author)) {
-              core.info(`Skipping bot PR #${pr.number}`);
-              return;
-            }
-
-            const marker = '<!-- pr-merged-thanks -->';
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner, repo, issue_number: pr.number, per_page: 100
-            });
-            if (comments.some(c => typeof c.body === 'string' && c.body.includes(marker))) {
-              core.info(`Already thanked on PR #${pr.number}`);
-              return;
-            }
-
-            const body = `Thanks for your contribution, @${author}! 🎉\n\nYour pull request has been merged. We appreciate your time and effort!\n\n${marker}`;
-            await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
-            core.info(`Thanked @${author} on PR #${pr.number}`);
+    - name: Add Comment to Issue
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        COMMENT=$(cat <<EOF
+        {
+          "body": "🎉 Your pull request has been successfully merged! 🎉 Thank you for your valuable contribution to our project. \n\n  Please do star the repo and Keep up the fantastic work! 🚀"
+        }
+        EOF
+        )
+        curl -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
+          -d "$COMMENT"
