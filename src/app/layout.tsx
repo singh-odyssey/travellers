@@ -1,6 +1,8 @@
 import "@/styles/globals.css";
 import { ReactNode } from "react";
 import { Inter } from "next/font/google";
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +15,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className}>
       <body className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900 antialiased">
-        {children}
+        <SiteHeader />
+        <div className="pb-16 pt-2">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   );
