@@ -1,0 +1,38 @@
+name: PR Acknowledgement
+
+# Safe for forks: uses pull_request_target but runs only GitHub API calls
+on:
+  pull_request_target:
+    types: [opened, reopened, ready_for_review]
+
+jobs:
+  acknowledge:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write       # to create a comment on the PR conversation
+      pull-requests: write
+    steps:
+      - name: Acknowledge PR and share next steps
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const author = pr.user?.login ?? 'contributor';
+            const body = `Thanks for opening this PR, @${author}! 👋\n\n` +
+              `Our maintainers will review it shortly. Meanwhile please:\n` +
+              `- Ensure CI is green (lint, typecheck, build).\n` +
+              `- Confirm the PR template checklist is complete.\n` +
+              `- Add screenshots for UI changes.\n\n` +
+              `If anything changes, feel free to push updates—this thread will stay open.`;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pr.number,
+              body,
+            });
+            core.info(`Acknowledged PR #${pr.number}`);

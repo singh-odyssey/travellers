@@ -1,27 +1,57 @@
 name: PR Merged Thanks
 
+# Safer approach: run on pushes to the default branch and discover
+# merged PRs associated with the pushed commits. This avoids
+# pull_request_target while still thanking external contributors.
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [ main ]
 
 jobs:
   thank-you:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
+      issues: write          # to post a comment on the PR conversation
+      pull-requests: read    # to read PR metadata
     steps:
-      - name: Thank contributor
+      - name: Thank contributor(s) for merged PRs in this push
         uses: actions/github-script@v7
         with:
           script: |
-            const pr = context.payload.pull_request;
-            const author = pr.user.login;
-            const body = `Thanks for your contribution, @${author}! 🎉\n\n` +
-              `Your pull request has been merged. We appreciate your time and effort!`;
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: pr.number,
-              body,
-            });
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Collect SHAs from this push (head SHA plus individual commits)
+            const commits = context.payload.commits || [];
+            const shas = new Set([context.sha, ...commits.map(c => c.id)]);
+
+            const thanked = new Set();
+
+            for (const sha of shas) {
+              // Find PRs associated with each commit
+              const prs = await github.paginate(
+                github.rest.repos.listPullRequestsAssociatedWithCommit,
+                { owner, repo, commit_sha: sha }
+              );
+
+              for (const pr of prs) {
+                if (!pr.merged_at) continue; // only thank when actually merged
+                if (thanked.has(pr.number)) continue; // avoid duplicates across SHAs
+
+                const author = pr.user?.login ?? 'contributor';
+                const body = `Thanks for your contribution, @${author}! 🎉\n\nYour pull request has been merged. We appreciate your time and effort!`;
+
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: pr.number,
+                  body,
+                });
+                core.info(`Thanked @${author} on PR #${pr.number}`);
+                thanked.add(pr.number);
+              }
+            }
+
+            if (thanked.size === 0) {
+              core.info('No merged PRs associated with this push.');
+            }
