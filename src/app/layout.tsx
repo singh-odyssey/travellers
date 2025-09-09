@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 
+import { ThemeProvider } from "@/state/theme";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -13,6 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
+    <ThemeProvider>
     <html lang="en" className={inter.className}>
       <body className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900 antialiased">
         <SiteHeader />
@@ -20,5 +23,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <SiteFooter />
       </body>
     </html>
+    </ThemeProvider>
   );
 }
