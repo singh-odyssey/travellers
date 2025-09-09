@@ -1,33 +1,48 @@
 "use client";
 
+import { useTheme } from "@/state/theme";
 import Link from "next/link";
 import { useState } from "react";
 
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
+
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const {theme, changeTheme} = useTheme()
+  
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 transition duration-150 dark:border-slate-800 dark:bg-slate-900/80 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-slate-900 text-white">✈️</span>
-            <span className="text-lg font-semibold tracking-tight">travellersmeet</span>
+            <span className="text-lg font-semibold tracking-tight dark:text-white">travellersmeet</span>
           </Link>
         </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link href="#features" className="text-sm text-slate-700 hover:text-slate-900">Features</Link>
-          <Link href="#how-it-works" className="text-sm text-slate-700 hover:text-slate-900">How it works</Link>
-          <Link href="#testimonials" className="text-sm text-slate-700 hover:text-slate-900">Stories</Link>
-          <Link href="#faq" className="text-sm text-slate-700 hover:text-slate-900">FAQ</Link>
-          <Link href="/upload" className="text-sm text-slate-700 hover:text-slate-900">Upload</Link>
+        <nav className="hidden items-center text-sm text-slate-800 dark:text-slate-400 hover:*:opacity-80 gap-6 md:flex">
+          <Link href="#features">Features</Link>
+          <Link href="#how-it-works">How it works</Link>
+          <Link href="#testimonials">Stories</Link>
+          <Link href="#faq">FAQ</Link>
+          <Link href="/upload">Upload</Link>
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <Link href="/signin" className="text-sm font-medium text-slate-700 hover:text-slate-900">Sign in</Link>
-          <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">Get started</Link>
+        <div className="hidden md:justify-between items-center gap-3 md:flex">
+          <div></div>
+
+          <div className="flex gap-3 items-center">
+          <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">Sign in</Link>
+          <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">Get started</Link>
+          </div>
+
+          <button onClick={changeTheme} className="float-right">
+            {theme==="dark"? <HiOutlineMoon color="#64748B" size={24}/> : <HiOutlineSun color="#000" size={24}/>}
+          </button>
         </div>
+      
+         
 
         <button
           aria-label="Toggle menu"
@@ -41,7 +56,7 @@ export default function SiteHeader() {
               <path fillRule="evenodd" d="M3.75 5.25a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm0 6a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm.75 5.25a.75.75 0 0 0 0 1.5h15a.75.75 0 0 0 0-1.5h-15Z" clipRule="evenodd" />
             )}
           </svg>
-        </button>
+        </button>        
       </div>
 
       {open && (

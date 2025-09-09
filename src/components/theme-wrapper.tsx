@@ -13,7 +13,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" className={`${inter.className} ${theme}`}>
-      <body>{children}</body>
+      <body className="dark:bg-slate-950">{children}</body>
     </html>
   );
 }

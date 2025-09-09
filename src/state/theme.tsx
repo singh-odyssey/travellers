@@ -13,18 +13,15 @@ const ThemeContext = createContext<ThemeContext>({
 })
 
 export function ThemeProvider({children}: {children: ReactNode}) {
-    const [theme,setTheme] = useState<'light'|'dark' | null> (null)
-
+    const [theme,setTheme] = useState<'light'|'dark' | null> ('dark')
     useEffect(()=> {
         const darkSys = window.matchMedia('(prefers-color-scheme: dark)').matches
         setTheme(darkSys ? "dark" :"light")
     },[])
 
-    if(!theme) return null
-
     const changeTheme = ()=> setTheme((p)=> (p==="light" ? "dark" : "light"))
 
-    return(
+    if (theme) return(
         <ThemeContext.Provider value={{theme,changeTheme}}>
             {children}
         </ThemeContext.Provider>
