@@ -20,6 +20,7 @@ jobs:
               `In the meantime, please ensure you've filled out all required details. ` +
               `If you have more information (logs, screenshots, reproduction steps), feel free to add them here.\n\n` +
               `Your contributions are highly appreciated!😊 `+
+              `- Hit the star ⭐ button to show your support!\n` +
               `If your issue goes stale for more than one day, you can tag and comment on this same issue by tagging **@singh-odyssey** `+
               `— singh-odyssey`;
             await github.rest.issues.createComment({

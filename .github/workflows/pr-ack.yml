@@ -25,6 +25,7 @@ jobs:
             const body = `Thanks for opening this PR, @${author}! 👋\n\n` +
               `Our maintainers will review it shortly. Estimate Time is 5-8 hrs .Meanwhile please:\n` +
               `- Ensure CI is green (lint, typecheck, build).\n` +
+              `- Hit the star ⭐ button to show your support!\n` +
               `- Confirm the PR template checklist is complete.\n` +
               `- Add screenshots for UI changes.\n\n` +
               `If anything changes, feel free to push updates—this thread will stay open.`;
