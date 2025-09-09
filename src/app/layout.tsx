@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <Wrapper>
         <SiteHeader />
-        <div className="pb-16 pt-2 bg-white dark:bg-gray-950 dark:text-white">{children}</div>
+        <div className="pb-16 pt-2 transition duration-150 bg-white dark:bg-gray-950 dark:text-white">{children}</div>
         <SiteFooter />
       </Wrapper>
     </ThemeProvider>
