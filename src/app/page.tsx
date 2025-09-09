@@ -8,14 +8,14 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 pt-14">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm">
+            <div className="inline-flex items-center gap-2 dark:bg-slate-800 dark:border-slate-800 dark:text-gray-400 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm">
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
               Now verifying tickets for fall trips
             </div>
             <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">
               Meet verified travellers. Make real connections.
             </h1>
-            <p className="mt-4 text-lg leading-7 text-slate-600">
+            <p className="mt-4 text-lg leading-7 text-slate-600 dark:text-slate-400">
               travellersmeet helps solo travellers find others headed to the same city and dates — verified with a real ticket, not just vibes.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -42,7 +42,7 @@ export default function HomePage() {
 
       {/* Trust */}
       <section className="mx-auto mt-10 max-w-6xl px-6">
-        <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-6 py-4 text-xs text-slate-600 shadow-sm sm:grid-cols-3">
+        <div className="dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800 grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-6 py-4 text-xs text-slate-600 shadow-sm sm:grid-cols-3">
           <p>Ticket-verified profiles</p>
           <p>Zero ads. No selling your data</p>
           <p>Report + block controls</p>
@@ -53,7 +53,7 @@ export default function HomePage() {
       <section id="features" className="mx-auto mt-24 max-w-6xl px-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Everything you need to find your crew</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-slate-600">
+          <p className="mx-auto mt-2 max-w-2xl text-slate-600 dark:text-slate-400">
             Built for safety and ease. Upload a ticket once and we do the rest.
           </p>
         </div>
@@ -76,13 +76,13 @@ export default function HomePage() {
               img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
             },
           ].map((f) => (
-            <div key={f.title} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div key={f.title} className="overflow-hidden rounded-xl border dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 text-black  border-slate-200  bg-white shadow-sm">
               <div className="relative h-40 w-full">
                 <Image src={f.img} alt="" fill className="object-cover" />
               </div>
               <div className="p-5">
                 <h3 className="text-lg font-semibold">{f.title}</h3>
-                <p className="mt-1 text-slate-600">{f.desc}</p>
+                <p className="mt-1 dark:text-slate-400 text-slate-600">{f.desc}</p>
               </div>
             </div>
           ))}
@@ -97,21 +97,21 @@ export default function HomePage() {
             { title: "Upload ticket", desc: "Submit your ticket for a quick verification." },
             { title: "Find matches", desc: "See people in your destination window and say hello." },
           ].map((s, i) => (
-            <div key={s.title} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-slate-900 text-sm font-semibold text-white">{i + 1}</div>
+            <div key={s.title} className="rounded-xl border dark:border-slate-800 dark:bg-slate-900  border-slate-200 bg-white p-6 shadow-sm">
+              <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-slate-900 dark:bg-slate-600 text-sm font-semibold text-white">{i + 1}</div>
               <h3 className="mt-3 text-lg font-semibold">{s.title}</h3>
-              <p className="mt-1 text-slate-600">{s.desc}</p>
+              <p className="mt-1 text-slate-600 dark:text-slate-400">{s.desc}</p>
             </div>
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:bg-slate-800">Create your account</Link>
+          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:opacity-90 transition duration-150 dark:bg-white dark:text-slate-900">Create your account</Link>
         </div>
       </section>
 
       {/* Testimonials */}
       <section id="testimonials" className="mx-auto mt-24 max-w-6xl px-6">
-        <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-br from-slate-900 to-slate-950 bg-white p-8 shadow-sm">
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
@@ -130,9 +130,9 @@ export default function HomePage() {
                 trip: "Reykjavík in July",
               },
             ].map((t) => (
-              <figure key={t.name} className="rounded-lg border border-slate-200 p-5">
-                <blockquote className="text-slate-800">“{t.quote}”</blockquote>
-                <figcaption className="mt-3 text-sm text-slate-600">{t.name} · {t.trip}</figcaption>
+              <figure key={t.name} className="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-900 p-5">
+                <blockquote className="text-slate-800 dark:text-slate-200">“{t.quote}”</blockquote>
+                <figcaption className="mt-3 text-sm text-slate-600 dark:text-slate-400">{t.name} · {t.trip}</figcaption>
               </figure>
             ))}
           </div>
@@ -158,9 +158,9 @@ export default function HomePage() {
               a: "Getting started and basic matching are free while we're in beta.",
             },
           ].map((f) => (
-            <div key={f.q} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="font-medium text-slate-900">{f.q}</p>
-              <p className="mt-1 text-slate-600">{f.a}</p>
+            <div key={f.q} className="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-900 bg-white p-5 shadow-sm">
+              <p className="font-medium text-slate-900 dark:text-slate-200">{f.q}</p>
+              <p className="mt-1 text-slate-600 dark:text-slate-400">{f.a}</p>
             </div>
           ))}
         </div>
