@@ -15,7 +15,7 @@ export default async function UploadPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <h1 className="text-2xl font-semibold">Upload your ticket</h1>
-      <p className="mt-2 text-slate-600">We only show verified users who uploaded a destination ticket.</p>
+      <p className="mt-2 text-slate-600 dark:text-slate-400">We only show verified users who uploaded a destination ticket.</p>
       <div className="mt-8">
         <TicketUploadForm />
       </div>
