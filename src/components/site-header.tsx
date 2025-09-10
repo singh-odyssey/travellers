@@ -8,7 +8,11 @@ import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import {AnimatePresence, motion} from "framer-motion"
 import Toggle from "./toggle";
 
-export default function SiteHeader() {
+type Props = {
+  session :any;
+}
+
+export default function SiteHeader({session}: Props) {
   const [open, setOpen] = useState(false);
   const {theme, changeTheme} = useTheme()
   
@@ -44,10 +48,11 @@ export default function SiteHeader() {
         <div className="hidden md:justify-between items-center gap-3 md:flex">
           <div></div>
 
+          { session?.user?.id ? <div><Link className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" href="/dashboard">Dashboard</Link></div> :
           <div className="flex gap-3 items-center">
           <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">Sign in</Link>
           <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">Get started</Link>
-          </div>
+          </div>}
 
           <button onClick={changeTheme} className="float-right">
             {theme==="dark"? <HiOutlineMoon color="#64748B" size={24}/> : <HiOutlineSun color="#000" size={24}/>}
@@ -85,10 +90,12 @@ export default function SiteHeader() {
                 <p>Dark Theme</p>
                 <Toggle theme={theme} changeTheme={changeTheme}/>
               </div>
-              <div className="mt-2 flex items-center gap-3">
-                <Link href="/signin" className="rounded px-2 py-2 dark:text-slate-400 text-slate-800 " onClick={() => setOpen(false)}>Sign in</Link>
-                <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:text-slate-900 dark:bg-white" onClick={() => setOpen(false)}>Get started</Link>
-              </div>
+              { session?.user?.id ? <div className="mt-4"><Link className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" href="/dashboard">Dashboard</Link></div> :
+          <div className="flex mt-4 gap-3 items-center">
+          <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">Sign in</Link>
+          <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">Get started</Link>
+          </div>
+          }
             </div>
           </div>
         </motion.div>
