@@ -15,7 +15,12 @@ export default function SiteFooter() {
             <Link href="/signup" className="hover:text-slate-900">Get started</Link>
           </nav>
         </div>
-        <p className="mt-6 text-xs text-slate-500">© {new Date().getFullYear()} travellersmeet. All rights reserved.</p>
+        <div className="mt-6 flex flex-col items-center justify-center gap-3">
+          <p className="text-center text-sm font-medium text-slate-700">
+            Made with love <span className="text-red-500">❤️</span> By The Community
+          </p>
+          <p className="text-xs text-slate-500">© {new Date().getFullYear()} travellersmeet. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );
