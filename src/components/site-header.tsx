@@ -22,6 +22,7 @@ export default function SiteHeader() {
     }
   },[open])
 
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 transition duration-150 dark:border-slate-800 dark:bg-slate-900/80 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
@@ -75,11 +76,11 @@ export default function SiteHeader() {
         <motion.div initial={{maxHeight: 0}} exit={{maxHeight:0}}  animate={{maxHeight: 500}} transition={{duration: 0.2}} className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150">
           <div className=" mx-auto max-w-6xl px-6 py-3">
             <div className="grid gap-2 dark:*:text-slate-200">
-              <Link href="#features" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Features</Link>
-              <Link href="#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>How it works</Link>
-              <Link href="#testimonials" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Stories</Link>
-              <Link href="#faq" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>FAQ</Link>
-              <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Upload</Link>
+              <Link href="#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Features</Link>
+              <Link href="#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>How it works</Link>
+              <Link href="#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
+              <Link href="#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
+              <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Upload</Link>
               <div className="flex pl-2 pr-8 py-2 justify-between">
                 <p>Dark Theme</p>
                 <Toggle theme={theme} changeTheme={changeTheme}/>
