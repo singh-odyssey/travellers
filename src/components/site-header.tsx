@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
+import {AnimatePresence, motion} from "framer-motion"
+import Toggle from "./toggle";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -46,7 +48,7 @@ export default function SiteHeader() {
 
         <button
           aria-label="Toggle menu"
-          className="inline-flex items-center justify-center rounded-md p-2 hover:bg-slate-100 md:hidden"
+          className="inline-flex items-center justify-end rounded-md dark:text-white text-slate-800 p-2 md:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
@@ -58,24 +60,30 @@ export default function SiteHeader() {
           </svg>
         </button>        
       </div>
-
+      
+      <AnimatePresence>
       {open && (
-        <div className="border-t border-slate-200/60 bg-white md:hidden">
-          <nav className="mx-auto max-w-6xl px-6 py-3">
-            <div className="grid gap-2">
+        <motion.div initial={{maxHeight: 0}} exit={{maxHeight:0}}  animate={{maxHeight: 500}} transition={{duration: 0.2}} className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150">
+          <div className=" mx-auto max-w-6xl px-6 py-3">
+            <div className="grid gap-2 dark:*:text-slate-200">
               <Link href="#features" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Features</Link>
               <Link href="#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>How it works</Link>
               <Link href="#testimonials" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Stories</Link>
               <Link href="#faq" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>FAQ</Link>
               <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Upload</Link>
+              <div className="flex pl-2 pr-8 py-2 justify-between">
+                <p>Dark Theme</p>
+                <Toggle theme={theme} changeTheme={changeTheme}/>
+              </div>
               <div className="mt-2 flex items-center gap-3">
-                <Link href="/signin" className="rounded px-2 py-2 text-slate-800 hover:bg-slate-100" onClick={() => setOpen(false)}>Sign in</Link>
-                <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800" onClick={() => setOpen(false)}>Get started</Link>
+                <Link href="/signin" className="rounded px-2 py-2 dark:text-slate-400 text-slate-800 " onClick={() => setOpen(false)}>Sign in</Link>
+                <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white dark:text-slate-900 dark:bg-white" onClick={() => setOpen(false)}>Get started</Link>
               </div>
             </div>
-          </nav>
-        </div>
+          </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </header>
   );
 }
