@@ -4,6 +4,11 @@ import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 
+import { auth } from "@/lib/auth";
+
+import { ThemeProvider } from "@/state/theme";
+import { Wrapper } from "@/components/theme-wrapper";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -11,14 +16,19 @@ export const metadata = {
   description: "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+
+
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  
+  const session = await auth()
+
   return (
-    <html lang="en" className={inter.className}>
-      <body className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900 antialiased">
-        <SiteHeader />
-        <div className="pb-16 pt-2">{children}</div>
+    <ThemeProvider>
+      <Wrapper>
+        <SiteHeader session={session} />
+        <div className="pb-16 pt-2 transition duration-150 bg-white dark:bg-gray-950 dark:text-white">{children}</div>
         <SiteFooter />
-      </body>
-    </html>
+      </Wrapper>
+    </ThemeProvider>
   );
 }
