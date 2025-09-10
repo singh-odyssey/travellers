@@ -1,31 +1,33 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
+import { z } from "zod";
+
+const signupSchema = z.object({
+  name: z.string().min(2).max(80),
+  email: z.string().email(),
+  password: z.string().min(8).max(100),
+});
 
 export async function POST(req: NextRequest) {
   const form = await req.formData();
-  const name = String(form.get("name") || "").trim();
-  const email = String(form.get("email") || "").toLowerCase().trim();
-  const password = String(form.get("password") || "");
-
-  if (!name || !email || password.length < 8) {
-    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  const data = {
+    name: String(form.get("name") || "").trim(),
+    email: String(form.get("email") || "").toLowerCase().trim(),
+    password: String(form.get("password") || ""),
+  };
+  const parsed = signupSchema.safeParse(data);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid input", details: parsed.error.issues }, { status: 400 });
   }
+  const { name, email, password } = parsed.data;
 
   const exists = await prisma.user.findUnique({ where: { email } });
-  if (exists) return NextResponse.json({ error: "Email already in use" }, { status: 400 });
+  if (exists) return NextResponse.json({ error: "Email already in use" }, { status: 409 });
 
-  const passwordHash = await hash(password, 10);
-  const user = await prisma.user.create({ data: { name, email, passwordHash } });
+  const passwordHash = await hash(password, 12);
+  await prisma.user.create({ data: { name, email, passwordHash } });
 
-  // Create a database session row mimicking signed-in state (simple demo)
-  await prisma.session.create({
-    data: {
-      sessionToken: crypto.randomUUID(),
-      userId: user.id,
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    },
-  });
-
-  return NextResponse.json({ ok: true });
+  // Optionally, we could call signIn here (credentials) for auto-login.
+  return NextResponse.json({ ok: true }, { status: 201 });
 }
