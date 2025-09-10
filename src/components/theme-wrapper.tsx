@@ -12,7 +12,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
 
 
   return (
-    <html lang="en" className={`${inter.className} ${theme}`}>
+    <html lang="en" className={`${inter.className} scroll-smooth ${theme}`}>
       <body className="dark:bg-slate-950">{children}</body>
     </html>
   );
