@@ -2,7 +2,7 @@
 
 import { useTheme } from "@/state/theme";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import {AnimatePresence, motion} from "framer-motion"
@@ -12,6 +12,15 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const {theme, changeTheme} = useTheme()
   
+
+  useEffect(()=> {
+    if(open) {
+      document.body.style.overflow= "hidden"
+    }
+    else {
+      document.body.style.overflow= "auto"
+    }
+  },[open])
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 transition duration-150 dark:border-slate-800 dark:bg-slate-900/80 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
