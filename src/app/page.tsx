@@ -91,7 +91,11 @@ export default function HomePage() {
 
       {/* How it works */}
       <section id="how-it-works" className="mx-auto mt-24 max-w-6xl px-6">
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Process</h2>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
             { title: "Create account", desc: "Sign up with email and password." },
             { title: "Upload ticket", desc: "Submit your ticket for a quick verification." },
@@ -111,7 +115,11 @@ export default function HomePage() {
 
       {/* Testimonials */}
       <section id="testimonials" className="mx-auto mt-24 max-w-6xl px-6">
-        <div className="rounded-xl border border-slate-200 transition duration-150 dark:border-slate-900 dark:bg-slate-950 bg-white p-8 shadow-sm">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">What people say about us</h2>
+        </div>
+
+        <div className="mt-10 rounded-xl border border-slate-200 transition duration-150 dark:border-slate-900 dark:bg-slate-950 bg-white p-8 shadow-sm">
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
