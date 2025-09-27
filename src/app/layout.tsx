@@ -25,9 +25,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <ThemeProvider>
       <Wrapper>
-        <SiteHeader session={session} />
-        <div className="pb-16 pt-2 transition duration-150 bg-white dark:bg-gray-950 dark:text-white">{children}</div>
-        <SiteFooter />
+        <div className="flex min-h-screen flex-col bg-white dark:bg-gray-950 dark:text-white transition duration-150">
+          <SiteHeader session={session} />
+          <main className="flex-1 pb-16 pt-2">{children}</main>
+          <SiteFooter />
+        </div>
       </Wrapper>
     </ThemeProvider>
   );
