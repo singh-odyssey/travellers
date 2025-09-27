@@ -50,7 +50,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="mx-auto mt-24 max-w-6xl px-6">
+      <section id="features" className="mx-auto mt-24 max-w-6xl px-6 scroll-mt-20">
         <div className="text-center">
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Everything you need to find your crew</h2>
           <p className="mx-auto mt-2 max-w-2xl text-slate-600 dark:text-slate-400">
@@ -90,7 +90,7 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="mx-auto mt-24 max-w-6xl px-6">
+      <section id="how-it-works" className="mx-auto mt-24 max-w-6xl px-6 scroll-mt-20">
         <div className="text-center">
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Process</h2>
         </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="mx-auto mt-24 max-w-6xl px-6">
+      <section id="testimonials" className="mx-auto mt-24 max-w-6xl px-6 scroll-mt-20">
         <div className="text-center">
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">What people say about us</h2>
         </div>
@@ -148,7 +148,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="mx-auto mt-24 max-w-6xl px-6 pb-24">
+      <section id="faq" className="mx-auto mt-24 max-w-6xl px-6 pb-24 scroll-mt-20">
         <h2 className="text-2xl font-semibold tracking-tight">Frequently asked questions</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {[
