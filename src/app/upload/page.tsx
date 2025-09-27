@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import TicketUploadForm from "@/components/ticket-upload-form";
+import SignInForm from "@/components/sign-in-form";
 
 export default async function UploadPage() {
   const session = await auth();
@@ -8,6 +9,9 @@ export default async function UploadPage() {
       <main className="mx-auto max-w-3xl px-6 py-16">
         <h1 className="text-2xl font-semibold">Sign in to upload</h1>
         <p className="mt-2 text-slate-600">You need an account to upload and verify tickets.</p>
+          <div className="mt-6">
+              <SignInForm />
+          </div>
       </main>
     );
   }
