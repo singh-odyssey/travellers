@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { POST } from "../route"
+import type { NextRequest } from "next/server"
 
 vi.mock("@/lib/prisma")
 
@@ -15,10 +16,10 @@ class MockFile extends Blob {
 }
 const dummyFile = new MockFile(["dummy"], "ticket.pdf", { type: "application/pdf" }) as any
 
-function makeNextRequest(form: FormData) {
+function makeNextRequest(form: FormData): NextRequest {
     return {
         formData: async () => form,
-    } as any
+    } as unknown as NextRequest
 }
 
 beforeEach(() => {
