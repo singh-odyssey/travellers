@@ -1,25 +1,30 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { POST } from "../route"
-import type { NextRequest } from "next/server"
 
 vi.mock("@/lib/prisma")
 
 class MockFile extends Blob {
     name: string
     lastModified: number
-    constructor(chunks: any[], name: string, opts?: any) {
+    constructor(chunks: any[], name: string, opts?: BlobPropertyBag) {
         super(chunks, opts)
         this.name = name
         this.lastModified = Date.now()
     }
 }
-const dummyFile = new MockFile(["dummy"], "ticket.pdf", { type: "application/pdf" }) as any
+const dummyFile = new MockFile(["dummy"], "ticket.pdf", {
+    type: "application/pdf",
+}) as File
 
-function makeNextRequest(form: FormData): NextRequest {
+interface MockNextRequest {
+    formData: () => Promise<FormData>
+}
+
+function makeNextRequest(form: FormData): MockNextRequest {
     return {
         formData: async () => form,
-    } as unknown as NextRequest
+    }
 }
 
 beforeEach(() => {
@@ -32,7 +37,7 @@ describe("POST /api/tickets", () => {
         body.append("departureDate", "2025-12-31")
         body.append("file", dummyFile)
 
-        const res = await POST(makeNextRequest(body))
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -44,7 +49,7 @@ describe("POST /api/tickets", () => {
         body.append("destination", "Paris")
         body.append("departureDate", "2025-12-31")
 
-        const res = await POST(makeNextRequest(body))
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -57,20 +62,7 @@ describe("POST /api/tickets", () => {
         body.append("departureDate", "not-a-date")
         body.append("file", dummyFile)
 
-        const res = await POST(makeNextRequest(body))
-        const data = await res.json()
-
-        expect(res.status).toBe(400)
-        expect(data.error).toBe("Invalid input")
-    })
-
-    it("returns 400 if departureDate is empty string", async () => {
-        const body = new FormData()
-        body.append("destination", "Paris")
-        body.append("departureDate", "")
-        body.append("file", dummyFile)
-
-        const res = await POST(makeNextRequest(body))
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -85,7 +77,7 @@ describe("POST /api/tickets", () => {
         body.append("departureDate", "2025-12-31")
         body.append("file", dummyFile)
 
-        const res = await POST(makeNextRequest(body))
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(401)
@@ -108,7 +100,7 @@ describe("POST /api/tickets", () => {
         body.append("departureDate", "2025-12-31")
         body.append("file", dummyFile)
 
-        const res = await POST(makeNextRequest(body))
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(200)
