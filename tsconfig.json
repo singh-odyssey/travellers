@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "types": [
+      "vitest/globals"
+    ],
     "target": "es2022",
     "lib": [
       "dom",
@@ -42,6 +45,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules", ".next"
   ]
 }
