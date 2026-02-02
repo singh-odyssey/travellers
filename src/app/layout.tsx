@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import ScrollToTop from "../components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
 
 import { auth } from "@/lib/auth";
@@ -30,6 +31,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <SiteHeader session={session} />
           <main className="flex-1 pb-16 pt-2">{children}</main>
           <SiteFooter />
+          <ScrollToTop />
           <Chatbot />
         </div>
       </Wrapper>
