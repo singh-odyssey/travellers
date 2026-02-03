@@ -3,36 +3,32 @@
 import { useTheme } from "@/state/theme";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import { useSession, signOut } from "next-auth/react";
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
-import {AnimatePresence, motion} from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion";
 import Toggle from "./toggle";
 
-type Props = {
-  session :any;
-}
-
-export default function SiteHeader({session}: Props) {
+export default function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const {theme, changeTheme} = useTheme()
+  const { theme, changeTheme } = useTheme();
+  const { data: session, status } = useSession();
   
-
-  useEffect(()=> {
-    if(open) {
-      document.body.style.overflow= "hidden"
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
-    else {
-      document.body.style.overflow= "auto"
-    }
-  },[open])
+  }, [open]);
 
+  const isAuthenticated = status === "authenticated" && session?.user;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 transition duration-150 dark:border-slate-800 dark:bg-slate-900/80 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md  text-white">✈️</span>
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md text-white">✈️</span>
             <span className="text-lg font-semibold tracking-tight dark:text-white">travellersmeet</span>
           </Link>
         </div>
@@ -48,18 +44,40 @@ export default function SiteHeader({session}: Props) {
         <div className="hidden md:justify-between items-center gap-3 md:flex">
           <div></div>
 
-          { session?.user?.id ? <div><Link className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" href="/dashboard">Dashboard</Link></div> :
-          <div className="flex gap-3 items-center">
-          <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">Sign in</Link>
-          <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">Get started</Link>
-          </div>}
+          {isAuthenticated ? (
+            <div className="flex items-center gap-3">
+              <Link 
+                className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" 
+                href="/dashboard"
+              >
+                Dashboard
+              </Link>
+              <button 
+                onClick={() => signOut({ callbackUrl: '/' })} 
+                className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-3 items-center">
+              <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">
+                Sign in
+              </Link>
+              <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">
+                Get started
+              </Link>
+            </div>
+          )}
 
           <button onClick={changeTheme} className="float-right">
-            {theme==="dark"? <HiOutlineMoon color="#64748B" size={24}/> : <HiOutlineSun color="#000" size={24}/>}
+            {theme === "dark" ? (
+              <HiOutlineMoon color="#64748B" size={24} />
+            ) : (
+              <HiOutlineSun color="#000" size={24} />
+            )}
           </button>
         </div>
-      
-         
 
         <button
           aria-label="Toggle menu"
@@ -77,29 +95,64 @@ export default function SiteHeader({session}: Props) {
       </div>
       
       <AnimatePresence>
-      {open && (
-        <motion.div initial={{maxHeight: 0}} exit={{maxHeight:0}}  animate={{maxHeight: 500}} transition={{duration: 0.2}} className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150">
-          <div className=" mx-auto max-w-6xl px-6 py-3">
-            <div className="grid gap-2 dark:*:text-slate-200">
-              <Link href="/#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Features</Link>
-              <Link href="/#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>How it works</Link>
-              <Link href="/#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
-              <Link href="/#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
-              <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Upload</Link>
-              <div className="flex pl-2 pr-8 py-2 justify-between">
-                <p>Dark Theme</p>
-                <Toggle theme={theme} changeTheme={changeTheme}/>
+        {open && (
+          <motion.div 
+            initial={{ maxHeight: 0 }} 
+            exit={{ maxHeight: 0 }}  
+            animate={{ maxHeight: 500 }} 
+            transition={{ duration: 0.2 }} 
+            className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150"
+          >
+            <div className="mx-auto max-w-6xl px-6 py-3">
+              <div className="grid gap-2 dark:*:text-slate-200">
+                <Link href="/#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>
+                  Features
+                </Link>
+                <Link href="/#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>
+                  How it works
+                </Link>
+                <Link href="/#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>
+                  Stories
+                </Link>
+                <Link href="/#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>
+                  FAQ
+                </Link>
+                <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>
+                  Upload
+                </Link>
+                <div className="flex pl-2 pr-8 py-2 justify-between">
+                  <p>Dark Theme</p>
+                  <Toggle theme={theme} changeTheme={changeTheme} />
+                </div>
+                {isAuthenticated ? (
+                  <div className="mt-4 flex flex-col gap-2">
+                    <Link 
+                      className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" 
+                      href="/dashboard"
+                    >
+                      Dashboard
+                    </Link>
+                    <button 
+                      onClick={() => signOut({ callbackUrl: '/' })} 
+                      className="text-left text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80 px-2 py-2"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex mt-4 gap-3 items-center">
+                    <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">
+                      Sign in
+                    </Link>
+                    <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">
+                      Get started
+                    </Link>
+                  </div>
+                )}
               </div>
-              { session?.user?.id ? <div className="mt-4"><Link className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80" href="/dashboard">Dashboard</Link></div> :
-          <div className="flex mt-4 gap-3 items-center">
-          <Link href="/signin" className="text-sm font-medium text-slate-700 dark:text-slate-400 hover:opacity-80">Sign in</Link>
-          <Link href="/signup" className="rounded-lg bg-slate-900 px-4 py-2 text-sm dark:bg-white dark:text-slate-800 font-medium text-white hover:opacity-80">Get started</Link>
-          </div>
-          }
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
       </AnimatePresence>
     </header>
   );

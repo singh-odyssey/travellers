@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Find verified tickets for same destination within ±3 days
     const targetDate = new Date(date);
     const startDate = new Date(targetDate);
     startDate.setDate(startDate.getDate() - 3);
@@ -38,7 +37,7 @@ export async function GET(req: NextRequest) {
           lte: endDate,
         },
         status: "VERIFIED",
-        userId: { not: session.user.id }, // Exclude current user
+        userId: { not: session.user.id },
       },
       include: {
         user: {
@@ -54,10 +53,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ matches });
   } catch (error) {
-    console.error("Match search error:", error);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

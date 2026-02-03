@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, userId: user.id });
   } catch (error) {
-    console.error("Signup error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

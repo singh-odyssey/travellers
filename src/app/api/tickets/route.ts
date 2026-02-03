@@ -12,7 +12,6 @@ const ticketSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  // 🔒 Verify authentication
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -34,10 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { destination, departureDate } = result.data;
-
-    // TODO: Upload file to S3/UploadThing and get URL
-    // For now, use placeholder
-    const ticketUrl = "about:blank"; // Replace with actual upload
+    const ticketUrl = "about:blank";
 
     const ticket = await prisma.ticket.create({
       data: {
@@ -51,15 +47,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, ticket });
   } catch (error) {
-    console.error("Ticket upload error:", error);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
-// Get user's tickets
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -74,10 +65,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ tickets });
   } catch (error) {
-    console.error("Fetch tickets error:", error);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

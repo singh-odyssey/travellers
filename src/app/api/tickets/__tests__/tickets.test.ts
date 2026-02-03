@@ -1,118 +1,128 @@
-import { describe, it, expect, beforeEach, vi } from "vitest"
-import { prisma } from "@/lib/prisma"
-import { POST } from "../route"
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { POST } from "../route";
 
-vi.mock("@/lib/prisma")
+vi.mock("@/lib/prisma");
+vi.mock("@/lib/auth");
 
 class MockFile extends Blob {
-    name: string
-    lastModified: number
-    constructor(chunks: any[], name: string, opts?: BlobPropertyBag) {
-        super(chunks, opts)
-        this.name = name
-        this.lastModified = Date.now()
-    }
+  name: string;
+  lastModified: number;
+  constructor(chunks: any[], name: string, opts?: BlobPropertyBag) {
+    super(chunks, opts);
+    this.name = name;
+    this.lastModified = Date.now();
+  }
 }
+
 const dummyFile = new MockFile(["dummy"], "ticket.pdf", {
-    type: "application/pdf",
-}) as File
+  type: "application/pdf",
+}) as File;
 
 interface MockNextRequest {
-    formData: () => Promise<FormData>
+  formData: () => Promise<FormData>;
 }
 
 function makeNextRequest(form: FormData): MockNextRequest {
-    return {
-        formData: async () => form,
-    }
+  return {
+    formData: async () => form,
+  };
 }
 
 beforeEach(() => {
-    vi.clearAllMocks()
-})
+  vi.clearAllMocks();
+});
 
 describe("POST /api/tickets", () => {
-    it("returns 400 if destination is missing", async () => {
-        const body = new FormData()
-        body.append("departureDate", "2025-12-31")
-        body.append("file", dummyFile)
+  it("returns 401 if not authenticated", async () => {
+    (auth as any).mockResolvedValue(null);
 
-        const res = await POST(makeNextRequest(body) as any)
-        const data = await res.json()
+    const body = new FormData();
+    body.append("destination", "Paris");
+    body.append("departureDate", "2025-12-31");
+    body.append("file", dummyFile);
 
-        expect(res.status).toBe(400)
-        expect(data.error).toBe("Invalid input")
-    })
+    const res = await POST(makeNextRequest(body) as any);
+    const data = await res.json();
 
-    it("returns 400 if file is missing", async () => {
-        const body = new FormData()
-        body.append("destination", "Paris")
-        body.append("departureDate", "2025-12-31")
+    expect(res.status).toBe(401);
+    expect(data.error).toBe("Unauthorized");
+  });
 
-        const res = await POST(makeNextRequest(body) as any)
-        const data = await res.json()
+  it("returns 400 if destination is missing", async () => {
+    (auth as any).mockResolvedValue({ user: { id: "user1" } });
 
-        expect(res.status).toBe(400)
-        expect(data.error).toBe("Invalid input")
-    })
+    const body = new FormData();
+    body.append("departureDate", "2025-12-31");
+    body.append("file", dummyFile);
 
-    it("returns 400 if departureDate is invalid", async () => {
-        const body = new FormData()
-        body.append("destination", "Paris")
-        body.append("departureDate", "not-a-date")
-        body.append("file", dummyFile)
+    const res = await POST(makeNextRequest(body) as any);
+    const data = await res.json();
 
-        const res = await POST(makeNextRequest(body) as any)
-        const data = await res.json()
+    expect(res.status).toBe(400);
+    expect(data.error).toBe("Invalid input");
+  });
 
-        expect(res.status).toBe(400)
-        expect(data.error).toBe("Invalid input")
-    })
+  it("returns 400 if file is missing", async () => {
+    (auth as any).mockResolvedValue({ user: { id: "user1" } });
 
-    it("returns 401 if no demo user exists", async () => {
-        ;(prisma.user.findFirst as any).mockResolvedValue(null)
+    const body = new FormData();
+    body.append("destination", "Paris");
+    body.append("departureDate", "2025-12-31");
 
-        const body = new FormData()
-        body.append("destination", "Paris")
-        body.append("departureDate", "2025-12-31")
-        body.append("file", dummyFile)
+    const res = await POST(makeNextRequest(body) as any);
+    const data = await res.json();
 
-        const res = await POST(makeNextRequest(body) as any)
-        const data = await res.json()
+    expect(res.status).toBe(400);
+    expect(data.error).toBe("Invalid input");
+  });
 
-        expect(res.status).toBe(401)
-        expect(data.error).toBe("No user")
-    })
+  it("returns 400 if departureDate is invalid", async () => {
+    (auth as any).mockResolvedValue({ user: { id: "user1" } });
 
-    it("returns 200 and creates ticket if valid input and user exists", async () => {
-        ;(prisma.user.findFirst as any).mockResolvedValue({ id: "user1" })
-        ;(prisma.ticket.create as any).mockResolvedValue({
-            id: "ticket1",
-            userId: "user1",
-            destination: "Paris",
-            departureDate: new Date("2025-12-31"),
-            ticketUrl: "about:blank",
-            status: "PENDING",
-        })
+    const body = new FormData();
+    body.append("destination", "Paris");
+    body.append("departureDate", "not-a-date");
+    body.append("file", dummyFile);
 
-        const body = new FormData()
-        body.append("destination", "Paris")
-        body.append("departureDate", "2025-12-31")
-        body.append("file", dummyFile)
+    const res = await POST(makeNextRequest(body) as any);
+    const data = await res.json();
 
-        const res = await POST(makeNextRequest(body) as any)
-        const data = await res.json()
+    expect(res.status).toBe(400);
+    expect(data.error).toBe("Invalid input");
+  });
 
-        expect(res.status).toBe(200)
-        expect(data.ok).toBe(true)
-        expect(prisma.ticket.create).toHaveBeenCalledWith(
-            expect.objectContaining({
-                data: expect.objectContaining({
-                    userId: "user1",
-                    destination: "Paris",
-                    status: "PENDING",
-                }),
-            }),
-        )
-    })
+  it("returns 200 and creates ticket if valid input", async () => {
+    (auth as any).mockResolvedValue({ user: { id: "user1" } });
+    (prisma.ticket.create as any).mockResolvedValue({
+      id: "ticket1",
+      userId: "user1",
+      destination: "Paris",
+      departureDate: new Date("2025-12-31"),
+      ticketUrl: "about:blank",
+      status: "PENDING",
+    });
+
+    const body = new FormData();
+    body.append("destination", "Paris");
+    body.append("departureDate", "2025-12-31");
+    body.append("file", dummyFile);
+
+    const res = await POST(makeNextRequest(body) as any);
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.ok).toBe(true);
+    expect(prisma.ticket.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          userId: "user1",
+          destination: "Paris",
+          status: "PENDING",
+        }),
+      })
+    );
+  });
+});
 })
