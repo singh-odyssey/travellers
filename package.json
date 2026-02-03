@@ -20,6 +20,7 @@
     "npm": ">=9"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^5.18.0",
     "@tailwindcss/forms": "^0.5.7",
     "@uploadthing/react": "^6.6.4",
