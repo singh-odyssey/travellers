@@ -32,7 +32,7 @@ export default function TicketUploadForm() {
         <CheckCircle2 className="h-12 w-12 text-emerald-500 mb-4 animate-bounce" />
         <h3 className="text-xl font-semibold text-emerald-900 dark:text-emerald-100">Ticket Uploaded!</h3>
         <p className="mt-2 text-emerald-700 dark:text-emerald-300 max-w-sm">
-          We've received your ticket. Our team will verify it within 24 hours and notify you.
+          We&apos;ve received your ticket. Our team will verify it within 24 hours and notify you.
         </p>
       </div>
     );
