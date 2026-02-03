@@ -3,6 +3,7 @@
 import { useTheme } from "@/state/theme";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Plane } from "lucide-react";
 
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import {AnimatePresence, motion} from "framer-motion"
@@ -31,9 +32,12 @@ export default function SiteHeader({session}: Props) {
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/60 transition duration-150 dark:border-slate-800 dark:bg-slate-900/80 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md  text-white">✈️</span>
-            <span className="text-lg font-semibold tracking-tight dark:text-white">travellersmeet</span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 transition-transform duration-300 group-hover:scale-110 shadow-sm overflow-hidden">
+               <Plane className="h-5 w-5 rotate-[-45deg] group-hover:rotate-0 transition-transform duration-500" />
+               <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors" />
+            </div>
+            <span className="text-xl font-bold tracking-tight dark:text-white">travellersmeet</span>
           </Link>
         </div>
 
