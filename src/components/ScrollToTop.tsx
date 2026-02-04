@@ -27,7 +27,7 @@ export default function ScrollToTop() {
       aria-label="Scroll to top"
     
       className="
-        fixed bottom-6 right-6 z-50
+        fixed bottom-6 right-24 z-50
         h-12 w-12 rounded-full p-[2px]
         transition-all duration-300 ease-out
         hover:-translate-y-1 hover:scale-110
@@ -36,10 +36,10 @@ export default function ScrollToTop() {
       <div
         className="
           flex h-full w-full items-center justify-center rounded-full
-          bg-white/10 backdrop-blur-md
-          border border-white/20
+          bg-black/40 text-white dark:bg-white/20 backdrop-blur-md
+          border border-white/30 dark:border-white/20
           shadow-lg
-          hover:bg-black/40 hover:text-[#38f888]
+          hover:bg-black/60 dark:hover:bg-white/30 hover:text-[#38f888]
         "
       >
         <ArrowUp size={18} />
