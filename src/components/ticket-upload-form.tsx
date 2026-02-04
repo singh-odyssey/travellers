@@ -42,12 +42,12 @@ export default function TicketUploadForm() {
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium">Destination city</label>
-          <input name="destination" required className="mt-1 dark:bg-slate-900 dark:border-slate-800 bg-white border-neutral-300 transition duration-150 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-slate-900 dark:focus:ring-white outline-none" placeholder="Paris" />
+          <label htmlFor="destination" className="block text-sm font-medium">Destination city</label>
+          <input id="destination" name="destination" required className="mt-1 dark:bg-slate-900 dark:border-slate-800 bg-white border-neutral-300 transition duration-150 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-slate-900 dark:focus:ring-white outline-none" placeholder="Paris" />
         </div>
         <div>
-          <label className="block text-sm font-medium">Departure date</label>
-          <input type="date" name="departureDate" required className="mt-1 transition duration-150 dark:bg-slate-900 dark:border-slate-800 bg-white border-neutral-300 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-slate-900 dark:focus:ring-white outline-none" />
+          <label htmlFor="departure-date" className="block text-sm font-medium">Departure date</label>
+          <input id="departure-date" type="date" name="departureDate" required className="mt-1 transition duration-150 dark:bg-slate-900 dark:border-slate-800 bg-white border-neutral-300 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-slate-900 dark:focus:ring-white outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium">Ticket (PDF or image)</label>
