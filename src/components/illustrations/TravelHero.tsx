@@ -12,7 +12,7 @@ export default function TravelHero() {
         className="w-full h-full max-w-2xl drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]"
       >
         {/* Background Stars (Dark Mode Only) */}
-        <g className="hidden dark:block opacity-40">
+        <g className="opacity-0 dark:opacity-40">
           <circle cx="100" cy="100" r="1" fill="white" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
           <circle cx="700" cy="150" r="1" fill="white" className="animate-pulse" style={{ animationDelay: '1s' }} />
           <circle cx="200" cy="50" r="1.5" fill="white" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
