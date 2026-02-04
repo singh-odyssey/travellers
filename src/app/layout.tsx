@@ -19,13 +19,17 @@ export const metadata = {
 
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  
+
   const session = await auth()
 
   return (
     <ThemeProvider>
       <Wrapper>
-        <div className="flex min-h-screen flex-col bg-white dark:bg-gray-950 dark:text-white transition duration-150">
+        <div className="flex min-h-screen flex-col 
+bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
+dark:!bg-gray-950 dark:!bg-none 
+dark:text-white transition duration-150">
+
           <SiteHeader session={session} />
           <main className="flex-1 pb-16 pt-2">{children}</main>
           <SiteFooter />

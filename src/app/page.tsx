@@ -28,15 +28,17 @@ export default function HomePage() {
             </div>
             <p className="mt-3 text-xs text-slate-500">No spam. Private by default. Cancel anytime.</p>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-slate-200 dark:ring-slate-800">
+          <div className="flex justify-center w-full overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1200&auto=format&fit=crop"
+              src="/hero.png"
               alt="Travellers connecting at an airport"
-              fill
-              className="object-cover"
+              width={1200}
+              height={800}
+              className="max-w-full h-auto"
               priority
             />
           </div>
+
         </div>
       </section>
 
