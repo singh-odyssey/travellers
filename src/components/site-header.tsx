@@ -3,6 +3,7 @@
 import { useTheme } from "@/state/theme";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Plane } from "lucide-react";
 
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion"
