@@ -47,9 +47,17 @@ export default function HomePage() {
             </div>
             <p className="mt-3 text-xs text-slate-500">No spam. Private by default. Cancel anytime.</p>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-slate-200 dark:ring-slate-800 bg-slate-50">
-            <TravelHero />
+          <div className="flex justify-center w-full overflow-hidden">
+            <Image
+              src="/hero.png"
+              alt="Travellers connecting at an airport"
+              width={1200}
+              height={800}
+              className="max-w-full h-auto"
+              priority
+            />
           </div>
+
         </div>
       </section>
 
