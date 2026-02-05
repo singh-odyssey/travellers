@@ -1,10 +1,12 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { auth, signIn, signOut, handlers } = NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       name: "Credentials",
@@ -13,34 +15,44 @@ export const { auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const schema = z.object({ email: z.string().email(), password: z.string().min(1) });
+        const schema = z.object({ 
+          email: z.string().email(), 
+          password: z.string().min(8) 
+        });
         const parsed = schema.safeParse(credentials ?? {});
         if (!parsed.success) return null;
+        
         const { email, password } = parsed.data;
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
+        
         const ok = await compare(password, user.passwordHash);
         if (!ok) return null;
-        return { id: user.id, email: user.email, name: user.name, image: user.image, role: user.role } as any;
+        
+        return { 
+          id: user.id, 
+          email: user.email, 
+          name: user.name, 
+          image: user.image,
+          role: user.role 
+        } as any;
       },
     }),
   ],
   session: { strategy: "database" },
   trustHost: true,
   callbacks: {
-    async session({ session, user, token }) {
-      // next-auth v5: when using database sessions, attach user id
+    async session({ session, user }) {
       if (session?.user) {
-        // @ts-ignore
-        session.user.id = token?.sub ?? user?.id ?? session.user.id;
+        session.user.id = user.id;
+        // @ts-ignore - role not in default session type
+        session.user.role = user.role;
       }
       return session;
     },
   },
-  adapter: {
-    // Minimal adapter methods used for sessions with Prisma
-    async createUser(data: any) {
-      return prisma.user.create({ data: { name: data.name!, email: data.email!, passwordHash: "", image: data.image ?? null } }) as any;
-    },
-  } as any,
+  pages: {
+    signIn: '/signin',
+    error: '/auth/error',
+  },
 });

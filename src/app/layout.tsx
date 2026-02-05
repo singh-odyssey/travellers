@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import ScrollToTop from "../components/ScrollToTop";
+import Chatbot from "@/components/chatbot";
 
 import { auth } from "@/lib/auth";
 
@@ -33,6 +35,8 @@ dark:text-white transition duration-150">
           <SiteHeader session={session} />
           <main className="flex-1 pb-16 pt-2">{children}</main>
           <SiteFooter />
+          <ScrollToTop />
+          <Chatbot />
         </div>
       </Wrapper>
     </ThemeProvider>

@@ -29,7 +29,8 @@ export default function SiteHeader({ session }: Props) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-teal-700/30 bg-gradient-to-r from-teal-700 to-teal-600 dark:from-slate-900 dark:to-slate-800 dark:border-slate-800 transition-colors duration-150">
-      <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
+      <div className="mx-auto flex items-center justify-between px-6 py-3">
+        {/* Logo Section */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-600 text-white shadow-sm">✈️</span>
@@ -37,6 +38,7 @@ export default function SiteHeader({ session }: Props) {
           </Link>
         </div>
 
+        {/* Desktop Navigation */}
         <nav className="hidden items-center text-sm font-medium text-white/95 gap-8 md:flex">
           <Link href="/#features" className="hover:text-white transition-colors">Features</Link>
           <Link href="/#how-it-works" className="hover:text-white transition-colors">How it works</Link>
@@ -45,30 +47,44 @@ export default function SiteHeader({ session }: Props) {
           <Link href="/upload" className="hover:text-white transition-colors">Upload</Link>
         </nav>
 
-        <div className="hidden md:justify-between items-center gap-3 md:flex">
-          <div></div>
-
-          {session?.user?.id ?
-            <div>
-              <Link className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm" href="/dashboard">Dashboard</Link>
-            </div>
-            :
+        {/* Desktop Auth Buttons & Theme Toggle */}
+        <div className="hidden items-center gap-3 md:flex">
+          {session?.user?.id ? (
+            <Link 
+              className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm" 
+              href="/dashboard"
+            >
+              Dashboard
+            </Link>
+          ) : (
             <div className="flex gap-3 items-center">
-              <Link href="/signin" className="text-sm font-medium text-white/95 hover:text-white transition-colors">Sign in</Link>
-              <Link href="/signup" className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm">Get started</Link>
+              <Link 
+                href="/signin" 
+                className="text-sm font-medium text-white/95 hover:text-white transition-colors"
+              >
+                Sign in
+              </Link>
+              <Link 
+                href="/signup" 
+                className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm"
+              >
+                Get started
+              </Link>
             </div>
-          }
+          )}
 
-          <button onClick={changeTheme} className="float-right">
-            {theme === "dark" ? <HiOutlineMoon color="#64748B" size={24} /> : <HiOutlineSun color="#000" size={24} />}
+          <button 
+            onClick={changeTheme} 
+            className="ml-2 p-2 rounded-lg hover:bg-teal-600/30 transition-all"
+          >
+            {theme === "dark" ? <HiOutlineMoon color="#FFFFFF" size={26} /> : <HiOutlineSun color="#FFFFFF" size={26} />}
           </button>
         </div>
 
-
-
+        {/* Mobile Hamburger Button */}
         <button
           aria-label="Toggle menu"
-          className="inline-flex items-center justify-end rounded-md dark:text-white text-slate-800 p-2 md:hidden"
+          className="inline-flex items-center justify-end rounded-md text-white p-2 md:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
@@ -81,30 +97,87 @@ export default function SiteHeader({ session }: Props) {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ maxHeight: 0 }} exit={{ maxHeight: 0 }} animate={{ maxHeight: 500 }} transition={{ duration: 0.2 }} className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150">
-            <div className=" mx-auto max-w-6xl px-6 py-3">
-              <div className="grid gap-2 dark:*:text-slate-200">
-                <Link href="/#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Features</Link>
-                <Link href="/#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>How it works</Link>
-                <Link href="/#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
-                <Link href="/#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
-                <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Upload</Link>
-                <div className="flex pl-2 pr-8 py-2 justify-between">
-                  <p>Dark Theme</p>
+          <motion.div 
+            initial={{ maxHeight: 0 }} 
+            exit={{ maxHeight: 0 }} 
+            animate={{ maxHeight: 500 }} 
+            transition={{ duration: 0.2 }} 
+            className="overflow-hidden z-20 absolute left-0 right-0 border-t border-teal-600/30 bg-teal-700 md:hidden transition duration-150"
+          >
+            <div className="mx-auto max-w-6xl px-6 py-3">
+              <div className="grid gap-2">
+                <Link 
+                  href="/#features" 
+                  className="rounded px-2 py-2 text-white/90 hover:bg-teal-600/50 transition-colors" 
+                  onClick={() => setOpen(false)}
+                >
+                  Features
+                </Link>
+                <Link 
+                  href="/#how-it-works" 
+                  className="rounded px-2 py-2 text-white/90 hover:bg-teal-600/50 transition-colors" 
+                  onClick={() => setOpen(false)}
+                >
+                  How it works
+                </Link>
+                <Link 
+                  href="/#testimonials" 
+                  className="rounded px-2 py-2 text-white/90 hover:bg-teal-600/50 transition-colors" 
+                  onClick={() => setOpen(false)}
+                >
+                  Stories
+                </Link>
+                <Link 
+                  href="/#faq" 
+                  className="rounded px-2 py-2 text-white/90 hover:bg-teal-600/50 transition-colors" 
+                  onClick={() => setOpen(false)}
+                >
+                  FAQ
+                </Link>
+                <Link 
+                  href="/upload" 
+                  className="rounded px-2 py-2 text-white/90 hover:bg-teal-600/50 transition-colors" 
+                  onClick={() => setOpen(false)}
+                >
+                  Upload
+                </Link>
+                
+                <div className="flex pl-2 pr-8 py-2 justify-between items-center text-white border-t border-teal-600/30 mt-2 pt-4">
+                  <p className="text-sm font-medium">Dark Theme</p>
                   <Toggle theme={theme} changeTheme={changeTheme} />
                 </div>
-                {session?.user?.id ?
-                  <div>
-                    <Link className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm" href="/dashboard">Dashboard</Link>
-                  </div>
-                  :
-                  <div className="flex gap-3 items-center">
-                    <Link href="/signin" className="text-sm font-medium text-white/95 hover:text-white transition-colors">Sign in</Link>
-                    <Link href="/signup" className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm">Get started</Link>
-                  </div>
-                }
+
+                <div className="mt-2 pt-2 border-t border-teal-600/30">
+                  {session?.user?.id ? (
+                    <Link 
+                      className="block w-full text-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 shadow-sm" 
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <div className="flex gap-3">
+                      <Link 
+                        href="/signin" 
+                        className="flex-1 text-center rounded-lg border border-white/30 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-600/50 transition-colors"
+                        onClick={() => setOpen(false)}
+                      >
+                        Sign in
+                      </Link>
+                      <Link 
+                        href="/signup" 
+                        className="flex-1 text-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 shadow-sm"
+                        onClick={() => setOpen(false)}
+                      >
+                        Get started
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
