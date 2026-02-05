@@ -33,7 +33,7 @@ export default function SiteHeader({ session }: Props) {
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-600 text-white shadow-sm">✈️</span>
-            <span className="text-lg font-semibold tracking-tight dark:text-white">travellersmeet</span>
+            <span className="text-lg font-semibold tracking-tight text-white">travellersmeet</span>
           </Link>
         </div>
 
