@@ -33,7 +33,21 @@ export default function SiteHeader({ session }: Props) {
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-600 text-white shadow-sm">✈️</span>
-            <span className="text-lg font-semibold tracking-tight text-white">travellersmeet</span>
+            <span className="
+            bg-white/90 text-black px-4 py-1.5 rounded-full 
+            text-lg font-semibold tracking-tight
+            transition-all duration-300 ease-out
+            shadow-sm
+            hover:bg-white
+            hover:-translate-y-0.5 hover:scale-105
+            hover:shadow-md
+            ">
+              travellersmeet
+            </span>
+
+
+
+
           </Link>
         </div>
 
