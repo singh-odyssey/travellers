@@ -20,6 +20,7 @@
     "npm": ">=9"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^5.18.0",
     "@tailwindcss/forms": "^0.5.7",
     "@uploadthing/react": "^6.6.4",
@@ -27,6 +28,9 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "next": "^14.2.35",
+    "lucide": "^0.563.0",
+    "lucide-react": "^0.563.0",
+    
     "next-auth": "^5.0.0-beta.22",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -3,6 +3,7 @@
 import { useTheme } from "@/state/theme";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Plane } from "lucide-react";
 
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion"
@@ -29,27 +30,32 @@ export default function SiteHeader({ session }: Props) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-teal-700/30 bg-gradient-to-r from-teal-700 to-teal-600 dark:from-slate-900 dark:to-slate-800 dark:border-slate-800 transition-colors duration-150">
-      <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-600 text-white shadow-sm">✈️</span>
-            <span className="
-            bg-white/90 text-black px-4 py-1.5 rounded-full 
-            text-lg font-semibold tracking-tight
-            transition-all duration-300 ease-out
-            shadow-sm
-            hover:bg-white
-            hover:-translate-y-0.5 hover:scale-105
-            hover:shadow-md
-            ">
-              travellersmeet
-            </span>
-
-
-
-
-          </Link>
+  <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
+    <div className="flex items-center gap-3">
+      <Link href="/" className="flex items-center gap-2 group">
+        
+        {/* Icon */}
+        <div className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 transition-transform duration-300 group-hover:scale-110 shadow-sm overflow-hidden">
+          <Plane className="h-5 w-5 rotate-[-45deg] group-hover:rotate-0 transition-transform duration-500" />
+          <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors" />
         </div>
+
+        {/* Brand text with hover effect */}
+        <span className="
+          bg-white/90 text-black px-4 py-1.5 rounded-full 
+          text-lg font-semibold tracking-tight 
+          cursor-pointer
+          transition-all duration-300 ease-out
+          shadow-sm
+          hover:bg-white
+          hover:-translate-y-0.5 hover:scale-105
+          hover:shadow-md
+        ">
+          travellersmeet
+        </span>
+
+      </Link>
+    </div>
 
         <nav className="hidden items-center text-sm font-medium text-white/95 gap-8 md:flex">
           <Link href="/#features" className="hover:text-white transition-colors">Features</Link>

@@ -1,5 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
+import {
+  ShieldCheck,
+  Lock,
+  MessageSquare,
+  UserPlus,
+  Upload,
+  Search,
+  CheckCircle2,
+  Users,
+  Quote,
+  HelpCircle
+} from "lucide-react";
+import TravelHero from "@/components/illustrations/TravelHero";
+import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
+import SmartMatching from "@/components/illustrations/SmartMatching";
+import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
+import AccountIllustration from "@/components/illustrations/AccountIllustration";
+import UploadIllustration from "@/components/illustrations/UploadIllustration";
+import MatchesIllustration from "@/components/illustrations/MatchesIllustration";
 
 export default function HomePage() {
   return (
@@ -20,7 +39,7 @@ export default function HomePage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/signup" className="inline-flex items-center transition duration-150 justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white shadow hover:bg-slate-800">
-                Get started free
+                Get started free <UserPlus className="ml-2 h-4 w-4" />
               </Link>
               <Link href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 font-medium text-slate-900 hover:bg-slate-50">
                 See how it works
@@ -44,10 +63,19 @@ export default function HomePage() {
 
       {/* Trust */}
       <section className="mx-auto mt-10 max-w-6xl px-6">
-        <div className="dark:bg-slate-900 transition duration-150 dark:text-slate-300 dark:border-slate-800 grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-6 py-4 text-xs text-slate-600 shadow-sm sm:grid-cols-3">
-          <p>Ticket-verified profiles</p>
-          <p>Zero ads. No selling your data</p>
-          <p>Report + block controls</p>
+        <div className="dark:bg-slate-900 transition duration-150 dark:text-slate-300 dark:border-slate-800 grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-sm sm:grid-cols-3">
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="h-5 w-5 text-emerald-500" />
+            <p>Ticket-verified profiles</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Lock className="h-5 w-5 text-blue-500" />
+            <p>Zero ads. No selling your data</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <MessageSquare className="h-5 w-5 text-purple-500" />
+            <p>Report + block controls</p>
+          </div>
         </div>
       </section>
 
@@ -65,24 +93,24 @@ export default function HomePage() {
             {
               title: "Verified by ticket",
               desc: "Simple upload with sensitive details redacted by our team.",
-              img: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1200&auto=format&fit=crop",
+              illustration: <VerifiedTicket />,
             },
             {
               title: "Smart matching",
               desc: "We surface people overlapping your city and dates.",
-              img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=800&auto=format&fit=crop",
+              illustration: <SmartMatching />,
             },
             {
               title: "Private messaging",
               desc: "Chat only after both sides opt in. Report anytime.",
-              img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
+              illustration: <PrivateMessaging />,
             },
           ].map((f) => (
-            <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 text-black  border-slate-200  bg-white shadow-sm">
-              <div className="relative h-40 w-full">
-                <Image src={f.img} alt="" fill className="object-cover" />
+            <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 text-black border-slate-200 bg-white shadow-sm hover:shadow-md group">
+              <div className="aspect-[16/10] border-b dark:border-slate-800 border-slate-50 bg-slate-50/50 dark:bg-slate-800/20">
+                {f.illustration}
               </div>
-              <div className="p-5">
+              <div className="p-8">
                 <h3 className="text-lg font-semibold">{f.title}</h3>
                 <p className="mt-1 dark:text-slate-400 text-slate-600">{f.desc}</p>
               </div>
@@ -99,17 +127,20 @@ export default function HomePage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
-            { title: "Create account", desc: "Sign up with email and password." },
-            { title: "Upload ticket", desc: "Submit your ticket for a quick verification." },
-            { title: "Find matches", desc: "See people in your destination window and say hello." },
+            { title: "Create account", desc: "Sign up with email and password.", illustration: <AccountIllustration /> },
+            { title: "Upload ticket", desc: "Submit your ticket for a quick verification.", illustration: <UploadIllustration /> },
+            { title: "Find matches", desc: "See people in your destination window and say hello.", illustration: <MatchesIllustration /> },
           ].map((s, i) => (
-            <div key={s.title} className="rounded-xl border transition duration-150 dark:border-slate-800 dark:bg-slate-900  border-slate-200 bg-white p-6 shadow-sm">
-              <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-slate-900 dark:bg-slate-600 text-sm font-semibold text-white">{i + 1}</div>
-              <h3 className="mt-3 text-lg font-semibold">{s.title}</h3>
+            <div key={s.title} className="rounded-xl border transition duration-150 dark:border-slate-800 dark:bg-slate-900 border-slate-200 bg-white p-6 shadow-sm hover:shadow-md group">
+              <div className="inline-flex h-16 w-16 mb-2 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800/50 text-white shadow-inner group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+                {s.illustration}
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
               <p className="mt-1 text-slate-600 dark:text-slate-400">{s.desc}</p>
             </div>
           ))}
         </div>
+
         <div className="mt-8 text-center">
           <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:opacity-90 transition duration-150 dark:bg-white dark:text-slate-900">Create your account</Link>
         </div>
@@ -121,28 +152,40 @@ export default function HomePage() {
           <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">What people say about us</h2>
         </div>
 
-        <div className="mt-10 rounded-xl border border-slate-200 transition duration-150 dark:border-slate-900 dark:bg-slate-950 bg-white p-8 shadow-sm">
+        <div className="mt-10">
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
                 quote: "Met two other solo travellers for a Louvre day and dinner—felt safe and easy.",
                 name: "Ana, 27",
                 trip: "Paris in May",
+                color: "bg-emerald-100 text-emerald-700"
               },
               {
                 quote: "Loved the verification. Real people going when I was.",
                 name: "Dev, 31",
                 trip: "Tokyo in March",
+                color: "bg-blue-100 text-blue-700"
               },
               {
                 quote: "Ended up sharing rides to hikes with folks on the same dates.",
                 name: "Sara, 24",
                 trip: "Reykjavík in July",
+                color: "bg-purple-100 text-purple-700"
               },
             ].map((t) => (
-              <div key={t.name} className="rounded-lg transition duration-150 border border-slate-200 dark:border-slate-800 dark:bg-slate-900 p-5">
-                <blockquote className="text-slate-800 dark:text-slate-200">“{t.quote}”</blockquote>
-                <figcaption className="mt-3 text-sm text-slate-600 dark:text-slate-400">{t.name} · {t.trip}</figcaption>
+              <div key={t.name} className="relative rounded-2xl transition duration-150 border border-slate-200 dark:border-slate-800 dark:bg-slate-900 p-8 shadow-sm hover:shadow-md">
+                <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
+                <blockquote className="relative text-slate-800 dark:text-slate-200 leading-relaxed italic">“{t.quote}”</blockquote>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold ${t.color}`}>
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <figcaption className="text-sm font-semibold text-slate-900 dark:text-white">{t.name}</figcaption>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{t.trip}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -168,9 +211,12 @@ export default function HomePage() {
               a: "Getting started and basic matching are free while we're in beta.",
             },
           ].map((f) => (
-            <div key={f.q} className="rounded-lg border border-slate-200 transition duration-150 dark:border-slate-800 dark:bg-slate-900 bg-white p-5 shadow-sm">
-              <p className="font-medium text-slate-900 dark:text-slate-200">{f.q}</p>
-              <p className="mt-1 text-slate-600 dark:text-slate-400">{f.a}</p>
+            <div key={f.q} className="rounded-xl border border-slate-200 transition duration-150 dark:border-slate-800 dark:bg-slate-900 bg-white p-6 shadow-sm flex gap-4">
+              <HelpCircle className="h-6 w-6 text-slate-400 shrink-0" />
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-200">{f.q}</p>
+                <p className="mt-1 text-slate-600 dark:text-slate-400">{f.a}</p>
+              </div>
             </div>
           ))}
         </div>
