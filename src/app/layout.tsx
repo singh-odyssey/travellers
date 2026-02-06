@@ -5,6 +5,7 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import ScrollToTop from "../components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
+import { PWAProvider } from "@/components/pwa-provider";
 
 import { auth } from "@/lib/auth";
 
@@ -16,6 +17,25 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "travellersmeet — Meet verified travellers",
   description: "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Travellers",
+  },
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+  },
+};
+
+export const viewport = {
+  themeColor: "#3b82f6",
 };
 
 
@@ -37,6 +57,7 @@ dark:text-white transition duration-150">
           <SiteFooter />
           <ScrollToTop />
           <Chatbot />
+          <PWAProvider />
         </div>
       </Wrapper>
     </ThemeProvider>

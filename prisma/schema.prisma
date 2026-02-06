@@ -19,6 +19,7 @@ model User {
   tickets       Ticket[]
   accounts      Account[]
   sessions      Session[]
+  routes        Route[]
 }
 
 model Ticket {
@@ -79,4 +80,26 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Route {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  originLat        Float
+  originLng        Float
+  destinationLat   Float
+  destinationLng   Float
+  originName       String?
+  destinationName  String?
+  distance         Float    // in meters
+  duration         Float    // in seconds
+  encodedPolyline  String   @db.Text
+  waypoints        String?  @db.Text // JSON string of waypoints
+  tripName         String?
+  notes            String?  @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId, updatedAt])
 }

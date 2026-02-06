@@ -39,14 +39,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       },
     }),
   ],
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
   trustHost: true,
   callbacks: {
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        // @ts-ignore - role not in default type
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
       if (session?.user) {
-        session.user.id = user.id;
+        session.user.id = token.id as string;
         // @ts-ignore - role not in default session type
-        session.user.role = user.role;
+        session.user.role = token.role;
       }
       return session;
     },
