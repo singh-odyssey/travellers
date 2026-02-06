@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { knowledge } from "@/lib/chatbot-data";
+const endRef = useRef<HTMLDivElement | null>(null);
 
 type Message = { from: "user" | "bot"; text: string };
 
@@ -16,6 +17,10 @@ export default function Chatbot() {
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
+  useEffect(() => {
+  endRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [messages]);
+
 
   function appendMessage(m: Message) {
     setMessages((s) => [...s, m]);
@@ -69,17 +74,25 @@ export default function Chatbot() {
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-80 max-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg flex flex-col overflow-hidden">
           <div className="px-4 py-2 bg-blue-600 text-white font-medium">Help Chat</div>
-          <div className="p-3 flex-1 overflow-auto h-64">
-            <div className="space-y-2">
-              {messages.map((m, i) => (
-                <div key={i} className={m.from === "user" ? "text-right" : "text-left"}>
-                  <div className={`inline-block px-3 py-1 rounded ${m.from === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"}`}>
-                    {m.text}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <div className="p-3 flex-1 min-h-0 overflow-y-auto">
+  <div className="space-y-2">
+    {messages.map((m, i) => (
+      <div key={i} className={m.from === "user" ? "text-right" : "text-left"}>
+        <div
+          className={`inline-block px-3 py-1 rounded ${
+            m.from === "user"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          }`}
+        >
+          {m.text}
+        </div>
+      </div>
+    ))}
+    <div ref={endRef} />
+  </div>
+</div>
+
           <div className="p-3 border-t border-gray-100 dark:border-gray-700">
             <div className="flex gap-2">
               <input
