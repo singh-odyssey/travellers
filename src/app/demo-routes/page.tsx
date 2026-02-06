@@ -171,10 +171,10 @@ export default function DemoRoutesPage() {
         <h3 className="font-bold mb-3">🧪 Testing Instructions (No Google Maps API Required)</h3>
         <ol className="list-decimal list-inside space-y-2 text-sm">
           <li><strong>View Routes:</strong> Click any route in the list to see SVG visualization</li>
-          <li><strong>Save to IndexedDB:</strong> Click "💾 Save to IndexedDB" on any route</li>
+          <li><strong>Save to IndexedDB:</strong> Click &quot;💾 Save to IndexedDB&quot; on any route</li>
           <li><strong>Check Storage:</strong> Open DevTools → Application → IndexedDB → TravellersOfflineCache</li>
           <li><strong>Test Offline:</strong> Go offline (DevTools Network tab → Offline), refresh page, routes still load!</li>
-          <li><strong>Delete Routes:</strong> Click "🗑️ Delete" to remove from IndexedDB</li>
+          <li><strong>Delete Routes:</strong> Click &quot;🗑️ Delete&quot; to remove from IndexedDB</li>
         </ol>
         <div className="mt-4 p-3 bg-white dark:bg-gray-800 rounded text-xs">
           <strong>Why this works without Google Maps:</strong> The routes use pre-calculated polylines (encoded route paths). 
