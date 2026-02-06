@@ -98,7 +98,11 @@ export default function SiteFooter() {
               <FaLinkedin size={22} />
             </a>
           </div>
-
+          {/*Made by */}
+        <div>
+        <p className="text-sm font-medium text-slate-700 dark:text-slate-400">
+            Made with love <span className="text-red-500">❤️</span> by the community
+          </p></div>
           {/* Copyright */}
           <div className="text-center md:text-right space-y-1">
             <p className="font-medium text-slate-700 dark:text-slate-400">
