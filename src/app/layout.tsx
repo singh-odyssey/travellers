@@ -6,6 +6,7 @@ import SiteFooter from "@/components/site-footer";
 import ScrollToTop from "../components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
 import { PWAProvider } from "@/components/pwa-provider";
+import AuthSessionProvider from "@/components/session-provider";
 
 import { auth } from "@/lib/auth";
 
@@ -47,6 +48,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <ThemeProvider>
       <Wrapper>
+        <AuthSessionProvider>
         <div className="flex min-h-screen flex-col 
 bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
 dark:!bg-gray-950 dark:!bg-none 
@@ -59,6 +61,7 @@ dark:text-white transition duration-150">
           <Chatbot />
           <PWAProvider />
         </div>
+        </AuthSessionProvider>
       </Wrapper>
     </ThemeProvider>
   );

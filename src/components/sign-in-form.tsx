@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export default function SignInForm() {
   const [loading, setLoading] = useState(false);
@@ -13,29 +14,25 @@ export default function SignInForm() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     try {
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setError(data?.error || "Failed to sign in");
+      if (!res?.ok) {
+        setError(res?.error === "CredentialsSignin"
+          ? "Invalid email or password"
+          : res?.error || "Failed to sign in");
         setLoading(false);
         return;
       }
 
-      // success
+      // success — full reload so the server-rendered layout picks up the new session
       window.location.href = "/dashboard";
     } catch (err) {
       setError("Something went wrong. Please try again.");

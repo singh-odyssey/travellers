@@ -6,6 +6,7 @@ import { compare } from "bcryptjs";
 import { z } from "zod";
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
