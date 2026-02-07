@@ -6,6 +6,16 @@ vi.mock("@/lib/prisma")
 import { POST } from "../signup/route"
 import { prisma } from "@/lib/prisma"
 
+interface MockNextRequest {
+    formData: () => Promise<FormData>
+}
+
+function makeNextRequest(form: FormData): MockNextRequest {
+    return {
+        formData: async () => form,
+    }
+}
+
 beforeEach(() => {
     vi.clearAllMocks()
 })
@@ -16,8 +26,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "test@example.com")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -29,8 +38,7 @@ describe("POST /api/auth/signup", () => {
         body.append("name", "Test User")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -42,8 +50,7 @@ describe("POST /api/auth/signup", () => {
         body.append("name", "Test User")
         body.append("email", "test@example.com")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -56,8 +63,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "test@example.com")
         body.append("password", "123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -70,8 +76,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "   ")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -86,8 +91,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "test@example.com")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(400)
@@ -114,8 +118,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "test@example.com")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(200)
@@ -144,8 +147,7 @@ describe("POST /api/auth/signup", () => {
         body.append("email", "prod@example.com")
         body.append("password", "password123")
 
-        const req = new Request("http://localhost/api/auth/signup", { method: "POST", body })
-        const res = await POST(req as any)
+        const res = await POST(makeNextRequest(body) as any)
         const data = await res.json()
 
         expect(res.status).toBe(200)
