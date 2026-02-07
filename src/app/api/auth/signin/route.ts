@@ -32,15 +32,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const sessionToken = crypto.randomUUID();
+
     await prisma.session.create({
       data: {
-        sessionToken: crypto.randomUUID(),
+        sessionToken,
         userId: user.id,
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       },
     });
 
-    return NextResponse.json({ ok: true });
+    const response = NextResponse.json({ ok: true });
+
+    const isProduction = process.env.NODE_ENV === "production";
+    const sessionCookieName = isProduction
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token";
+
+    response.cookies.set(sessionCookieName, sessionToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+    });
+
+    return response;
   } catch (err) {
     console.error("Signin error:", err);
     return NextResponse.json(
