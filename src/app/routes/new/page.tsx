@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import { GoogleMapsRoute } from '@/components/google-maps-route';
 import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { Location, RouteMetadata } from '@/lib/types/route';
+import { DestinationAutocomplete } from '@/components/destination-autocomplete';
+import type { Destination } from '@/lib/data/destinations';
 import { ArrowLeft, Save, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -51,12 +53,22 @@ export default function NewRoutePage() {
     }
   };
 
+  const handleOriginSelect = (destination: Destination) => {
+    setOrigin(destination.coordinates);
+    setOriginInput(destination.name);
+  };
+
   const handleDestinationChange = (value: string) => {
     setDestinationInput(value);
     const loc = parseLocation(value);
     if (loc) {
       setDestination(loc);
     }
+  };
+
+  const handleDestinationSelect = (destination: Destination) => {
+    setDestination(destination.coordinates);
+    setDestinationInput(destination.name);
   };
 
   const handleSaveRoute = async () => {
@@ -160,29 +172,33 @@ export default function NewRoutePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Origin (lat, lng)
-                  </label>
-                  <input
-                    type="text"
+                  <DestinationAutocomplete
+                    id="origin-input"
+                    label="Origin"
                     value={originInput}
-                    onChange={(e) => handleOriginChange(e.target.value)}
-                    placeholder="40.7128, -74.0060"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={handleOriginChange}
+                    onSelect={handleOriginSelect}
+                    placeholder="Search for origin city or enter coordinates"
+                    showCoordinatesOnSelect={false}
                   />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    You can also enter coordinates manually (lat, lng)
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Destination (lat, lng)
-                  </label>
-                  <input
-                    type="text"
+                  <DestinationAutocomplete
+                    id="destination-input"
+                    label="Destination"
                     value={destinationInput}
-                    onChange={(e) => handleDestinationChange(e.target.value)}
-                    placeholder="38.9072, -77.0369"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={handleDestinationChange}
+                    onSelect={handleDestinationSelect}
+                    placeholder="Search for destination city or enter coordinates"
+                    showCoordinatesOnSelect={false}
                   />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    You can also enter coordinates manually (lat, lng)
+                  </p>
                 </div>
 
                 <div>
