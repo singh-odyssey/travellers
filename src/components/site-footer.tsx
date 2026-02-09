@@ -39,28 +39,6 @@ export default function SiteFooter() {
             </p>
 
             <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/#faq"
-                  className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
-                >
-                  FAQ
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
-                >
-                  Contact
-                </Link>
-
-                <Link
-                  href="/about"
-                  className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
-                >
-                  About
-                </Link>
-
                 <Link
                   href="/signin"
                   className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
@@ -74,9 +52,6 @@ export default function SiteFooter() {
                 >
                   Get started
                 </Link>
-              </div>
-
-
             </div>
           </div>
 
@@ -110,20 +85,6 @@ export default function SiteFooter() {
                 className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
               >
                 About
-              </Link>
-
-              <Link
-                href="/signin"
-                className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
-              >
-                Sign in
-              </Link>
-
-              <Link
-                href="/signup"
-                className="text-slate-600 dark:text-slate-400 hover:text-slate-300 dark:hover:text-slate-200 transition-colors duration-200"
-              >
-                Get started
               </Link>
             </div>
           </div>
