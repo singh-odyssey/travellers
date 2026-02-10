@@ -36,6 +36,7 @@ const nextConfig = {
         ],
       },
     ];
+  },
   // PWA Configuration
   webpack: (config, { isServer }) => {
     if (!isServer) {

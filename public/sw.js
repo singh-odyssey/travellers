@@ -1,19 +1,3 @@
-// Service Worker for travellersmeet PWA
-const CACHE_NAME = 'travellersmeet-v2';
-const urlsToCache = [
-  '/',
-  '/manifest.json',
-  '/favicon.ico'
-];
-
-// Install event - cache essential resources
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
 // Service Worker for Offline-First Travel Mode
 // Lightweight PWA enhancement for caching non-map data
 
@@ -50,12 +34,6 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
         cacheNames
           .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
           .map((name) => {
@@ -68,63 +46,6 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-
-        // Clone the request
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone the response
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        });
-      })
-  );
-});
-
-// Handle push notifications (optional)
-self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data ? event.data.text() : 'New notification',
-    icon: '/icon-192x192.svg',
-    badge: '/icon-72x72.svg',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    }
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('travellersmeet', options)
-  );
-});
-
-// Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(
-    clients.openWindow('/')
-  );
 // Fetch event - network-first strategy for API, cache-first for assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -163,27 +84,27 @@ self.addEventListener('fetch', (event) => {
 async function networkFirstStrategy(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
-    
+
     // Cache successful responses
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     console.log('[SW] Network failed, trying cache:', request.url);
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Return offline page or error response
     return new Response(
-      JSON.stringify({ 
-        error: 'Offline', 
-        message: 'You are currently offline. Some features may not be available.' 
+      JSON.stringify({
+        error: 'Offline',
+        message: 'You are currently offline. Some features may not be available.'
       }),
       {
         status: 503,
@@ -199,23 +120,23 @@ async function networkFirstStrategy(request, cacheName) {
 // Cache-first strategy (for static assets)
 async function cacheFirstStrategy(request, cacheName) {
   const cachedResponse = await caches.match(request);
-  
+
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     console.log('[SW] Failed to fetch:', request.url);
-    
+
     // For navigation requests, try to return a cached page
     if (request.mode === 'navigate') {
       const cachedPage = await caches.match('/');
@@ -223,7 +144,7 @@ async function cacheFirstStrategy(request, cacheName) {
         return cachedPage;
       }
     }
-    
+
     return new Response('Offline', {
       status: 503,
       statusText: 'Service Unavailable',
@@ -259,7 +180,7 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'CACHE_ROUTES') {
     event.waitUntil(
       caches.open(RUNTIME_CACHE).then((cache) => {
@@ -267,4 +188,30 @@ self.addEventListener('message', (event) => {
       })
     );
   }
+});
+
+// Handle push notifications (optional)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New notification',
+    icon: '/icon-192x192.svg',
+    badge: '/icon-72x72.svg',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('travellersmeet', options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
+  );
 });
