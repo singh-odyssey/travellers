@@ -107,7 +107,8 @@ export default function HomePage() {
             },
           ].map((f) => (
             <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 text-black border-slate-200 bg-white shadow-sm hover:shadow-md group">
-              <div className="aspect-[16/10] border-b dark:border-slate-800 border-slate-50 bg-slate-50/50 dark:bg-slate-800/20">
+              <div className="h-[220px] border-b dark:border-slate-800 border-slate-50 bg-slate-50/50 dark:bg-slate-800/20 flex items-center justify-center">
+
                 {f.illustration}
               </div>
               <div className="p-8">
