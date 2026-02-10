@@ -1,26 +1,60 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 
 export default function AccountIllustration() {
     return (
-        <div className="relative w-full h-full flex items-center justify-center p-2 group">
-            <svg
-                viewBox="0 0 100 100"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 transition-transform duration-300 group-hover:scale-110"
-            >
-                <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" className="text-slate-100 dark:text-slate-800" />
-                <circle cx="50" cy="40" r="12" fill="currentColor" className="text-slate-400 dark:text-slate-600 group-hover:text-emerald-500 transition-colors" />
-                <path d="M25 75C25 65 35 60 50 60C65 60 75 65 75 75" stroke="currentColor" strokeWidth="4" strokeLinecap="round" className="text-slate-400 dark:text-slate-600 group-hover:text-emerald-500 transition-colors" />
+        <div className="relative w-full flex items-center justify-center group">
+            <div
+                className="
+          relative
+          w-[96px] h-[96px]
+          md:w-[120px] md:h-[120px]
 
-                {/* Plus sign */}
-                <g className="group-hover:animate-bounce">
-                    <circle cx="75" cy="35" r="8" fill="#10b981" />
-                    <path d="M75 31V39M71 35H79" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                </g>
-            </svg>
+          /* hover motion */
+          transition-transform duration-300 ease-out
+          group-hover:scale-110
+          group-hover:-translate-y-1
+
+          /* subtle glow (account / onboarding tone) */
+          group-hover:drop-shadow-[0_12px_28px_rgba(16,185,129,0.35)]
+
+          /* gentle floating */
+          animate-float
+        "
+            >
+                <Image
+                    src="/create-account.png"
+                    alt="Create account illustration"
+                    fill
+                    className="object-contain"
+                    priority
+                />
+            </div>
+
+            {/* animation styles */}
+            <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+
+        .animate-float {
+          animation: float 4.2s ease-in-out infinite;
+        }
+
+        /* accessibility: reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .animate-float {
+            animation: none;
+          }
+        }
+      `}</style>
         </div>
     );
 }

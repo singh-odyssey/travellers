@@ -1,25 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { compare } from "bcryptjs";
+// Delegate to NextAuth's built-in handler — do not override.
+// The sign-in form uses next-auth/react's signIn() which goes through
+// /api/auth/[...nextauth] (callback/credentials endpoint).
+// This file is intentionally left to re-export the NextAuth handlers
+// so it doesn't shadow the catch-all route with a conflicting implementation.
+export { GET, POST } from "../[...nextauth]/route";
 
-export async function POST(req: NextRequest) {
-  const form = await req.formData();
-  const email = String(form.get("email") || "").toLowerCase().trim();
-  const password = String(form.get("password") || "");
-
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-
-  const ok = await compare(password, user.passwordHash);
-  if (!ok) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-
-  await prisma.session.create({
-    data: {
-      sessionToken: crypto.randomUUID(),
-      userId: user.id,
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    },
-  });
-
-  return NextResponse.json({ ok: true });
-}

@@ -1,39 +1,60 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 
 export default function MatchesIllustration() {
-    return (
-        <div className="relative w-full h-full flex items-center justify-center p-2 group">
-            <svg
-                viewBox="0 0 100 100"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 transition-transform duration-300 group-hover:scale-110"
-            >
-                {/* Two overlapping circles representing people/matches */}
-                <circle cx="40" cy="50" r="15" stroke="currentColor" strokeWidth="2" className="text-slate-400 dark:text-slate-600" />
-                <circle cx="60" cy="50" r="15" stroke="currentColor" strokeWidth="2" className="text-slate-400 dark:text-slate-600" />
+  return (
+    <div className="relative w-full flex items-center justify-center group">
+      <div
+        className="
+          relative
+          w-[96px] h-[96px]
+          md:w-[120px] md:h-[120px]
 
-                {/* Magnifying glass or heart in middle */}
-                <g className="group-hover:animate-pulse">
-                    <circle cx="50" cy="50" r="8" fill="#a855f7" />
-                    <path d="M50 47V53M47 50H53" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                </g>
+          /* hover motion */
+          transition-transform duration-300 ease-out
+          group-hover:scale-110
+          group-hover:-translate-y-1
 
-                {/* Radar waves */}
-                <circle cx="50" cy="50" r="35" stroke="#a855f7" strokeWidth="1" strokeDasharray="4 4" className="animate-spin-slow opacity-30" />
-            </svg>
-            <style jsx>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          /* subtle glow (matching / discovery tone) */
+          group-hover:drop-shadow-[0_12px_28px_rgba(168,85,247,0.35)]
+
+          /* gentle floating */
+          animate-float
+        "
+      >
+        <Image
+          src="/matching.png"
+          alt="Smart matching illustration"
+          fill
+          className="object-contain"
+          priority
+        />
+      </div>
+
+      {/* animation styles */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
         }
-        .animate-spin-slow {
-          animation: spin-slow 10s linear infinite;
-          transform-origin: center;
+
+        .animate-float {
+          animation: float 5.2s ease-in-out infinite;
+        }
+
+        /* accessibility */
+        @media (prefers-reduced-motion: reduce) {
+          .animate-float {
+            animation: none;
+          }
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

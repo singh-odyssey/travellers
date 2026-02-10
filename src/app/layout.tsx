@@ -6,6 +6,8 @@ import SiteFooter from "@/components/site-footer";
 import ScrollToTop from "../components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
 import PWARegister from "@/components/pwa-register";
+import { PWAProvider } from "@/components/pwa-provider";
+import AuthSessionProvider from "@/components/session-provider";
 
 import { auth } from "@/lib/auth";
 
@@ -41,6 +43,21 @@ export const metadata = {
       { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
     ],
   },
+    title: "Travellers",
+  },
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+  },
+};
+
+export const viewport = {
+  themeColor: "#3b82f6",
 };
 
 
@@ -53,6 +70,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <ThemeProvider>
       <PWARegister />
       <Wrapper>
+        <AuthSessionProvider>
         <div className="flex min-h-screen flex-col 
 bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
 dark:!bg-gray-950 dark:!bg-none 
@@ -63,7 +81,9 @@ dark:text-white transition duration-150">
           <SiteFooter />
           <ScrollToTop />
           <Chatbot />
+          <PWAProvider />
         </div>
+        </AuthSessionProvider>
       </Wrapper>
     </ThemeProvider>
   );
