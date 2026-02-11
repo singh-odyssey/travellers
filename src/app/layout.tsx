@@ -33,16 +33,6 @@ export const metadata = {
     statusBarStyle: "default",
     title: "travellersmeet",
   },
-  icons: {
-    icon: [
-      { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
-      { url: "/icon-512x512.svg", sizes: "512x512", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/icon-152x152.svg", sizes: "152x152", type: "image/svg+xml" },
-      { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
-    ],
-  },
 };
 
 
