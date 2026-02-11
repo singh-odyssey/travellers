@@ -286,7 +286,7 @@ export default function SignUpForm() {
                     disabled={loading}
                     className="text-sm text-white/70 hover:text-white disabled:text-white/40"
                   >
-                     Didn't receive the code? <span className="font-semibold underline">Resend</span>
+                     Didn&#39;t receive the code? <span className="font-semibold underline">Resend</span>
                   </button>
                 </div>
 
