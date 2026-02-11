@@ -102,13 +102,6 @@ export default function SignInForm() {
 
             <form onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="text-sm text-white/80">Name</label>
-                <input
-                  required
-                  className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
-                />
-              </div>
-              <div>
                 <label className="text-sm text-white/80">Email</label>
                 <input
                   type="email"

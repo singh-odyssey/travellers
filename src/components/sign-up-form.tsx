@@ -2,21 +2,59 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Eye, EyeOff } from "lucide-react";
 
 
 export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    setTimeout(() => {
-      setLoading(false);
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      // Step 1: Create the account
+      const signupRes = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: formData,
+      });
+
+      const signupData = await signupRes.json();
+
+      if (!signupRes.ok) {
+        setError(signupData.error || "Failed to create account");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Automatically sign in the user
+      const signInRes = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!signInRes?.ok) {
+        setError("Account created but sign-in failed. Please try signing in manually.");
+        setLoading(false);
+        return;
+      }
+
+      // Step 3: Redirect to dashboard on success
       window.location.href = "/dashboard";
-    }, 1200);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -86,9 +124,16 @@ export default function SignUpForm() {
 
             {/* Form */}
             <form onSubmit={onSubmit} className="space-y-4">
+              {error && (
+                <div className="p-3 rounded-xl bg-red-500/20 border border-red-500/50 text-red-200 text-sm">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label className="text-sm text-white/80">Name</label>
                 <input
+                  name="name"
                   required
                   className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
                 />
@@ -97,6 +142,7 @@ export default function SignUpForm() {
               <div>
                 <label className="text-sm text-white/80">Email</label>
                 <input
+                  name="email"
                   type="email"
                   required
                   className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
@@ -106,8 +152,10 @@ export default function SignUpForm() {
               <div className="relative">
                 <label className="text-sm text-white/80">Password</label>
                 <input
+                  name="password"
                   type={showPassword ? "text" : "password"}
                   required
+                  minLength={8}
                   className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 pr-10 text-white outline-none focus:border-blue-400"
                 />
                 <button
@@ -121,7 +169,7 @@ export default function SignUpForm() {
 
               <button
                 disabled={loading}
-                className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold transition"
+                className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white font-bold transition"
               >
                 {loading ? "Creating..." : "Create account"}
               </button>
