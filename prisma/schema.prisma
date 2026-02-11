@@ -8,18 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  passwordHash  String
-  image         String?
-  role          Role     @default(USER)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  tickets       Ticket[]
-  accounts      Account[]
-  sessions      Session[]
-  routes        Route[]
+  id                       String   @id @default(cuid())
+  name                     String
+  email                    String   @unique
+  passwordHash             String
+  image                    String?
+  role                     Role     @default(USER)
+  emailVerified            DateTime?
+  verificationToken        String?   // hashed OTP
+  verificationTokenExpiry  DateTime?
+
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  tickets                  Ticket[]
+  accounts                 Account[]
+  sessions                 Session[]
+  routes                   Route[]
 }
 
 model Ticket {
@@ -95,9 +99,9 @@ model Route {
   distance         Float    // in meters
   duration         Float    // in seconds
   encodedPolyline  String   @db.Text
-  waypoints        String?  @db.Text // JSON string of waypoints
+  waypoints        String? @db.Text // JSON string of waypoints
   tripName         String?
-  notes            String?  @db.Text
+  notes            String? @db.Text
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
