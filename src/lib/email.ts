@@ -1,6 +1,14 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization to prevent build-time errors when API key is not available
+let resend: Resend | null = null;
+
+function getResendClient() {
+  if (!resend && process.env.RESEND_API_KEY) {
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resend;
+}
 
 export async function sendOTPEmail(email: string, otp: string) {
   // Development: log to console
@@ -21,7 +29,12 @@ export async function sendOTPEmail(email: string, otp: string) {
       throw new Error('RESEND_API_KEY not configured');
     }
 
-    await resend.emails.send({
+    const client = getResendClient();
+    if (!client) {
+      throw new Error('Failed to initialize Resend client');
+    }
+
+    await client.emails.send({
       from: 'Travellers <onboarding@travellersmeet.app>',
       to: email,
       subject: 'Verify your email - Travellers',
