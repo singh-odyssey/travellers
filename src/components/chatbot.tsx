@@ -1,117 +1,227 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { knowledge } from "@/lib/chatbot-data";
+import { MessageCircle } from "lucide-react";
 
-
-type Message = { from: "user" | "bot"; text: string };
+type Message = {
+  role: "user" | "bot";
+  content: string;
+};
 
 export default function Chatbot() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { from: "bot", text: "Hi! I'm the Travellers help bot. Ask me about the site or how to use it." },
+    {
+      role: "bot",
+      content:
+        "Hi 👋 Ask me about ticket uploads, matching, dashboard or messaging!",
+    },
   ]);
+
   const [input, setInput] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
-const endRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto scroll
   useEffect(() => {
-    if (open) inputRef.current?.focus();
-  }, [open]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Close on outside click + ESC key
   useEffect(() => {
-  endRef.current?.scrollIntoView({ behavior: "smooth" });
-}, [messages]);
-
-
-  function appendMessage(m: Message) {
-    setMessages((s) => [...s, m]);
-  }
-
-  function handleSend() {
-    const text = input.trim();
-    if (!text) return;
-    appendMessage({ from: "user", text });
-    setInput("");
-    // very small local QA: find best knowledge match
-    const lower = text.toLowerCase();
-    // exact keyword match on titles or text
-    let reply = "Sorry, I don't know that yet. Try asking about signing up, uploading tickets, the dashboard, or the tech stack.";
-    for (const k of knowledge) {
-      if (k.title.toLowerCase().includes(lower) || k.text.toLowerCase().includes(lower)) {
-        reply = k.text;
-        break;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
       }
     }
-    // fallback: keyword search
-    if (reply.startsWith("Sorry")) {
-      const hits = knowledge.filter((k) => {
-        const words = lower.split(/\W+/).filter(Boolean);
-        return words.some((w) => k.text.toLowerCase().includes(w) || k.title.toLowerCase().includes(w));
-      });
-      if (hits.length) reply = hits[0].text;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
     }
 
-    setTimeout(() => appendMessage({ from: "bot", text: reply }), 300);
-  }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+    }
 
-  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") handleSend();
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
+  async function sendMessage() {
+    if (!input.trim() || input.length > 500) return;
+
+    const userMessage: Message = {
+      role: "user",
+      content: input,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await res.json();
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          content: data.reply || "Sorry, I couldn't respond.",
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: "Server error occurred." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div>
-      {/* Floating button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          aria-label="Open chat"
-          onClick={() => setOpen((s) => !s)}
-          className="rounded-full bg-blue-600 text-white w-14 h-14 shadow-lg flex items-center justify-center hover:bg-blue-700"
-        >
-          {open ? "×" : "💬"}
-        </button>
-      </div>
+    <>
+      {/* Floating Button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className="
+    fixed bottom-6 right-6 z-50
+    h-14 w-14 rounded-full
+    bg-blue-600 text-white shadow-lg
+    flex items-center justify-center
+    transition-all duration-300
 
-      {/* Panel */}
-      {open && (
-  <div className="fixed bottom-24 right-6 z-50 w-80 h-[450px] max-h-[70vh] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg flex flex-col overflow-hidden">
-    <div className="px-4 py-2 bg-blue-600 text-white font-medium flex-shrink-0">Help Chat</div>
-    
-    {/* This is the scrollable area */}
-    <div className="p-3 flex-1 overflow-y-auto scrollbar-thin scroll-smooth transition-all">
-  <div className="space-y-3 pr-2"> {/* Added padding-right so text doesn't touch the bar */}
-    {messages.map((m, i) => (
-      <div key={i} className={m.from === "user" ? "text-right" : "text-left"}>
+    animate-bounce-slow
+    hover:scale-110
+  "
+      >
+        <MessageCircle size={22} />
+      </button>
+
+
+      {/* Chat Panel */}
+      {isOpen && (
         <div
-          className={`inline-block px-4 py-2 rounded-2xl shadow-sm max-w-[85%] ${
-            m.from === "user"
-              ? "bg-blue-600 text-white rounded-tr-none" // Chat bubble style
-              : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-tl-none"
-          }`}
+          ref={panelRef}
+          className="
+            fixed bottom-24 right-6 w-80 h-[420px]
+            rounded-2xl flex flex-col z-50 shadow-2xl border
+
+            bg-[#f0fdf4] border-green-200
+            dark:bg-[#111111] dark:border-gray-800
+          "
         >
-          {m.text}
-        </div>
-      </div>
-    ))}
-    <div ref={endRef} />
-  </div>
-</div>
+          {/* Header */}
+          <div
+            className="
+              p-3 font-semibold border-b rounded-t-2xl text-center
 
+              bg-green-100 border-green-200 text-green-900
+              dark:bg-[#1a1a1a] dark:border-gray-800 dark:text-gray-200
+            "
+          >
+            TravelBox
+          </div>
 
-          <div className="p-3 border-t border-gray-100 dark:border-gray-700">
-            <div className="flex gap-2">
+          {/* Messages */}
+          <div
+            className="
+              flex-1 overflow-y-auto p-3 space-y-3 text-sm
+
+              bg-green-50
+              dark:bg-[#0f0f0f]
+            "
+          >
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`px-3 py-2 rounded-2xl max-w-[80%] ${msg.role === "user"
+                  ? "bg-blue-600 text-white ml-auto"
+                  : "bg-white border border-green-200 text-gray-800 dark:bg-[#1c1c1c] dark:border-gray-700 dark:text-gray-200"
+                  }`}
+              >
+                {msg.content}
+              </div>
+            ))}
+
+            {loading && (
+              <div className="text-gray-500 dark:text-gray-400 text-xs">
+                Typing...
+              </div>
+            )}
+
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <div
+            className="
+              p-3 border-t
+
+              bg-green-50 border-green-200
+              dark:bg-[#111111] dark:border-gray-800
+            "
+          >
+            <div
+              className="
+                flex items-center gap-2 rounded-full px-4 py-2 transition
+
+                bg-white focus-within:ring-2 focus-within:ring-green-500
+                dark:bg-[#1a1a1a] dark:focus-within:ring-blue-500
+              "
+            >
               <input
-                ref={inputRef}
+                type="text"
                 value={input}
+                maxLength={500}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                placeholder="Ask about the site..."
-                className="flex-1 rounded px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") sendMessage();
+                }}
+                placeholder="Ask anything about Travellers..."
+                className="
+  flex-1 bg-transparent border-none text-sm
+
+  text-gray-800 placeholder-gray-500
+  dark:text-gray-200 dark:placeholder-gray-400
+
+  outline-none focus:outline-none focus:ring-0"
               />
-              <button onClick={handleSend} className="bg-blue-600 text-white px-3 py-2 rounded">Send</button>
+
+              <button
+                onClick={sendMessage}
+                disabled={loading}
+                className="
+                  bg-blue-600 hover:bg-blue-700
+                  text-white rounded-full px-4 py-1 text-sm font-medium
+                  transition disabled:opacity-50
+                "
+              >
+                Send
+              </button>
             </div>
-            <div className="text-xs text-gray-500 mt-2">Try: &quot;How do I upload a ticket?&quot;</div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
