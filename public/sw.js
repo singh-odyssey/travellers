@@ -84,27 +84,27 @@ self.addEventListener('fetch', (event) => {
 async function networkFirstStrategy(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
-    
+
     // Cache successful responses
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     console.log('[SW] Network failed, trying cache:', request.url);
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Return offline page or error response
     return new Response(
-      JSON.stringify({ 
-        error: 'Offline', 
-        message: 'You are currently offline. Some features may not be available.' 
+      JSON.stringify({
+        error: 'Offline',
+        message: 'You are currently offline. Some features may not be available.'
       }),
       {
         status: 503,
@@ -120,23 +120,23 @@ async function networkFirstStrategy(request, cacheName) {
 // Cache-first strategy (for static assets)
 async function cacheFirstStrategy(request, cacheName) {
   const cachedResponse = await caches.match(request);
-  
+
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     console.log('[SW] Failed to fetch:', request.url);
-    
+
     // For navigation requests, try to return a cached page
     if (request.mode === 'navigate') {
       const cachedPage = await caches.match('/');
@@ -144,7 +144,7 @@ async function cacheFirstStrategy(request, cacheName) {
         return cachedPage;
       }
     }
-    
+
     return new Response('Offline', {
       status: 503,
       statusText: 'Service Unavailable',
@@ -180,7 +180,7 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'CACHE_ROUTES') {
     event.waitUntil(
       caches.open(RUNTIME_CACHE).then((cache) => {
@@ -188,4 +188,30 @@ self.addEventListener('message', (event) => {
       })
     );
   }
+});
+
+// Handle push notifications (optional)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New notification',
+    icon: '/icon-192x192.svg',
+    badge: '/icon-72x72.svg',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('travellersmeet', options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
+  );
 });

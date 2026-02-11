@@ -1,0 +1,38 @@
+
+<svg width="144" height="144" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="144" height="144" fill="url(#grad)" rx="21.599999999999998"/>
+  
+  <!-- Globe circle -->
+  <circle cx="72" cy="72" r="48" 
+          stroke="white" stroke-width="3.6" fill="none"/>
+  
+  <!-- Connection dots and lines -->
+  <g stroke="white" stroke-width="3.6" fill="white">
+    <!-- Top-left dot -->
+    <circle cx="38.51162790697674" cy="38.51162790697674" r="4.8"/>
+    <line x1="72" y1="72" x2="38.51162790697674" y2="38.51162790697674"/>
+    
+    <!-- Top-right dot -->
+    <circle cx="105.48837209302326" cy="38.51162790697674" r="4.8"/>
+    <line x1="72" y1="72" x2="105.48837209302326" y2="38.51162790697674"/>
+    
+    <!-- Bottom-left dot -->
+    <circle cx="38.51162790697674" cy="105.48837209302326" r="4.8"/>
+    <line x1="72" y1="72" x2="38.51162790697674" y2="105.48837209302326"/>
+    
+    <!-- Bottom-right dot -->
+    <circle cx="105.48837209302326" cy="105.48837209302326" r="4.8"/>
+    <line x1="72" y1="72" x2="105.48837209302326" y2="105.48837209302326"/>
+    
+    <!-- Center dot -->
+    <circle cx="72" cy="72" r="7.2"/>
+  </g>
+</svg>
