@@ -147,6 +147,7 @@ travellers/
 │   ├── app/              # Next.js app router pages & API routes
 │   │   ├── (auth)/       # Authentication pages (signin, signup)
 │   │   ├── api/          # Backend API endpoints
+│   │   ├── contact/      # contact page
 │   │   ├── dashboard/    # User dashboard
 │   │   ├── routes/       # Route management & visualization
 │   │   └── upload/       # Ticket upload flow
