@@ -2,21 +2,108 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail } from "lucide-react";
 
 
 export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [step, setStep] = useState<"signup" | "verify">("signup");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [otp, setOtp] = useState("");
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSignup(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    setSuccess("");
 
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const emailValue = formData.get("email") as string;
+    setEmail(emailValue);
+
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Signup failed");
+        setLoading(false);
+        return;
+      }
+
+      setSuccess(data.message || "OTP sent! Check your email.");
+      setStep("verify");
+    } catch (err) {
+      setError("Network error. Please try again.");
+    } finally {
       setLoading(false);
-      window.location.href = "/dashboard";
-    }, 1200);
+    }
+  }
+
+  async function onVerifyOTP(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const res = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Verification failed");
+        setLoading(false);
+        return;
+      }
+
+      setSuccess("Email verified! Redirecting...");
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 1500);
+    } catch (err) {
+      setError("Network error. Please try again.");
+      setLoading(false);
+    }
+  }
+
+  async function resendOTP() {
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const res = await fetch("/api/auth/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to resend OTP");
+        setLoading(false);
+        return;
+      }
+
+      setSuccess(data.message || "New OTP sent!");
+    } catch (err) {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -64,76 +151,167 @@ export default function SignUpForm() {
 
           <div className="rounded-3xl border border-white/10 bg-[#122b45]/70 backdrop-blur-xl p-8">
 
-            {/* Social Buttons */}
-            <div className="space-y-3 mb-6">
+            {step === "signup" ? (
+              <>
+                {/* Social Buttons */}
+                <div className="space-y-3 mb-6">
 
-              {/* GOOGLE */}
-              <button className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold">
-                <GoogleIcon />
-                Continue with Google
-              </button>
+                  {/* GOOGLE */}
+                  <button className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold">
+                    <GoogleIcon />
+                    Continue with Google
+                  </button>
 
-              {/* APPLE */}
-              <button className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold">
-                <AppleIcon />
-                Continue with Apple
-              </button>
+                  {/* APPLE */}
+                  <button className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold">
+                    <AppleIcon />
+                    Continue with Apple
+                  </button>
 
+                </div>
 
+                {/* Errors/Success */}
+                {error && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-200 text-sm">
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-4 p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-200 text-sm">
+                    {success}
+                  </div>
+                )}
 
-            </div>
+                {/* Form */}
+                <form onSubmit={onSignup} className="space-y-4">
+                  <div>
+                    <label className="text-sm text-white/80">Name</label>
+                    <input
+                      name="name"
+                      required
+                      className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
+                    />
+                  </div>
 
+                  <div>
+                    <label className="text-sm text-white/80">Email</label>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
+                    />
+                  </div>
 
-            {/* Form */}
-            <form onSubmit={onSubmit} className="space-y-4">
-              <div>
-                <label className="text-sm text-white/80">Name</label>
-                <input
-                  required
-                  className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
-                />
-              </div>
+                  <div className="relative">
+                    <label className="text-sm text-white/80">Password</label>
+                    <input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      minLength={8}
+                      className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 pr-10 text-white outline-none focus:border-blue-400"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-9 text-white/60"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
 
-              <div>
-                <label className="text-sm text-white/80">Email</label>
-                <input
-                  type="email"
-                  required
-                  className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400"
-                />
-              </div>
+                  <button
+                    disabled={loading}
+                    className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
+                  >
+                    {loading ? "Creating..." : "Create account"}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                {/* OTP Verification Step */}
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/20 mb-4">
+                    <Mail className="w-8 h-8 text-blue-400" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">
+                    Verify Your Email
+                  </h2>
+                  <p className="text-white/70 text-sm">
+                    We sent a 6-digit code to<br />
+                    <span className="font-semibold text-white">{email}</span>
+                  </p>
+                </div>
 
-              <div className="relative">
-                <label className="text-sm text-white/80">Password</label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 pr-10 text-white outline-none focus:border-blue-400"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-9 text-white/60"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+                {/* Errors/Success */}
+                {error && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-200 text-sm">
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-4 p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-200 text-sm">
+                    {success}
+                  </div>
+                )}
 
-              <button
-                disabled={loading}
-                className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold transition"
-              >
-                {loading ? "Creating..." : "Create account"}
-              </button>
-            </form>
+                <form onSubmit={onVerifyOTP} className="space-y-4">
+                  <div>
+                    <label className="text-sm text-white/80">Enter OTP</label>
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      required
+                      placeholder="000000"
+                      maxLength={6}
+                      className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white text-center text-2xl tracking-widest outline-none focus:border-blue-400"
+                    />
+                  </div>
+
+                  <button
+                    disabled={loading || otp.length !== 6}
+                    className="w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
+                  >
+                    {loading ? "Verifying..." : "Verify Email"}
+                  </button>
+                </form>
+
+                <div className="mt-6 text-center">
+                  <button
+                    type="button"
+                    onClick={resendOTP}
+                    disabled={loading}
+                    className="text-sm text-white/70 hover:text-white disabled:text-white/40"
+                  >
+                    Didn't receive the code? <span className="font-semibold underline">Resend</span>
+                  </button>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setStep("signup")}
+                    className="text-sm text-white/70 hover:text-white"
+                  >
+                    ← Back to signup
+                  </button>
+                </div>
+              </>
+            )}
+
           </div>
 
-          <p className="mt-5 text-center text-sm text-white/70">
-            Already have an account?{" "}
-            <Link href="/signin" className="font-semibold text-white hover:underline">
-              Sign in
-            </Link>
-          </p>
+          {step === "signup" && (
+            <p className="mt-5 text-center text-sm text-white/70">
+              Already have an account?{" "}
+              <Link href="/signin" className="font-semibold text-white hover:underline">
+                Sign in
+              </Link>
+            </p>
+          )}
 
         </div>
       </div>
