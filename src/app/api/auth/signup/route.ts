@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { z } from "zod";
+import { generateOTP } from "@/lib/otp";
+import { sendOTPEmail } from "@/lib/email";
 
 const signupSchema = z.object({
   name: z.string().min(1, "Name required"),
@@ -39,12 +41,19 @@ export async function POST(req: NextRequest) {
     // Hash password (10 rounds for production)
     const passwordHash = await hash(password, 10);
 
-    // Create user
+    // Generate OTP
+    const otp = generateOTP();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Create user (unverified)
     const user = await prisma.user.create({
-      data: { name, email, passwordHash },
+      data: { name, email, passwordHash, otp, otpExpires },
     });
 
-    return NextResponse.json({ ok: true, userId: user.id });
+    // Send OTP email
+    await sendOTPEmail(email, otp);
+
+    return NextResponse.json({ ok: true, userId: user.id, message: "OTP sent to your email" });
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
