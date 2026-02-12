@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail } from "lucide-react";
 
 
@@ -10,6 +11,7 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState<"signup" | "verify">("signup");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [otp, setOtp] = useState("");
@@ -22,7 +24,9 @@ export default function SignUpForm() {
 
     const formData = new FormData(e.currentTarget);
     const emailValue = formData.get("email") as string;
+    const passwordValue = formData.get("password") as string;
     setEmail(emailValue);
+    setPassword(passwordValue);
 
     try {
       const res = await fetch("/api/auth/signup", {
@@ -68,10 +72,27 @@ export default function SignUpForm() {
         return;
       }
 
-      setSuccess("Email verified! Redirecting...");
+      setSuccess("Email verified! Signing you in...");
+      
+      // Automatically sign in the user
+      const signInRes = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!signInRes?.ok) {
+        setError("Verification successful, but sign-in failed. Please sign in manually.");
+        setTimeout(() => {
+          window.location.href = "/signin";
+        }, 2000);
+        return;
+      }
+
+      // Redirect to dashboard
       setTimeout(() => {
-        window.location.href = "/signin";
-      }, 1500);
+        window.location.href = "/dashboard";
+      }, 1000);
     } catch (err) {
       setError("Network error. Please try again.");
       setLoading(false);
