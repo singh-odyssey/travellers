@@ -63,6 +63,7 @@ export default function SiteHeader({ session }: Props) {
           <Link href="/#testimonials" className="hover:text-white transition-colors">Stories</Link>
           <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
           <Link href="/upload" className="hover:text-white transition-colors">Upload</Link>
+          <Link href="/routes" className="hover:text-white transition-colors">Routes</Link>
         </nav>
 
         <div className="hidden md:justify-between items-center gap-3 md:flex">
