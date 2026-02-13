@@ -9,7 +9,6 @@ const STATIC_ASSETS = [
   '/',
   '/routes',
   '/dashboard',
-  '/offline',
 ];
 
 // API routes to cache

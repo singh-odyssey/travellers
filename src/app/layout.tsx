@@ -5,7 +5,6 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import ScrollToTop from "../components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
-import PWARegister from "@/components/pwa-register";
 import { PWAProvider } from "@/components/pwa-provider";
 import AuthSessionProvider from "@/components/session-provider";
 
@@ -43,7 +42,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <ThemeProvider>
-      <PWARegister />
       <Wrapper>
         <AuthSessionProvider>
           <div className="flex min-h-screen flex-col 
