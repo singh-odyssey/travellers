@@ -10,6 +10,8 @@ import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { CachedRoute } from '@/lib/types/route';
 import { Map, Plus, Search, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import SignInForm from "@/components/sign-in-form";
+import { auth } from "@/lib/auth";
 
 export default function RoutesPage() {
   const [routes, setRoutes] = useState<CachedRoute[]>([]);
@@ -59,6 +61,23 @@ export default function RoutesPage() {
       route.destinationName?.toLowerCase().includes(query)
     );
   });
+
+  const session = await auth();
+  if (!session?.user?.id) {
+    return (
+      <main className="min-h-screen py-16 px-6 ">
+        
+        <div className="mx-auto max-w-[1800px]">  
+        <h1 className="text-2xl font-semibold">Sign in to upload</h1>
+        <p className="mt-2 text-slate-600 ">You need an account to upload and verify tickets.</p>
+          <div className="mt-6">
+              <SignInForm />
+              </div>
+          </div>
+      </main>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
