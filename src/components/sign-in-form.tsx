@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -58,24 +59,28 @@ export default function SignInForm() {
         xl:grid-cols-2
       "
     >
-      {/* Logo */}
-      <div className="absolute top-8 right-[calc(50%-210px)] translate-x-[6cm] z-20 text-white font-semibold text-xl">
-        ✈️ travellersmeet
-      </div>
+      
 
       {/* LEFT IMAGE */}
-      <div className="relative w-full h-full min-h-[720px] overflow-hidden">
-        <img
+      <div className="relative w-full h-64 xl:h-auto xl:min-h-full overflow-hidden">
+        <Image
           src="/travel.jpg"
           alt="Travel"
-          className="absolute inset-0 w-full h-full object-cover animate-kenburns"
+          fill
+          className="object-cover animate-kenburns"
+          priority
+          
         />
         <div className="absolute inset-0 bg-black/25" />
       </div>
 
       {/* RIGHT FORM */}
-      <div className="flex items-center justify-center px-6">
+      <div className="flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-[420px]">
+
+          <div className="mb-8 text-center text-white font-semibold text-2xl">
+            ✈️ travellersmeet
+          </div>
 
           <div className="rounded-3xl border border-white/10 bg-[#122b45]/70 backdrop-blur-xl p-8 min-h-[420px] flex flex-col justify-between">
 

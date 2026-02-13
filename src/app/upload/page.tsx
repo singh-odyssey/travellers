@@ -6,11 +6,14 @@ export default async function UploadPage() {
   const session = await auth();
   if (!session?.user?.id) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <main className="min-h-screen py-16 px-6 ">
+        
+        <div className="mx-auto max-w-[1800px]">  
         <h1 className="text-2xl font-semibold">Sign in to upload</h1>
-        <p className="mt-2 text-slate-600">You need an account to upload and verify tickets.</p>
+        <p className="mt-2 text-slate-600 ">You need an account to upload and verify tickets.</p>
           <div className="mt-6">
               <SignInForm />
+              </div>
           </div>
       </main>
     );
