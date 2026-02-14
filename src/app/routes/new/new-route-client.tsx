@@ -10,7 +10,7 @@ import { ArrowLeft, Save, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function NewRouteClient() {
+export default function NewRouteClient({ userId }: { userId: string }) {
   const router = useRouter();
   const [tripName, setTripName] = useState('');
   const [originInput, setOriginInput] = useState('');
@@ -79,7 +79,7 @@ export default function NewRouteClient() {
     try {
       const route: RouteMetadata = {
         id: crypto.randomUUID(),
-        // userId is determined server-side from the authenticated session
+        userId, 
         origin,
         destination,
         originName: originInput,
