@@ -63,6 +63,7 @@ export default function SiteHeader({ session }: Props) {
           <Link href="/#testimonials" className="hover:text-white transition-colors">Stories</Link>
           <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
           <Link href="/upload" className="hover:text-white transition-colors">Upload</Link>
+          <Link href="/routes" className="hover:text-white transition-colors">Routes</Link>
         </nav>
 
         <div className="hidden md:justify-between items-center gap-3 md:flex">
@@ -111,6 +112,7 @@ export default function SiteHeader({ session }: Props) {
                 <Link href="/#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
                 <Link href="/#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
                 <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Upload</Link>
+                <Link href="/routes" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Routes</Link>
                 <div className="flex pl-2 pr-8 py-2 justify-between">
                   <p>Dark Theme</p>
                   <Toggle theme={theme} changeTheme={changeTheme} />
