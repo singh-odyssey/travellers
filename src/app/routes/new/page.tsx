@@ -21,5 +21,5 @@ export default async function NewRoutePage() {
     );
   }
 
-  return <NewRouteClient />;
+  return <NewRouteClient userId={session.user.id} />;
 }
