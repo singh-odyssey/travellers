@@ -79,7 +79,7 @@ export default function NewRouteClient() {
     try {
       const route: RouteMetadata = {
         id: crypto.randomUUID(),
-        userId: 'current-user', // This should come from session
+        // userId is determined server-side from the authenticated session
         origin,
         destination,
         originName: originInput,
