@@ -243,7 +243,7 @@ export default function SignUpForm() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-9 text-white/60"
+                      className="absolute right-3 top-9 text-white/60 mt-[5px]"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
