@@ -20,6 +20,7 @@
     "npm": ">=9"
   },
   "dependencies": {
+    "react-icons": "^5.5.0",
     "@auth/prisma-adapter": "^2.11.1",
     "@googlemaps/js-api-loader": "^1.16.10",
     "@prisma/client": "^5.18.0",
