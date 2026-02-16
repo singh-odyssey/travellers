@@ -130,6 +130,17 @@ export default function SignUpForm() {
     }
   }
 
+  const passwordRules = {
+  length: password.length >= 8,
+  number: /\d/.test(password),
+  lower: /[a-z]/.test(password),
+  upper: /[A-Z]/.test(password),
+  special: /[!@#$%^&*(){}]/.test(password),
+};
+
+const passwordValid = Object.values(passwordRules).every(Boolean);
+
+
   return (
     <div
       className="
@@ -240,9 +251,12 @@ export default function SignUpForm() {
                       type={showPassword ? "text" : "password"}
                       required
                       minLength={8}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="mt-1 h-[46px] w-full rounded-7 bg-transparent border border-white/20 px-4 pr-10 text-white outline-none focus:border-blue-400"
+                      className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 pr-10 text-white outline-none focus:border-blue-400"
                     />
+
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
@@ -251,6 +265,17 @@ export default function SignUpForm() {
                      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
                   </div>
+
+                  <div className="mt-3 text-xs space-y-1">
+                  <p className="text-white/70">Password must contain:</p>
+                
+                  <PasswordRule valid={passwordRules.length} text="At least 8 characters" />
+                  <PasswordRule valid={passwordRules.number} text="At least 1 number (0–9)" />
+                  <PasswordRule valid={passwordRules.lower} text="At least 1 lowercase letter (a–z)" />
+                  <PasswordRule valid={passwordRules.upper} text="At least 1 uppercase letter (A–Z)" />
+                  <PasswordRule valid={passwordRules.special} text="At least 1 special symbol (!@#$%^&*)" />
+                </div>
+
 
                   <button
                     disabled={loading}
@@ -302,12 +327,13 @@ export default function SignUpForm() {
                     />
                   </div>
 
-                  <button
-                    disabled={loading || otp.length !== 6}
-                    className="w-full h-[46px] rounded-7 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
-                  >
-                    {loading ? "Verifying..." : "Verify Email"}
-                  </button>
+                 <button
+                disabled={loading || !passwordValid}
+                className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
+              >
+                {loading ? "Creating..." : "Create account"}
+              </button>
+
                 </form>
 
                 <div className="mt-6 text-center">
@@ -363,4 +389,16 @@ function GoogleIcon() {
   );
 }
 
+function PasswordRule({ valid, text }: { valid: boolean; text: string }) {
+  return (
+    <div
+      className={`flex items-center gap-2 transition ${
+        valid ? "text-emerald-400" : "text-red-400"
+      }`}
+    >
+      <span>{valid ? "✅" : "❌"}</span>
+      <span>{text}</span>
+    </div>
+  );
+}
 
