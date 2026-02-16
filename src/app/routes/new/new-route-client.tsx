@@ -4,33 +4,43 @@ import React, { useState } from 'react';
 import { GoogleMapsRoute } from '@/components/google-maps-route';
 import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { Location, RouteMetadata } from '@/lib/types/route';
-import { DestinationAutocomplete } from '@/components/destination-autocomplete';
-import type { Destination } from '@/lib/data/destinations';
+import { PlaceAutocomplete } from '@/components/place-autocomplete';
+import type { PlaceLocation } from '@/lib/types/places';
 import { ArrowLeft, Save, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function NewRouteClient({ userId }: { userId: string }) {
   const router = useRouter();
+  
+  // Form fields
   const [tripName, setTripName] = useState('');
-  const [originInput, setOriginInput] = useState('');
-  const [destinationInput, setDestinationInput] = useState('');
   const [notes, setNotes] = useState('');
   
+  // Location inputs
+  const [originInput, setOriginInput] = useState('');
+  const [destinationInput, setDestinationInput] = useState('');
+  const [originAddress, setOriginAddress] = useState('');
+  const [destinationAddress, setDestinationAddress] = useState('');
+  
+  // Location objects
   const [origin, setOrigin] = useState<Location | null>(null);
   const [destination, setDestination] = useState<Location | null>(null);
+  
+  // Route data
   const [routeData, setRouteData] = useState<{
     distance: number;
     duration: number;
     encodedPolyline: string;
   } | null>(null);
   
+  // UI state
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Parse location from input (lat, lng)
+  // Parse location from input (lat, lng) - fallback for manual entry
   const parseLocation = (input: string): Location | null => {
-    const parts = input.split(',').map(s => s.trim());
+    const parts = input.split(',').map((s) => s.trim());
     if (parts.length === 2) {
       const lat = parseFloat(parts[0]);
       const lng = parseFloat(parts[1]);
@@ -41,32 +51,39 @@ export default function NewRouteClient({ userId }: { userId: string }) {
     return null;
   };
 
-  const handleOriginChange = (value: string) => {
+  // Handle place selection from Google Places autocomplete
+  const handleOriginPlaceSelect = (location: PlaceLocation) => {
+    setOrigin({ lat: location.lat, lng: location.lng });
+    setOriginInput(location.address);
+    setOriginAddress(location.address);
+  };
+
+  const handleDestinationPlaceSelect = (location: PlaceLocation) => {
+    setDestination({ lat: location.lat, lng: location.lng });
+    setDestinationInput(location.address);
+    setDestinationAddress(location.address);
+  };
+
+  // Handle manual input (for coordinate fallback)
+  const handleOriginManualInput = (value: string) => {
     setOriginInput(value);
     const loc = parseLocation(value);
     if (loc) {
       setOrigin(loc);
+      setOriginAddress(''); // Clear address when using coordinates
     }
   };
 
-  const handleOriginSelect = (destination: Destination) => {
-    setOrigin(destination.coordinates);
-    setOriginInput(destination.name);
-  };
-
-  const handleDestinationChange = (value: string) => {
+  const handleDestinationManualInput = (value: string) => {
     setDestinationInput(value);
     const loc = parseLocation(value);
     if (loc) {
       setDestination(loc);
+      setDestinationAddress(''); // Clear address when using coordinates
     }
   };
 
-  const handleDestinationSelect = (destination: Destination) => {
-    setDestination(destination.coordinates);
-    setDestinationInput(destination.name);
-  };
-
+  // Save route
   const handleSaveRoute = async () => {
     if (!origin || !destination || !routeData) {
       setError('Please set origin and destination');
@@ -79,11 +96,11 @@ export default function NewRouteClient({ userId }: { userId: string }) {
     try {
       const route: RouteMetadata = {
         id: crypto.randomUUID(),
-        userId, 
+        userId,
         origin,
         destination,
-        originName: originInput,
-        destinationName: destinationInput,
+        originName: originAddress || originInput,
+        destinationName: destinationAddress || destinationInput,
         distance: routeData.distance,
         duration: routeData.duration,
         encodedPolyline: routeData.encodedPolyline,
@@ -95,7 +112,7 @@ export default function NewRouteClient({ userId }: { userId: string }) {
 
       // Save to server and cache
       await routeCacheManager.syncRoute(route);
-      
+
       alert('Route saved successfully!');
       router.push('/routes');
     } catch (err) {
@@ -106,15 +123,17 @@ export default function NewRouteClient({ userId }: { userId: string }) {
     }
   };
 
-  // Demo locations
+  // Demo route
   const useDemoRoute = () => {
-    const demoOrigin = { lat: 40.7128, lng: -74.0060 }; // New York
+    const demoOrigin = { lat: 40.7128, lng: -74.006 }; // New York
     const demoDestination = { lat: 38.9072, lng: -77.0369 }; // Washington DC
-    
-    setOriginInput(`${demoOrigin.lat}, ${demoOrigin.lng}`);
-    setDestinationInput(`${demoDestination.lat}, ${demoDestination.lng}`);
+
     setOrigin(demoOrigin);
     setDestination(demoDestination);
+    setOriginInput('New York, NY, USA');
+    setDestinationInput('Washington, DC, USA');
+    setOriginAddress('New York, NY, USA');
+    setDestinationAddress('Washington, DC, USA');
     setTripName('New York to Washington DC');
   };
 
@@ -136,7 +155,7 @@ export default function NewRouteClient({ userId }: { userId: string }) {
                   Create New Route
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Plan your journey and save for offline access
+                  Search for any address or enter coordinates
                 </p>
               </div>
             </div>
@@ -168,33 +187,27 @@ export default function NewRouteClient({ userId }: { userId: string }) {
                 </div>
 
                 <div>
-                  <DestinationAutocomplete
+                  <PlaceAutocomplete
                     id="origin-input"
-                    label="Origin"
+                    label="Starting Location"
                     value={originInput}
-                    onChange={handleOriginChange}
-                    onSelect={handleOriginSelect}
-                    placeholder="Search for origin city or enter coordinates"
-                    showCoordinatesOnSelect={false}
+                    onChange={handleOriginManualInput}
+                    onPlaceSelect={handleOriginPlaceSelect}
+                    placeholder="Search for starting location"
+                    required
                   />
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    You can also enter coordinates manually (lat, lng)
-                  </p>
                 </div>
 
                 <div>
-                  <DestinationAutocomplete
+                  <PlaceAutocomplete
                     id="destination-input"
                     label="Destination"
                     value={destinationInput}
-                    onChange={handleDestinationChange}
-                    onSelect={handleDestinationSelect}
-                    placeholder="Search for destination city or enter coordinates"
-                    showCoordinatesOnSelect={false}
+                    onChange={handleDestinationManualInput}
+                    onPlaceSelect={handleDestinationPlaceSelect}
+                    placeholder="Search for destination"
+                    required
                   />
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    You can also enter coordinates manually (lat, lng)
-                  </p>
                 </div>
 
                 <div>
@@ -225,13 +238,17 @@ export default function NewRouteClient({ userId }: { userId: string }) {
                   </h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Distance:</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Distance:
+                      </span>
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {routeCacheManager.formatDistance(routeData.distance)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Duration:</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Duration:
+                      </span>
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {routeCacheManager.formatDuration(routeData.duration)}
                       </span>
@@ -242,7 +259,9 @@ export default function NewRouteClient({ userId }: { userId: string }) {
 
               {error && (
                 <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+                  <p className="text-sm text-red-800 dark:text-red-200">
+                    {error}
+                  </p>
                 </div>
               )}
 
@@ -272,10 +291,10 @@ export default function NewRouteClient({ userId }: { userId: string }) {
                   <div className="text-center">
                     <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600 dark:text-gray-400 mb-2">
-                      Enter origin and destination coordinates
+                      Search for locations to see route on map
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-500">
-                      Format: latitude, longitude (e.g., 40.7128, -74.0060)
+                      You can also enter coordinates: latitude, longitude
                     </p>
                   </div>
                 </div>
