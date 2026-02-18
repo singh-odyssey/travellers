@@ -3,17 +3,18 @@ import { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import ScrollToTop from "../components/ScrollToTop";
+import ScrollToTop from "@/components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
 import { PWAProvider } from "@/components/pwa-provider";
 import AuthSessionProvider from "@/components/session-provider";
-
 import { auth } from "@/lib/auth";
-
 import { ThemeProvider } from "@/state/theme";
 import { Wrapper } from "@/components/theme-wrapper";
 
 const inter = Inter({ subsets: ["latin"] });
+
+/* ✅ MUST be at top level */
+export const dynamic = "force-dynamic";
 
 export const viewport = {
   themeColor: "#10b981",
@@ -25,7 +26,8 @@ export const viewport = {
 
 export const metadata = {
   title: "travellersmeet — Meet verified travellers",
-  description: "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
+  description:
+    "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -34,30 +36,37 @@ export const metadata = {
   },
 };
 
-
-
-export default async function RootLayout({ children }: { children: ReactNode }) {
-
-  const session = await auth()
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await auth(); // ✅ restored
 
   return (
-    <ThemeProvider>
-      <Wrapper>
-        <AuthSessionProvider>
-          <div className="flex min-h-screen flex-col 
-bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
-dark:!bg-gray-950 dark:!bg-none 
-dark:text-white transition duration-150">
+    <html lang="en">
+      <body className={inter.className}>
+        <ThemeProvider>
+          <Wrapper>
+            <AuthSessionProvider session={session}>
+              <div className="flex min-h-screen flex-col bg-white dark:bg-gray-950 dark:text-white transition-colors duration-150">
 
-            <SiteHeader session={session} />
-            <main className="flex-1 pb-16 pt-2">{children}</main>
-            <SiteFooter />
-            <ScrollToTop />
-            <Chatbot />
-            <PWAProvider />
-          </div>
-        </AuthSessionProvider>
-      </Wrapper>
-    </ThemeProvider>
+                <SiteHeader session={session} />
+
+                <main className="flex-1 pt-2 pb-16">
+                  {children}
+                </main>
+
+                <SiteFooter />
+                <ScrollToTop />
+                <Chatbot />
+                <PWAProvider />
+
+              </div>
+            </AuthSessionProvider>
+          </Wrapper>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
