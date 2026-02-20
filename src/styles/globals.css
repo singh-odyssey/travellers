@@ -45,3 +45,31 @@
 .animate-bounce-slow {
   animation: bounceSlow 2.5s infinite ease-in-out;
 }
+
+@keyframes floatSlow {
+  0% {
+    transform: translateY(-50%) translateX(0px);
+  }
+
+  50% {
+    transform: translateY(-52%) translateX(-10px);
+  }
+
+  100% {
+    transform: translateY(-50%) translateX(0px);
+  }
+}
+
+@keyframes floatSlow {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-60px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
