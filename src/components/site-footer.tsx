@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Github, Twitter, Instagram, Plane } from "lucide-react";
 
 export default function SiteFooter() {
@@ -35,7 +36,6 @@ export default function SiteFooter() {
             />
             <h2 className="text-3xl tracking-tight">
               <span className="font-semibold">travellersmeet</span>
-
             </h2>
           </div>
 
@@ -48,30 +48,68 @@ export default function SiteFooter() {
         {/* Columns */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 text-base">
 
+          {/* Explore */}
           <div>
             <h3 className="font-semibold mb-3">Explore</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Find Travellers</li>
-              <li>Safety Center</li>
+              <li>
+                <Link href="/demo-routes" className="hover:text-white transition">
+                  Find Travellers
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-white transition">
+                  Safety Center
+                </Link>
+              </li>
             </ul>
           </div>
 
+          {/* Community */}
           <div>
             <h3 className="font-semibold mb-3">Community</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>GitHub Repo ⭐</li>
-              <li>Contributors</li>
+              <li>
+                <a
+                  href="https://github.com/singh-odyssey/travellers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition"
+                >
+                  GitHub Repo ⭐
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/singh-odyssey/travellers/graphs/contributors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition"
+                >
+                  Contributors
+                </a>
+              </li>
             </ul>
           </div>
 
+          {/* Legal */}
           <div>
             <h3 className="font-semibold mb-3">Legal</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Privacy Policy</li>
-              <li>Terms & Conditions</li>
+              <li>
+                <Link href="/privacy" className="hover:text-white transition">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-white transition">
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
 
+          {/* Newsletter */}
           <div>
             <h3 className="font-semibold mb-3">Newsletter</h3>
             <p className="text-gray-300 mb-3">Email Address</p>
@@ -99,10 +137,15 @@ export default function SiteFooter() {
 
         {/* Bottom Row */}
         <div className="mt-6 flex flex-col md:flex-row items-center justify-between text-gray-300 text-sm gap-6">
-
-
           <div>
-            © 2026 TravellersMeet. Privacy · Terms
+            © 2026 TravellersMeet.{" "}
+            <Link href="/privacy" className="hover:text-white transition">
+              Privacy
+            </Link>{" "}
+            ·{" "}
+            <Link href="/terms" className="hover:text-white transition">
+              Terms
+            </Link>
           </div>
 
           <div>
@@ -110,7 +153,13 @@ export default function SiteFooter() {
           </div>
 
           <div className="flex gap-8">
-            <Github className="hover:text-white transition cursor-pointer" />
+            <a
+              href="https://github.com/singh-odyssey/travellers"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="hover:text-white transition cursor-pointer" />
+            </a>
             <Twitter className="hover:text-white transition cursor-pointer" />
             <Instagram className="hover:text-white transition cursor-pointer" />
           </div>
