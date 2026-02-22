@@ -48,14 +48,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} bg-white dark:bg-gray-950 dark:text-white transition-colors duration-300`}
-      >
+      <body className={`${inter.className} bg-white dark:bg-gray-950 dark:text-white transition-colors duration-300`}>
         <ThemeProvider>
           <Wrapper>
             <AuthSessionProvider session={session}>
               <div className="flex min-h-screen flex-col">
-
                 {/* Header */}
                 <SiteHeader session={session} />
 
@@ -64,28 +61,11 @@ export default async function RootLayout({
                   {children}
                 </main>
 
-  return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} bg-white dark:bg-slate-950 transition-colors duration-300`}>
-        <ThemeProvider>
-          <PWARegister />
-          <Wrapper>
-            <AuthSessionProvider>
-              <div className="flex min-h-screen flex-col dark:text-white transition-colors duration-300">
-                <SiteHeader session={session} />
-                <main className="flex-1 pb-16 pt-2">{children}</main>
+                {/* Footer and Utilities */}
                 <SiteFooter />
                 <ScrollToTop />
                 <Chatbot />
                 <PWAProvider />
-                {/* Footer */}
-                <SiteFooter />
-
-                {/* Utilities */}
-                <ScrollToTop />
-                <Chatbot />
-                <PWAProvider />
-
               </div>
             </AuthSessionProvider>
           </Wrapper>
