@@ -27,6 +27,11 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
         
+        // Check if email is verified
+        if (!user.emailVerified) {
+          throw new Error("Please verify your email before signing in");
+        }
+        
         const ok = await compare(password, user.passwordHash);
         if (!ok) return null;
         

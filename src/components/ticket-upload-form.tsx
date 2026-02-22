@@ -1,12 +1,45 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef} from "react";
 import { CloudUpload, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export default function TicketUploadForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+const [dragActive, setDragActive] = useState(false);
+const [fileName, setFileName] = useState<string | null>(null);
+
+function handleDragOver(e: React.DragEvent) {
+  e.preventDefault();
+  e.stopPropagation();
+  setDragActive(true);
+}
+
+function handleDragLeave(e: React.DragEvent) {
+  e.preventDefault();
+  e.stopPropagation();
+  setDragActive(false);
+}
+
+function handleDrop(e: React.DragEvent) {
+  e.preventDefault();
+  e.stopPropagation();
+  setDragActive(false);
+
+  const file = e.dataTransfer.files?.[0];
+  if (!file) return;
+
+  // attach dropped file to the real input
+  const dt = new DataTransfer();
+  dt.items.add(file);
+  if (fileRef.current) {
+    fileRef.current.files = dt.files;
+  }
+
+  setFileName(file.name);
+}
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,28 +82,65 @@ export default function TicketUploadForm() {
           <label htmlFor="departure-date" className="block text-sm font-medium">Departure date</label>
           <input id="departure-date" type="date" name="departureDate" required className="mt-1 transition duration-150 dark:bg-slate-900 dark:border-slate-800 bg-white border-neutral-300 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-slate-900 dark:focus:ring-white outline-none" />
         </div>
-        <div>
-          <label className="block text-sm font-medium">Ticket (PDF or image)</label>
-          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 dark:border-slate-700 border-dashed rounded-lg hover:border-slate-400 dark:hover:border-slate-600 transition-colors cursor-pointer relative group">
-            <div className="space-y-1 text-center">
-              <CloudUpload className="mx-auto h-12 w-12 text-slate-400 group-hover:text-slate-500 transition-colors" />
-              <div className="flex text-sm text-slate-600 dark:text-slate-400">
-                <label htmlFor="file-upload" className="relative cursor-pointer rounded-md font-medium text-slate-900 dark:text-white hover:underline focus-within:outline-none">
-                  <span>Upload a file</span>
-                  <input id="file-upload" name="file" type="file" accept=".pdf,image/*" required className="sr-only" />
-                </label>
-                <p className="pl-1">or drag and drop</p>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                PDF, PNG, JPG up to 10MB
-              </p>
-            </div>
-          </div>
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-start gap-1">
-            <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
-            Your ticket is stored securely. Sensitive info can be redacted by our team.
-          </p>
-        </div>
+
+        
+       <div>
+  <label className="block text-sm font-medium">Ticket (PDF or image)</label>
+
+  <div
+    onDragOver={handleDragOver}
+    onDragEnter={handleDragOver}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop}
+    onClick={() => fileRef.current?.click()}
+    className={`
+      mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg
+      transition-colors cursor-pointer relative group
+      ${dragActive
+        ? "border-slate-900 dark:border-white bg-slate-50 dark:bg-slate-800/40"
+        : "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600"}
+    `}
+  >
+    <div className="space-y-1 text-center pointer-events-none">
+      <CloudUpload className="mx-auto h-12 w-12 text-slate-400 group-hover:text-slate-500 transition-colors" />
+
+      <div className="flex justify-center text-sm text-slate-600 dark:text-slate-400">
+        <span className="font-medium text-slate-900 dark:text-white underline">
+          Choose file
+        </span>
+        <p className="pl-1">or drag and drop</p>
+      </div>
+
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        PDF, PNG, JPG up to 10MB
+      </p>
+
+      {fileName && (
+        <p className="text-xs font-medium text-emerald-600 mt-2">
+          Selected: {fileName}
+        </p>
+      )}
+    </div>
+
+    <input
+      ref={fileRef}
+      id="file-upload"
+      name="file"
+      type="file"
+      accept=".pdf,image/*"
+      required
+      className="hidden"
+      onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
+    />
+  </div>
+
+  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 flex items-start gap-1">
+    <AlertCircle className="h-3 w-3 mt-0.5 shrink-0" />
+    Your ticket is stored securely. Sensitive info can be redacted by our team.
+  </p>
+</div>
+
+        
       </div>
 
       {error && (
