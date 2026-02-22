@@ -29,19 +29,19 @@ export default function SiteHeader({ session }: Props) {
 
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-teal-700/30 bg-gradient-to-r from-teal-700 to-teal-600 dark:from-slate-900 dark:to-slate-800 dark:border-slate-800 transition-colors duration-150">
-  <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
-    <div className="flex items-center gap-3">
-      <Link href="/" className="flex items-center gap-2 group">
-        
-        {/* Icon */}
-        <div className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 transition-transform duration-300 group-hover:scale-110 shadow-sm overflow-hidden">
-          <Plane className="h-5 w-5 rotate-[-45deg] group-hover:rotate-0 transition-transform duration-500" />
-          <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors" />
-        </div>
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md dark:bg-slate-900/80 dark:border-slate-800 transition-colors duration-300">
+      <div className="mx-auto *:flex-1 flex items-center justify-between px-6 py-3">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 group">
 
-        {/* Brand text with hover effect */}
-        <span className="
+            {/* Icon */}
+            <div className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 transition-transform duration-300 group-hover:scale-110 shadow-sm overflow-hidden">
+              <Plane className="h-5 w-5 rotate-[-45deg] group-hover:rotate-0 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors" />
+            </div>
+
+            {/* Brand text with hover effect */}
+            <span className="
           bg-white/90 text-black px-4 py-1.5 rounded-full 
           text-lg font-semibold tracking-tight 
           cursor-pointer
@@ -51,18 +51,18 @@ export default function SiteHeader({ session }: Props) {
           hover:-translate-y-0.5 hover:scale-105
           hover:shadow-md
         ">
-          travellersmeet
-        </span>
+              travellersmeet
+            </span>
 
-      </Link>
-    </div>
+          </Link>
+        </div>
 
-        <nav className="hidden items-center text-sm font-medium text-white/95 gap-8 md:flex">
-          <Link href="/#features" className="hover:text-white transition-colors">Features</Link>
-          <Link href="/#how-it-works" className="hover:text-white transition-colors">How it works</Link>
-          <Link href="/#testimonials" className="hover:text-white transition-colors">Stories</Link>
-          <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
-          <Link href="/upload" className="hover:text-white transition-colors">Upload</Link>
+        <nav className="hidden items-center text-sm font-medium text-slate-600 dark:text-slate-300 gap-8 md:flex">
+          <Link href="/#features" className="hover:text-slate-900 dark:hover:text-white transition-colors">Features</Link>
+          <Link href="/#how-it-works" className="hover:text-slate-900 dark:hover:text-white transition-colors">How it works</Link>
+          <Link href="/#testimonials" className="hover:text-slate-900 dark:hover:text-white transition-colors">Stories</Link>
+          <Link href="/#faq" className="hover:text-slate-900 dark:hover:text-white transition-colors">FAQ</Link>
+          <Link href="/upload" className="hover:text-slate-900 dark:hover:text-white transition-colors">Upload</Link>
         </nav>
 
         <div className="hidden md:justify-between items-center gap-3 md:flex">
@@ -70,12 +70,12 @@ export default function SiteHeader({ session }: Props) {
 
           {session?.user?.id ?
             <div>
-              <Link className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm" href="/dashboard">Dashboard</Link>
+              <Link className="rounded-lg bg-slate-900 dark:bg-white px-4 py-2.5 text-sm font-semibold text-white dark:text-slate-900 hover:opacity-90 transition-all shadow-sm" href="/dashboard">Dashboard</Link>
             </div>
             :
             <div className="flex gap-3 items-center">
-              <Link href="/signin" className="text-sm font-medium text-white/95 hover:text-white transition-colors">Sign in</Link>
-              <Link href="/signup" className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-teal-700 hover:bg-white/90 transition-all shadow-sm">Get started</Link>
+              <Link href="/signin" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Sign in</Link>
+              <Link href="/signup" className="rounded-lg bg-slate-900 dark:bg-white px-4 py-2.5 text-sm font-semibold text-white dark:text-slate-900 hover:opacity-90 transition-all shadow-sm">Get started</Link>
             </div>
           }
 

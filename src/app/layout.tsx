@@ -52,24 +52,24 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const session = await auth()
 
   return (
-    <ThemeProvider>
-      <PWARegister />
-      <Wrapper>
-        <AuthSessionProvider>
-          <div className="flex min-h-screen flex-col 
-bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
-dark:!bg-gray-950 dark:!bg-none 
-dark:text-white transition duration-150">
-
-            <SiteHeader session={session} />
-            <main className="flex-1 pb-16 pt-2">{children}</main>
-            <SiteFooter />
-            <ScrollToTop />
-            <Chatbot />
-            <PWAProvider />
-          </div>
-        </AuthSessionProvider>
-      </Wrapper>
-    </ThemeProvider>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.className} bg-white dark:bg-slate-950 transition-colors duration-300`}>
+        <ThemeProvider>
+          <PWARegister />
+          <Wrapper>
+            <AuthSessionProvider>
+              <div className="flex min-h-screen flex-col dark:text-white transition-colors duration-300">
+                <SiteHeader session={session} />
+                <main className="flex-1 pb-16 pt-2">{children}</main>
+                <SiteFooter />
+                <ScrollToTop />
+                <Chatbot />
+                <PWAProvider />
+              </div>
+            </AuthSessionProvider>
+          </Wrapper>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
