@@ -10,9 +10,8 @@ import {
 import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
 import SmartMatching from "@/components/illustrations/SmartMatching";
 import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
-import AccountIllustration from "@/components/illustrations/AccountIllustration";
-import UploadIllustration from "@/components/illustrations/UploadIllustration";
-import MatchesIllustration from "@/components/illustrations/MatchesIllustration";
+
+
 
 export default function HomePage() {
   return (
@@ -178,30 +177,42 @@ export default function HomePage() {
             {
               title: "Create account",
               desc: "Sign up with email and password.",
-              illustration: <AccountIllustration />,
+              image: "/process-create-account.png",
             },
             {
               title: "Upload ticket",
               desc: "Submit your ticket for a quick verification.",
-              illustration: <UploadIllustration />,
+              image: "/process-upload-ticket.png",
             },
             {
               title: "Find matches",
               desc: "See people in your destination window and say hello.",
-              illustration: <MatchesIllustration />,
+              image: "/process-find-matches.png",
             },
           ].map((s) => (
             <div
               key={s.title}
-              className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
+              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                {s.illustration}
+              <div className="px-4 pt-4">
+                <div className="relative h-[130px] w-full overflow-hidden rounded-xl">
+                  <Image
+                    src={s.image}
+                    alt={s.title}
+                    width={400}
+                    height={130}
+                    className="w-full h-full object-cover animate-image-pan"
+                  />
+                  {/* Dark mode overlay toggle */}
+                  <div className="absolute inset-0 rounded-xl bg-transparent dark:bg-black/30 transition-colors duration-300" />
+                </div>
               </div>
-              <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
-                {s.desc}
-              </p>
+              <div className="p-8">
+                <h3 className="text-lg font-semibold">{s.title}</h3>
+                <p className="mt-2 text-slate-600 dark:text-slate-400">
+                  {s.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>
