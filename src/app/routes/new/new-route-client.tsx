@@ -6,7 +6,7 @@ import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { Location, RouteMetadata } from '@/lib/types/route';
 import { PlaceAutocomplete } from '@/components/place-autocomplete';
 import type { PlaceLocation } from '@/lib/types/places';
-import { ArrowLeft, Save, MapPin } from 'lucide-react';
+import { ArrowLeft, Save, MapPin } from "lucide-react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

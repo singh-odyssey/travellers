@@ -57,7 +57,7 @@ export default async function RootLayout({
               <div className="flex min-h-screen flex-col">
 
                 {/* Header */}
-                <SiteHeader session={session} />
+                <SiteHeader />
 
                 {/* Main Content */}
                 <main className="flex-1 pt-6 pb-20">

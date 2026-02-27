@@ -7,7 +7,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { MapPin, X, Loader2 } from 'lucide-react';
+import { MapPin, X, Loader2 } from "lucide-react";
 
 export interface PlaceLocation {
   address: string;

@@ -12,31 +12,43 @@ model User {
   name          String
   email         String   @unique
   passwordHash  String
-  image         String?
-  role          Role     @default(USER)
-  emailVerified Boolean  @default(false)
+  image         String?     // Profile avatar URL
+
+  // ✅ NEW PROFILE FIELDS (Safe Additions)
+  bio           String?     @db.Text
+  location      String?
+  phone         String?
+  isDeleted     Boolean     @default(false)  // Soft delete support
+
+  role          Role        @default(USER)
+  emailVerified Boolean     @default(false)
   otp           String?
   otpExpires    DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
   tickets       Ticket[]
   accounts      Account[]
   sessions      Session[]
   routes        Route[]
+
+  @@index([email])
 }
 
 model Ticket {
-  id            String   @id @default(cuid())
-  user          User     @relation(fields: [userId], references: [id])
+  id            String        @id @default(cuid())
+  user          User          @relation(fields: [userId], references: [id])
   userId        String
   destination   String
   departureDate DateTime
   ticketUrl     String
-  status        TicketStatus @default(PENDING)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  status        TicketStatus  @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([destination, departureDate])
+  @@index([userId])
 }
 
 enum TicketStatus {
@@ -50,7 +62,12 @@ enum Role {
   ADMIN
 }
 
-// NextAuth (v5) Prisma Adapter models
+//
+// --------------------
+// NextAuth Models (DO NOT MODIFY)
+// --------------------
+//
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -75,6 +92,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -85,24 +104,34 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+//
+// --------------------
+// Route Model
+// --------------------
+//
+
 model Route {
   id               String   @id @default(cuid())
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String
+
   originLat        Float
   originLng        Float
   destinationLat   Float
   destinationLng   Float
+
   originName       String?
   destinationName  String?
-  distance         Float    // in meters
-  duration         Float    // in seconds
-  encodedPolyline  String   @db.Text
-  waypoints        String?  @db.Text // JSON string of waypoints
+
+  distance         Float      // meters
+  duration         Float      // seconds
+  encodedPolyline  String     @db.Text
+  waypoints        String?    @db.Text
   tripName         String?
-  notes            String?  @db.Text
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  notes            String?    @db.Text
+
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   @@index([userId, updatedAt])
 }

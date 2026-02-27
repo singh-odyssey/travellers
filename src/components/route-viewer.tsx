@@ -12,7 +12,7 @@ import { OfflineModeIndicator } from './offline-mode-indicator';
 import { useConnectivity } from '@/lib/hooks/useConnectivity';
 import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { OfflineRouteData, RouteMetadata } from '@/lib/types/route';
-import { Download, Save, Trash2, MapPin } from 'lucide-react';
+import { Download, Save, Trash2, MapPin } from "lucide-react";
 
 interface RouteViewerProps {
   routeId?: string;

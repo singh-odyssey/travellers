@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 
@@ -16,31 +16,31 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const schema = z.object({ 
-          email: z.string().email(), 
-          password: z.string().min(8) 
+        const schema = z.object({
+          email: z.string().email(),
+          password: z.string().min(8)
         });
         const parsed = schema.safeParse(credentials ?? {});
         if (!parsed.success) return null;
-        
+
         const { email, password } = parsed.data;
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null;
-        
+
         // Check if email is verified
         if (!user.emailVerified) {
           throw new Error("Please verify your email before signing in");
         }
-        
+
         const ok = await compare(password, user.passwordHash);
         if (!ok) return null;
-        
-        return { 
-          id: user.id, 
-          email: user.email, 
-          name: user.name, 
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
           image: user.image,
-          role: user.role 
+          role: user.role
         } as any;
       },
     }),

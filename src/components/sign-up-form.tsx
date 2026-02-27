@@ -76,7 +76,7 @@ export default function SignUpForm() {
       }
 
       setSuccess("Email verified! Signing you in...");
-      
+
       // Automatically sign in the user
       const signInRes = await signIn("credentials", {
         email,
@@ -131,14 +131,14 @@ export default function SignUpForm() {
   }
 
   const passwordRules = {
-  length: password.length >= 8,
-  number: /\d/.test(password),
-  lower: /[a-z]/.test(password),
-  upper: /[A-Z]/.test(password),
-  special: /[!@#$%^&*(){}]/.test(password),
-};
+    length: password.length >= 8,
+    number: /\d/.test(password),
+    lower: /[a-z]/.test(password),
+    upper: /[A-Z]/.test(password),
+    special: /[!@#$%^&*(){}]/.test(password),
+  };
 
-const passwordValid = Object.values(passwordRules).every(Boolean);
+  const passwordValid = Object.values(passwordRules).every(Boolean);
 
 
   return (
@@ -161,7 +161,7 @@ const passwordValid = Object.values(passwordRules).every(Boolean);
 
 
 
-      
+
 
 
 
@@ -179,7 +179,7 @@ const passwordValid = Object.values(passwordRules).every(Boolean);
         />
         <div className="absolute inset-0 bg-black/25" />
       </div>
-      
+
 
       {/* RIGHT FORM */}
       <div className="flex items-center justify-center px-6 py-12">
@@ -262,19 +262,19 @@ const passwordValid = Object.values(passwordRules).every(Boolean);
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-9 text-white/60 mt-[5px]"
                     >
-                     {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
                   </div>
 
                   <div className="mt-3 text-xs space-y-1">
-                  <p className="text-white/70">Password must contain:</p>
-                
-                  <PasswordRule valid={passwordRules.length} text="At least 8 characters" />
-                  <PasswordRule valid={passwordRules.number} text="At least 1 number (0–9)" />
-                  <PasswordRule valid={passwordRules.lower} text="At least 1 lowercase letter (a–z)" />
-                  <PasswordRule valid={passwordRules.upper} text="At least 1 uppercase letter (A–Z)" />
-                  <PasswordRule valid={passwordRules.special} text="At least 1 special symbol (!@#$%^&*)" />
-                </div>
+                    <p className="text-white/70">Password must contain:</p>
+
+                    <PasswordRule valid={passwordRules.length} text="At least 8 characters" />
+                    <PasswordRule valid={passwordRules.number} text="At least 1 number (0–9)" />
+                    <PasswordRule valid={passwordRules.lower} text="At least 1 lowercase letter (a–z)" />
+                    <PasswordRule valid={passwordRules.upper} text="At least 1 uppercase letter (A–Z)" />
+                    <PasswordRule valid={passwordRules.special} text="At least 1 special symbol (!@#$%^&*)" />
+                  </div>
 
 
                   <button
@@ -327,12 +327,12 @@ const passwordValid = Object.values(passwordRules).every(Boolean);
                     />
                   </div>
 
-                 <button
-                disabled={loading || !passwordValid}
-                className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
-              >
-                {loading ? "Creating..." : "Create account"}
-              </button>
+                  <button
+                    disabled={loading || !passwordValid}
+                    className="mt-5 w-full h-[46px] rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white font-bold transition"
+                  >
+                    {loading ? "Creating..." : "Create account"}
+                  </button>
 
                 </form>
 
@@ -343,7 +343,7 @@ const passwordValid = Object.values(passwordRules).every(Boolean);
                     disabled={loading}
                     className="text-sm text-white/70 hover:text-white disabled:text-white/40"
                   >
-                     Didn&#39;t receive the code? <span className="font-semibold underline">Resend</span>
+                    Didn&#39;t receive the code? <span className="font-semibold underline">Resend</span>
                   </button>
                 </div>
 
@@ -380,10 +380,10 @@ function GoogleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 48 48">
       <g>
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
       </g>
     </svg>
   );
@@ -392,9 +392,8 @@ function GoogleIcon() {
 function PasswordRule({ valid, text }: { valid: boolean; text: string }) {
   return (
     <div
-      className={`flex items-center gap-2 transition ${
-        valid ? "text-emerald-400" : "text-red-400"
-      }`}
+      className={`flex items-center gap-2 transition ${valid ? "text-emerald-400" : "text-red-400"
+        }`}
     >
       <span>{valid ? "✅" : "❌"}</span>
       <span>{text}</span>

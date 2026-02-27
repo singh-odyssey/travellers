@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "types": [
-      "vitest/globals",
-      "google.maps"
-    ],
-    "target": "es2022",
+    "target": "ES2022",
     "lib": [
       "dom",
       "dom.iterable",
-      "es2022"
+      "esnext"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -18,26 +14,30 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/components/*": [
-        "src/components/*"
-      ],
-      "@/lib/*": [
-        "src/lib/*"
-      ],
-      "@/*": [
-        "src/*"
-      ]
-    },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "isolatedModules": true
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "lucide-react": [
+        "node_modules/lucide-react/dist/lucide-react.d.ts"
+      ],
+      "framer-motion": [
+        "node_modules/framer-motion/dist/types/index.d.ts"
+      ]
+    },
+    "types": [
+      "vitest/globals",
+      "google.maps"
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -46,7 +46,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    ".next"
+    "node_modules"
   ]
 }

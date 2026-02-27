@@ -5,13 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "next-auth/react";
 
-type Props = {
-  session: any;
-};
-
-export default function SiteHeader({ session }: Props) {
+export default function SiteHeader() {
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const { theme, changeTheme } = useTheme();
 
@@ -32,8 +30,7 @@ export default function SiteHeader({ session }: Props) {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
 
         {/* ================= LEFT SIDE ================= */}
-        <Link href="/" className="flex items-center gap-3 group">
-
+        <Link href={session?.user ? "/dashboard/profile" : "/"} className="flex items-center gap-3 group">
           {/* LOGO IMAGE */}
           <Image
             src="/logo.png"
@@ -45,12 +42,7 @@ export default function SiteHeader({ session }: Props) {
           />
 
           {/* BRAND NAME */}
-          <span
-            className="
-              text-base font-semibold tracking-tight
-              text-black dark:text-white
-            "
-          >
+          <span className="text-base font-semibold tracking-tight text-black dark:text-white">
             travellersmeet
           </span>
         </Link>
@@ -80,9 +72,9 @@ export default function SiteHeader({ session }: Props) {
         {/* ================= RIGHT SIDE ================= */}
         <div className="hidden md:flex items-center gap-5">
 
-          {session?.user?.id ? (
+          {session?.user ? (
             <Link
-              href="/dashboard"
+              href="/dashboard/profile"
               className="
                 bg-black text-white
                 dark:bg-white dark:text-black

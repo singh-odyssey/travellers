@@ -7,7 +7,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { searchDestinations, type Destination } from '@/lib/data/destinations';
-import { MapPin, Navigation, X } from 'lucide-react';
+import { MapPin, Navigation, X } from "lucide-react";
 
 export interface DestinationAutocompleteProps {
   value: string;

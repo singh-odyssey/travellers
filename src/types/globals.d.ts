@@ -1,0 +1,12 @@
+declare module "lucide-react";
+declare module "framer-motion";
+declare module "react-icons/fa";
+declare module "react-icons/hi";
+declare module "react-icons/fi";
+declare module "react-icons/io";
+declare module "react-icons/md";
+declare module "react-icons/bs";
+declare module "react-icons/bi";
+declare module "react-icons/si";
+declare module "react-icons/ri";
+declare module "react-icons/ai";

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { useConnectivity } from '@/lib/hooks/useConnectivity';
-import { WifiOff, Wifi, Cloud, CloudOff } from 'lucide-react';
+import { WifiOff, Wifi, Cloud, CloudOff } from "lucide-react";
 
 interface OfflineModeIndicatorProps {
   showWhenOnline?: boolean;
