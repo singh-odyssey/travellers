@@ -22,8 +22,8 @@ export default function NotFound() {
 
         {/* Friendly Message */}
         <p className="text-lg text-slate-600 dark:text-slate-300 mb-8">
-          Oops! The page you're looking for doesn't exist or may have been moved.
-        </p>
+  {"Oops! The page you're looking for doesn't exist or may have been moved."}
+</p>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -61,6 +61,12 @@ export default function SiteFooter() {
                   Safety Center
                 </Link>
               </li>
+              <Link
+  href="/feedback"
+  className="hover:text-slate-900 dark:hover:text-white transition-colors"
+>
+  Feedback
+</Link>
             </ul>
           </div>
 
