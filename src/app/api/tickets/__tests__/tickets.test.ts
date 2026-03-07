@@ -1,8 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 import { POST } from "../route"
+import { auth } from "@/lib/auth"
 
-vi.mock("@/lib/prisma")
+vi.mock("@/lib/prisma", () => ({
+    default: {
+        user: {
+            findFirst: vi.fn(),
+        },
+        ticket: {
+            create: vi.fn(),
+        },
+    },
+}))
+
+vi.mock("@/lib/auth", () => ({
+    auth: vi.fn(),
+}))
 
 class MockFile extends Blob {
     name: string
@@ -29,6 +43,7 @@ function makeNextRequest(form: FormData): MockNextRequest {
 
 beforeEach(() => {
     vi.clearAllMocks()
+        ; (auth as any).mockResolvedValue({ user: { id: "user1" } })
 })
 
 describe("POST /api/tickets", () => {
@@ -69,8 +84,8 @@ describe("POST /api/tickets", () => {
         expect(data.error).toBe("Invalid input")
     })
 
-    it("returns 401 if no demo user exists", async () => {
-        ;(prisma.user.findFirst as any).mockResolvedValue(null)
+    it("returns 401 if unauthorized", async () => {
+        ; (auth as any).mockResolvedValue(null)
 
         const body = new FormData()
         body.append("destination", "Paris")
@@ -81,19 +96,19 @@ describe("POST /api/tickets", () => {
         const data = await res.json()
 
         expect(res.status).toBe(401)
-        expect(data.error).toBe("No user")
+        expect(data.error).toBe("Unauthorized")
     })
 
     it("returns 200 and creates ticket if valid input and user exists", async () => {
-        ;(prisma.user.findFirst as any).mockResolvedValue({ id: "user1" })
-        ;(prisma.ticket.create as any).mockResolvedValue({
-            id: "ticket1",
-            userId: "user1",
-            destination: "Paris",
-            departureDate: new Date("2025-12-31"),
-            ticketUrl: "about:blank",
-            status: "PENDING",
-        })
+        ; (auth as any).mockResolvedValue({ user: { id: "user1" } })
+            ; (prisma.ticket.create as any).mockResolvedValue({
+                id: "ticket1",
+                userId: "user1",
+                destination: "Paris",
+                departureDate: new Date("2025-12-31"),
+                ticketUrl: "about:blank",
+                status: "PENDING",
+            })
 
         const body = new FormData()
         body.append("destination", "Paris")
