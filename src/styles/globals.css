@@ -6,6 +6,9 @@
   --radius: 0.75rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 /* ================= Ken Burns ================= */
 @keyframes kenburns {
   0% {
