@@ -42,10 +42,10 @@ export default function SiteHeader({ session }: Props) {
         </div>
 
         <nav className="hidden items-center text-sm font-medium text-white/95 gap-8 md:flex">
-          <Link href="/#features" className="hover:text-white transition-colors">Features</Link>
-          <Link href="/#how-it-works" className="hover:text-white transition-colors">How it works</Link>
-          <Link href="/#testimonials" className="hover:text-white transition-colors">Stories</Link>
-          <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
+          <Link href="#features" className="hover:text-white transition-colors">Features</Link>
+          <Link href="#how-it-works" className="hover:text-white transition-colors">How it works</Link>
+          <Link href="#testimonials" className="hover:text-white transition-colors">Stories</Link>
+          <Link href="#faq" className="hover:text-white transition-colors">FAQ</Link>
           <Link href="/upload" className="hover:text-white transition-colors">Upload</Link>
         </nav>
 
@@ -90,10 +90,10 @@ export default function SiteHeader({ session }: Props) {
           <motion.div initial={{ maxHeight: 0 }} exit={{ maxHeight: 0 }} animate={{ maxHeight: 500 }} transition={{ duration: 0.2 }} className="overflow-hidden z-20 absolute left-0 right-0 border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 md:hidden transition duration-150">
             <div className=" mx-auto max-w-6xl px-6 py-3">
               <div className="grid gap-2 dark:*:text-slate-200">
-                <Link href="/#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Features</Link>
-                <Link href="/#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>How it works</Link>
-                <Link href="/#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
-                <Link href="/#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
+                <Link href="#features" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Features</Link>
+                <Link href="#how-it-works" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>How it works</Link>
+                <Link href="#testimonials" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Stories</Link>
+                <Link href="#faq" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>FAQ</Link>
                 <Link href="/upload" className="rounded px-2 py-2 text-slate-800 hover:opacity-80" onClick={() => setOpen(false)}>Upload</Link>
                 <div className="flex pl-2 pr-8 py-2 justify-between">
                   <p>Dark Theme</p>
