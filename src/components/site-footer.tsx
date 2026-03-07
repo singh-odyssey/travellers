@@ -1,68 +1,203 @@
-import Link from "next/link";
-import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
+"use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { Github, Twitter, Instagram, Plane } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-slate-200/60 bg-white transition duration-150 dark:border-slate-900 dark:bg-slate-950">
-      <div className="mx-auto max-w-6xl px-6 py-10 text-sm text-slate-600">
+    <footer className="relative overflow-hidden text-slate-800 dark:text-white transition-colors duration-300">
 
-        {/* Top Section */}
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+      {/* Background with theme-aware gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-[#06132a] dark:via-[#071a3d] dark:to-[#06132a] transition-colors duration-500" />
 
-          {/* Brand Info */}
-          <div className="max-w-sm space-y-2 text-center md:text-left">
-            <p className="text-base font-semibold text-slate-800 dark:text-slate-400">
-              travellersmeet
-            </p>
-            <p className="text-sm text-slate-500">
-              Meet verified travellers and explore journeys together.
-            </p>
+      {/* World Map with theme-aware opacity */}
+      <div className="absolute inset-0 opacity-10 dark:opacity-25 pointer-events-none">
+        <Image
+          src="/worldMap.png"
+          alt="World Map"
+          fill
+          priority
+          className="object-cover"
+        />
+      </div>
+
+      {/* Container */}
+      <div className="relative z-20 max-w-7xl mx-auto px-16 py-16">
+        {/* Logo + Tagline */}
+        <div className="text-center -mt-2 mb-8">
+          <div className="flex justify-center items-center gap-3">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={38}
+              height={38}
+            />
+            <h2 className="text-3xl tracking-tight transition-colors duration-300">
+              <span className="font-semibold">travellersmeet</span>
+            </h2>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-medium md:justify-end">
-            <Link href="/" className="hover:text-blue-500 transition">Home</Link>
-            <Link href="/about" className="hover:text-blue-500 transition">About</Link>
-            <Link href="/contact" className="hover:text-blue-500 transition">Contact</Link>
-            <Link href="#features" className="hover:text-blue-500 transition">Features</Link>
-            <Link href="#how-it-works" className="hover:text-blue-500 transition">How it works</Link>
-            <Link href="#faq" className="hover:text-blue-500 transition">FAQ</Link>
-            <Link href="/signup" className="hover:text-blue-500 transition">Get started</Link>
-          </nav>
+          <p className="mt-4 text-slate-600 dark:text-gray-300 max-w-2xl mx-auto text-base leading-relaxed transition-colors duration-300">
+            Connect with verified travellers, discover shared journeys,
+            and explore the world together.
+          </p>
+        </div>
+
+        {/* Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 text-base">
+
+          {/* Explore */}
+          <div>
+            <h3 className="font-semibold mb-3 transition-colors duration-300">Explore</h3>
+            <ul className="space-y-2 text-slate-600 dark:text-gray-300 transition-colors duration-300">
+              <li>
+                <Link href="/demo-routes" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  Find Travellers
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  Safety Center
+                </Link>
+              </li>
+              <Link
+  href="/feedback"
+  className="hover:text-slate-900 dark:hover:text-white transition-colors"
+>
+  Feedback
+</Link>
+            </ul>
+          </div>
+
+          {/* Community */}
+          <div>
+            <h3 className="font-semibold mb-3 transition-colors duration-300">Community</h3>
+            <ul className="space-y-2 text-slate-600 dark:text-gray-300 transition-colors duration-300">
+              <li>
+                <a
+                  href="https://github.com/singh-odyssey/travellers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  GitHub Repo ⭐
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/singh-odyssey/travellers/graphs/contributors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  Contributors
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="font-semibold mb-3 transition-colors duration-300">Legal</h3>
+            <ul className="space-y-2 text-slate-600 dark:text-gray-300 transition-colors duration-300">
+              <li>
+                <Link href="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="font-semibold mb-3 transition-colors duration-300">Newsletter</h3>
+            <p className="text-slate-600 dark:text-gray-300 mb-3 transition-colors duration-300">Email Address</p>
+
+            <div className="flex gap-3">
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full rounded-lg bg-slate-200/50 dark:bg-white/10 border border-slate-300 dark:border-white/20 px-4 py-2 backdrop-blur-sm text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400 focus:outline-none focus:border-slate-400 dark:focus:border-white/40 transition-all duration-300"
+              />
+              <button className="bg-slate-900 dark:bg-white text-white dark:text-black px-5 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-gray-200 transition-colors duration-300">
+                Go
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Divider */}
-        <div className="my-8 border-t border-slate-200 dark:border-slate-800"></div>
-
-        {/* Social Icons */}
-        <div className="flex justify-center gap-8 text-slate-700 dark:text-slate-300">
-          <a href="https://github.com/singh-odyssey/travellers" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaGithub size={22} />
-          </a>
-
-          <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <svg viewBox="0 0 512 512" fill="currentColor" className="w-5 h-5">
-              <path d="M459.37 151.716c.325 4.548 0 9.097 0 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.83-17.219-161.137-46.779 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c14.182 7.873 30.355 12.67 47.431 13.319-28.264-18.843-46.78-51.005-46.78-87.391 0-19.492 5.197-37.36 14.182-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.872-2.599-15.743-2.599-23.615 0-57.828 46.782-104.934 104.934-104.934 30.355 0 57.828 12.995 77.07 33.832 24.04-4.548 46.78-13.645 67.095-25.791-7.873 24.366-24.366 44.833-46.132 57.827 21.366-2.273 41.834-8.122 60.665-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/>
-            </svg>
-          </a>
-
-          <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaInstagram size={22} />
-          </a>
-
-          <a href="https://linkedin.com/in/aditya-singh-6297242a5" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-            <FaLinkedin size={22} />
-          </a>
+        <div className="my-12 relative flex items-center justify-center">
+          <div className="absolute w-full border-t border-dashed border-slate-300 dark:border-white/30" />
+          <div className="relative bg-slate-50 dark:bg-[#071a3d] px-2 transition-colors duration-500">
+            <Plane size={16} className="text-slate-400 dark:text-white" />
+          </div>
         </div>
 
-        {/* Bottom Text */}
-        <div className="mt-8 flex flex-col items-center gap-2 text-center">
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-400">
-            Made with love <span className="text-red-500">❤️</span> by the community
-          </p>
-          <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} travellersmeet. All rights reserved.
-          </p>
+        {/* Bottom Row */}
+        <div className="mt-6 flex flex-col md:flex-row items-center justify-between text-slate-500 dark:text-gray-300 text-sm gap-6 transition-colors duration-300">
+          <div>
+            © 2026 TravellersMeet.{" "}
+            <Link href="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+              Privacy
+            </Link>{" "}
+            ·{" "}
+            <Link href="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+              Terms
+            </Link>
+          </div>
+
+          <div>
+            Made with <span className="text-red-500">❤️</span> by a community with 🛂 passports ready.
+          </div>
+
+          <div className="relative z-30 flex gap-8 items-center">
+            <a
+              href="https://github.com/singh-odyssey/travellers"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Repository"
+              className="hover:scale-110 transition-transform duration-200"
+            >
+              <Github className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
+            </a>
+
+            <a
+              href="https://twitter.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+              className="hover:scale-110 transition-transform duration-200"
+            >
+              <Twitter className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
+            </a>
+
+            <a
+              href="https://instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hover:scale-110 transition-transform duration-200"
+            >
+              <Instagram className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
+            </a>
+
+            <a
+              href="https://linkedin.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="hover:scale-110 transition-transform duration-200"
+            >
+              <FaLinkedin className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

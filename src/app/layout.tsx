@@ -3,16 +3,21 @@ import { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import ScrollToTop from "../components/ScrollToTop";
+import ScrollToTop from "@/components/ScrollToTop";
 import Chatbot from "@/components/chatbot";
-import PWARegister from "@/components/pwa-register";
-
+import { PWAProvider } from "@/components/pwa-provider";
+import AuthSessionProvider from "@/components/session-provider";
 import { auth } from "@/lib/auth";
-
 import { ThemeProvider } from "@/state/theme";
 import { Wrapper } from "@/components/theme-wrapper";
+import FloatingActions from "@/components/FloatingActions";
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
-const inter = Inter({ subsets: ["latin"] });
+/* ✅ Force dynamic rendering */
+export const dynamic = "force-dynamic";
 
 export const viewport = {
   themeColor: "#10b981",
@@ -24,47 +29,47 @@ export const viewport = {
 
 export const metadata = {
   title: "travellersmeet — Meet verified travellers",
-  description: "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
+  description:
+    "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "travellersmeet",
   },
-  icons: {
-    icon: [
-      { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
-      { url: "/icon-512x512.svg", sizes: "512x512", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/icon-152x152.svg", sizes: "152x152", type: "image/svg+xml" },
-      { url: "/icon-192x192.svg", sizes: "192x192", type: "image/svg+xml" },
-    ],
-  },
 };
 
-
-
-export default async function RootLayout({ children }: { children: ReactNode }) {
-
-  const session = await auth()
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await auth();
 
   return (
-    <ThemeProvider>
-      <PWARegister />
-      <Wrapper>
-        <div className="flex min-h-screen flex-col 
-bg-gradient-to-br from-[#ecfaf4] via-[#dff3ea] to-[#cfeee0] 
-dark:!bg-gray-950 dark:!bg-none 
-dark:text-white transition duration-150">
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} bg-white dark:bg-gray-950 dark:text-white transition-colors duration-300`}>
+        <ThemeProvider>
+          <Wrapper>
+            <AuthSessionProvider session={session}>
+              <div className="flex min-h-screen flex-col">
+                {/* Header */}
+                <SiteHeader />
 
-          <SiteHeader session={session} />
-          <main className="flex-1 pb-16 pt-2">{children}</main>
-          <SiteFooter />
-          <ScrollToTop />
-          <Chatbot />
-        </div>
-      </Wrapper>
-    </ThemeProvider>
+                {/* Main Content */}
+                <main className="flex-1 pt-6 pb-20">
+                  {children}
+                </main>
+
+                {/* Footer and Utilities */}
+                <SiteFooter />
+                <FloatingActions />
+                  <PWAProvider />
+              </div>
+            </AuthSessionProvider>
+          </Wrapper>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
