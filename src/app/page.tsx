@@ -38,12 +38,12 @@ export default function HomePage() {
               travellersmeet helps solo travellers find others headed to the same city and dates — verified with a real ticket, not just vibes.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/signup" className="inline-flex items-center transition duration-150 justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white shadow hover:bg-slate-800">
+              <Link href="/signup" className="inline-flex items-center transition duration-150 justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white shadow hover:bg-slate-800 cursor-pointer">
                 Get started free <UserPlus className="ml-2 h-4 w-4" />
               </Link>
-              <Link href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150">
+              <a href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150 cursor-pointer">
                 See how it works
-              </Link>
+              </a>
             </div>
             <p className="mt-3 text-xs text-slate-500">No spam. Private by default. Cancel anytime.</p>
           </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-8 text-center">
-          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:opacity-90 transition duration-150 dark:bg-white dark:text-slate-900">Create your account</Link>
+          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:opacity-90 transition duration-150 dark:bg-white dark:text-slate-900 cursor-pointer">Create your account</Link>
         </div>
       </section>
 
@@ -221,7 +221,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150">Already booked? Upload your ticket</Link>
+          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150 cursor-pointer">Already booked? Upload your ticket</Link>
         </div>
       </section>
     </main>
