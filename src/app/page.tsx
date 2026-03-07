@@ -22,7 +22,7 @@ import MatchesIllustration from "@/components/illustrations/MatchesIllustration"
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="bg-gradient-to-b from-slate-50 via-blue-50/30 to-purple-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900/95">
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 pt-14">
         <div className="grid items-center gap-10 md:grid-cols-2">
@@ -41,7 +41,7 @@ export default function HomePage() {
               <Link href="/signup" className="inline-flex items-center transition duration-150 justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white shadow hover:bg-slate-800">
                 Get started free <UserPlus className="ml-2 h-4 w-4" />
               </Link>
-              <Link href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 font-medium text-slate-900 hover:bg-slate-50">
+              <Link href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150">
                 See how it works
               </Link>
             </div>
@@ -63,7 +63,7 @@ export default function HomePage() {
 
       {/* Trust */}
       <section className="mx-auto mt-10 max-w-6xl px-6">
-        <div className="dark:bg-slate-900 transition duration-150 dark:text-slate-300 dark:border-slate-800 grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-sm sm:grid-cols-3">
+        <div className="dark:bg-slate-900/60 backdrop-blur-sm transition duration-150 dark:text-slate-300 dark:border-slate-700/50 grid items-center gap-6 rounded-xl border border-slate-200/60 bg-white/70 px-8 py-6 text-sm text-slate-600 shadow-sm sm:grid-cols-3">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-5 w-5 text-emerald-500" />
             <p>Ticket-verified profiles</p>
@@ -106,8 +106,8 @@ export default function HomePage() {
               illustration: <PrivateMessaging />,
             },
           ].map((f) => (
-            <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 text-black border-slate-200 bg-white shadow-sm hover:shadow-md group">
-              <div className="aspect-[16/10] border-b dark:border-slate-800 border-slate-50 bg-slate-50/50 dark:bg-slate-800/20">
+            <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm dark:text-slate-200 text-black border-slate-200/60 bg-white/70 shadow-sm hover:shadow-md group">
+              <div className="aspect-[16/10] border-b dark:border-slate-700/50 border-slate-100/60 bg-slate-50/60 dark:bg-slate-800/30">
                 {f.illustration}
               </div>
               <div className="p-8">
@@ -131,8 +131,8 @@ export default function HomePage() {
             { title: "Upload ticket", desc: "Submit your ticket for a quick verification.", illustration: <UploadIllustration /> },
             { title: "Find matches", desc: "See people in your destination window and say hello.", illustration: <MatchesIllustration /> },
           ].map((s, i) => (
-            <div key={s.title} className="rounded-xl border transition duration-150 dark:border-slate-800 dark:bg-slate-900 border-slate-200 bg-white p-6 shadow-sm hover:shadow-md group">
-              <div className="inline-flex h-16 w-16 mb-2 items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800/50 text-white shadow-inner group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+            <div key={s.title} className="rounded-xl border transition duration-150 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm border-slate-200/60 bg-white/70 p-6 shadow-sm hover:shadow-md group">
+              <div className="inline-flex h-16 w-16 mb-2 items-center justify-center rounded-lg bg-slate-100/60 dark:bg-slate-800/60 text-white shadow-inner group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
                 {s.illustration}
               </div>
               <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
@@ -174,7 +174,7 @@ export default function HomePage() {
                 color: "bg-purple-100 text-purple-700"
               },
             ].map((t) => (
-              <div key={t.name} className="relative rounded-2xl transition duration-150 border border-slate-200 dark:border-slate-800 dark:bg-slate-900 p-8 shadow-sm hover:shadow-md">
+              <div key={t.name} className="relative rounded-2xl transition duration-150 border border-slate-200/60 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm bg-white/70 p-8 shadow-sm hover:shadow-md">
                 <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
                 <blockquote className="relative text-slate-800 dark:text-slate-200 leading-relaxed italic">“{t.quote}”</blockquote>
                 <div className="mt-6 flex items-center gap-3">
@@ -211,7 +211,7 @@ export default function HomePage() {
               a: "Getting started and basic matching are free while we're in beta.",
             },
           ].map((f) => (
-            <div key={f.q} className="rounded-xl border border-slate-200 transition duration-150 dark:border-slate-800 dark:bg-slate-900 bg-white p-6 shadow-sm flex gap-4">
+            <div key={f.q} className="rounded-xl border border-slate-200/60 transition duration-150 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm bg-white/70 p-6 shadow-sm flex gap-4">
               <HelpCircle className="h-6 w-6 text-slate-400 shrink-0" />
               <div>
                 <p className="font-medium text-slate-900 dark:text-slate-200">{f.q}</p>
@@ -221,7 +221,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 font-medium text-slate-900 hover:bg-slate-50">Already booked? Upload your ticket</Link>
+          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150">Already booked? Upload your ticket</Link>
         </div>
       </section>
     </main>
