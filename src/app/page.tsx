@@ -14,33 +14,9 @@ import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
 
 export default function HomePage() {
   return (
-    <main className="bg-gradient-to-b from-slate-50 via-blue-50/30 to-purple-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900/95">
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pt-14">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          <div>
-            <div className="inline-flex items-center gap-2 transition duration-150 dark:bg-slate-800 dark:border-slate-800 dark:text-gray-400 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm">
-              <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Now verifying tickets for fall trips
-            </div>
-            <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">
-              Meet verified travellers. Make real connections.
-            </h1>
-            <p className="mt-4 text-lg leading-7 text-slate-600 dark:text-slate-400">
-              travellersmeet helps solo travellers find others headed to the same city and dates — verified with a real ticket, not just vibes.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/signup" className="inline-flex items-center transition duration-150 justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white shadow hover:bg-slate-800 cursor-pointer">
-                Get started free <UserPlus className="ml-2 h-4 w-4" />
-              </Link>
-              <a href="#how-it-works" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150 cursor-pointer">
-                See how it works
-              </a>
     <main>
-
       {/* ================= HERO ================= */}
       <section className="relative w-full overflow-hidden">
-
         <div
           className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-30"
           style={{ backgroundImage: "url('/worldMap.png')" }}
@@ -50,9 +26,7 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
           <div className="grid items-center gap-16 md:grid-cols-2">
-
             <div className="text-slate-900 dark:text-white">
-
               <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 Now verifying tickets for fall trips
@@ -71,19 +45,18 @@ export default function HomePage() {
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white shadow hover:bg-emerald-600 transition"
+                  className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white shadow hover:bg-emerald-600 transition cursor-pointer"
                 >
                   Get started free <UserPlus className="ml-2 h-4 w-4" />
                 </Link>
 
-                <Link
+                <a
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition cursor-pointer"
                 >
                   See how it works
-                </Link>
+                </a>
               </div>
-
             </div>
 
             <div className="relative flex justify-center md:justify-end overflow-visible">
@@ -98,14 +71,10 @@ export default function HomePage() {
                 />
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* Trust */}
-      <section className="mx-auto mt-10 max-w-6xl px-6">
-        <div className="dark:bg-slate-900/60 backdrop-blur-sm transition duration-150 dark:text-slate-300 dark:border-slate-700/50 grid items-center gap-6 rounded-xl border border-slate-200/60 bg-white/70 px-8 py-6 text-sm text-slate-600 shadow-sm sm:grid-cols-3">
       {/* ================= TRUST STRIP ================= */}
       <section className="mx-auto max-w-7xl px-6 -mt-16 relative z-20 pb-10">
         <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-xl sm:grid-cols-3 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300">
@@ -150,8 +119,6 @@ export default function HomePage() {
               illustration: <PrivateMessaging />,
             },
           ].map((f) => (
-            <div key={f.title} className="overflow-hidden transition duration-150 rounded-xl border dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm dark:text-slate-200 text-black border-slate-200/60 bg-white/70 shadow-sm hover:shadow-md group">
-              <div className="aspect-[16/10] border-b dark:border-slate-700/50 border-slate-100/60 bg-slate-50/60 dark:bg-slate-800/30">
             <div
               key={f.title}
               className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
@@ -171,7 +138,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= HOW IT WORKS ================= */}
-      <section id="how-it-works" className="mx-auto max-w-7xl px-6 mt-28">
+      <section id="how-it-works" className="mx-auto max-w-7xl px-6 mt-28 scroll-mt-20">
         <div className="text-center">
           <h2 className="text-3xl font-semibold tracking-tight">
             Process
@@ -180,13 +147,6 @@ export default function HomePage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {[
-            { title: "Create account", desc: "Sign up with email and password.", illustration: <AccountIllustration /> },
-            { title: "Upload ticket", desc: "Submit your ticket for a quick verification.", illustration: <UploadIllustration /> },
-            { title: "Find matches", desc: "See people in your destination window and say hello.", illustration: <MatchesIllustration /> },
-          ].map((s, i) => (
-            <div key={s.title} className="rounded-xl border transition duration-150 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm border-slate-200/60 bg-white/70 p-6 shadow-sm hover:shadow-md group">
-              <div className="inline-flex h-16 w-16 mb-2 items-center justify-center rounded-lg bg-slate-100/60 dark:bg-slate-800/60 text-white shadow-inner group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
-                {s.illustration}
             {
               title: "Create account",
               desc: "Sign up with email and password.",
@@ -228,63 +188,21 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="mt-8 text-center">
-          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 font-medium text-white hover:opacity-90 transition duration-150 dark:bg-white dark:text-slate-900 cursor-pointer">Create your account</Link>
+        <div className="mt-12 text-center">
+          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white hover:bg-emerald-600 transition cursor-pointer">
+            Create your account
+          </Link>
         </div>
       </section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <section className="mx-auto mt-24 max-w-6xl px-6">
+      <section className="mx-auto max-w-7xl px-6 mt-28">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+          <h2 className="text-3xl font-semibold tracking-tight">
             What people say
           </h2>
         </div>
 
-        <div className="mt-10">
-          <div className="grid gap-8 md:grid-cols-3">
-            {[
-              {
-                quote: "Met two other solo travellers for a Louvre day and dinner—felt safe and easy.",
-                name: "Ana, 27",
-                trip: "Paris in May",
-                color: "bg-emerald-100 text-emerald-700"
-              },
-              {
-                quote: "Loved the verification. Real people going when I was.",
-                name: "Dev, 31",
-                trip: "Tokyo in March",
-                color: "bg-blue-100 text-blue-700"
-              },
-              {
-                quote: "Ended up sharing rides to hikes with folks on the same dates.",
-                name: "Sara, 24",
-                trip: "Reykjavík in July",
-                color: "bg-purple-100 text-purple-700"
-              },
-            ].map((t) => (
-              <div key={t.name} className="relative rounded-2xl transition duration-150 border border-slate-200/60 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm bg-white/70 p-8 shadow-sm hover:shadow-md">
-                <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
-                <blockquote className="relative text-slate-800 dark:text-slate-200 leading-relaxed italic">“{t.quote}”</blockquote>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold ${t.color}`}>
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <figcaption className="text-sm font-semibold text-slate-900 dark:text-white">{t.name}</figcaption>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{t.trip}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="mx-auto mt-24 max-w-6xl px-6 pb-24 scroll-mt-20">
-        <h2 className="text-2xl font-semibold tracking-tight">Frequently asked questions</h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           {[
             {
@@ -299,24 +217,11 @@ export default function HomePage() {
               quote: "Shared rides with folks on same dates.",
               name: "Sara",
             },
-          ].map((f) => (
-            <div key={f.q} className="rounded-xl border border-slate-200/60 transition duration-150 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm bg-white/70 p-6 shadow-sm flex gap-4">
-              <HelpCircle className="h-6 w-6 text-slate-400 shrink-0" />
-              <div>
-                <p className="font-medium text-slate-900 dark:text-slate-200">{f.q}</p>
-                <p className="mt-1 text-slate-600 dark:text-slate-400">{f.a}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-8 text-center">
-          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300/70 bg-white/80 backdrop-blur-sm px-5 py-3 font-medium text-slate-900 hover:bg-white/90 transition duration-150 cursor-pointer">Already booked? Upload your ticket</Link>
-        </div>
           ].map((t) => (
-            <div key={t.name} className="relative rounded-2xl border border-slate-200 dark:border-slate-800 dark:bg-slate-900 p-8 shadow-sm">
+            <div key={t.name} className="relative rounded-2xl border border-slate-200 dark:border-slate-800 dark:bg-slate-900 bg-white p-8 shadow-sm">
               <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
               <blockquote className="italic text-slate-800 dark:text-slate-200">
-                “{t.quote}”
+                &ldquo;{t.quote}&rdquo;
               </blockquote>
               <p className="mt-4 font-semibold">{t.name}</p>
             </div>
@@ -324,57 +229,62 @@ export default function HomePage() {
         </div>
       </section>
 
-{/* ================= FAQ ================= */}
-<section
-  id="faq"
-  className="mx-auto max-w-4xl px-6 mt-28 mb-28 scroll-mt-20"
->
-  <div className="text-center">
-    <h2 className="text-3xl font-semibold tracking-tight">
-      Frequently Asked Questions
-    </h2>
-    <p className="mt-3 text-slate-600 dark:text-slate-400">
-      Everything you need to know before joining travellersmeet.
-    </p>
-  </div>
-
-  <div className="mt-12 space-y-4">
-    {[
-      {
-        q: "How do I create a profile?",
-        a: "Simply sign up using your email and password. Once registered, you can upload your ticket to verify your trip.",
-      },
-      {
-        q: "How do I connect with other travellers?",
-        a: "After verification, you’ll see travellers going to the same city on overlapping dates. You can send a connection request to start chatting.",
-      },
-      {
-        q: "Is the platform free to use?",
-        a: "Yes. travellersmeet is currently free to join and use for verified travellers.",
-      },
-      {
-        q: "How is my data protected?",
-        a: "We never sell your data. Ticket details are reviewed securely and sensitive information is not displayed publicly.",
-      },
-    ].map((faq, index) => (
-      <details
-        key={index}
-        className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
+      {/* ================= FAQ ================= */}
+      <section
+        id="faq"
+        className="mx-auto max-w-4xl px-6 mt-28 mb-28 scroll-mt-20"
       >
-        <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-slate-900 dark:text-white">
-          {faq.q}
-          <span className="ml-4 transition-transform group-open:rotate-180">
-            ▼
-          </span>
-        </summary>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">
-          {faq.a}
-        </p>
-      </details>
-    ))}
-  </div>
-</section>
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-3 text-slate-600 dark:text-slate-400">
+            Everything you need to know before joining travellersmeet.
+          </p>
+        </div>
 
-</main>
+        <div className="mt-12 space-y-4">
+          {[
+            {
+              q: "How do I create a profile?",
+              a: "Simply sign up using your email and password. Once registered, you can upload your ticket to verify your trip.",
+            },
+            {
+              q: "How do I connect with other travellers?",
+              a: "After verification, you'll see travellers going to the same city on overlapping dates. You can send a connection request to start chatting.",
+            },
+            {
+              q: "Is the platform free to use?",
+              a: "Yes. travellersmeet is currently free to join and use for verified travellers.",
+            },
+            {
+              q: "How is my data protected?",
+              a: "We never sell your data. Ticket details are reviewed securely and sensitive information is not displayed publicly.",
+            },
+          ].map((faq, index) => (
+            <details
+              key={index}
+              className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
+            >
+              <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-slate-900 dark:text-white">
+                {faq.q}
+                <span className="ml-4 transition-transform group-open:rotate-180">
+                  ▼
+                </span>
+              </summary>
+              <p className="mt-4 text-slate-600 dark:text-slate-400">
+                {faq.a}
+              </p>
+            </details>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3 font-medium text-slate-900 hover:bg-slate-50 transition cursor-pointer dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800">
+            Already booked? Upload your ticket
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }
