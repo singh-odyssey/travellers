@@ -45,17 +45,17 @@ export default function HomePage() {
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white shadow hover:bg-emerald-600 transition"
+                  className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white shadow hover:bg-emerald-600 transition cursor-pointer"
                 >
                   Get started free <UserPlus className="ml-2 h-4 w-4" />
                 </Link>
 
-                <Link
+                <a
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition cursor-pointer"
                 >
                   See how it works
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -190,6 +190,7 @@ export default function HomePage() {
 
         <div className="mt-12 text-center">
           <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white hover:bg-emerald-600 transition">
+          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white hover:bg-emerald-600 transition cursor-pointer">
             Create your account
           </Link>
         </div>
@@ -280,7 +281,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-12 text-center">
-          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3 font-medium text-slate-900 hover:bg-slate-50 transition dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800">
+          <Link href="/upload" className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3 font-medium text-slate-900 hover:bg-slate-50 transition cursor-pointer dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800">
             Already booked? Upload your ticket
           </Link>
         </div>
