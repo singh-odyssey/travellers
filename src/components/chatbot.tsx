@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, SendHorizonal } from "lucide-react";
 
 type Message = {
   role: "user" | "bot";
@@ -207,7 +207,9 @@ hover:scale-110
               <button
                 onClick={sendMessage}
                 disabled={loading}
-className="h-14 w-14 rounded-full bg-blue-600 text-white shadow-md flex items-center justify-center transition-all duration-300 hover:scale-110">              </button>
+className="h-14 w-14 rounded-full bg-blue-600 text-white shadow-md flex items-center justify-center transition-all duration-300 hover:scale-110">              
+  <SendHorizonal size={22} />
+              </button>
             </div>
           </div>
         </div>
