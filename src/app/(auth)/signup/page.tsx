@@ -9,7 +9,7 @@ export default async function SignUpPage() {
   }
 
   return (
-    <main className="min-h-screen">
+      <main className="flex justify-center py-6">
       <SignUpForm />
     </main>
   );
