@@ -9,9 +9,9 @@ export default async function SignInPage() {
   }
 
   return (
-    <main className="min-h-screen">
-      <SignInForm />
-    </main>
+  <main className="flex justify-center py-6">
+  <SignInForm />
+</main>
   );
 }
 
