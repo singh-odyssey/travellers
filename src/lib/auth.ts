@@ -58,6 +58,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           throw new Error("Please verify your email before signing in");
         }
 
+        if (!user.passwordHash) return null;
         const ok = await compare(password, user.passwordHash);
         if (!ok) return null;
 
@@ -98,10 +99,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 },
 
 logger: {
-  error(code, metadata) {
-    console.error("NEXTAUTH ERROR:", code, metadata);
+  error(error: Error) {
+    console.error("NEXTAUTH ERROR:", error);
   },
-  warn(code) {
+  warn(code: string) {
     console.warn("NEXTAUTH WARNING:", code);
   },
 },
