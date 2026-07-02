@@ -16,6 +16,8 @@ const MARKETING_LINKS = [
   { href: "/#how-it-works", key: "how-it-works", label: "How it works" },
   { href: "/#testimonials", key: "testimonials", label: "Stories" },
   { href: "/#faq", key: "faq", label: "FAQ" },
+  { href: "/upload", key: "upload", label: "Upload" },
+  { href: "/routes", key: "routes", label: "Routes" },
 ];
 
 const APP_LINKS = [
@@ -94,6 +96,69 @@ export default function SiteHeader() {
           </span>
         </Link>
 
+        {/* NAV LINKS */}
+        <nav className="hidden items-center text-sm font-medium text-slate-600 dark:text-slate-300 gap-8 md:flex">
+          <Link
+            href="/#features"
+            className={`transition-colors ${
+              activeSection === "features"
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            Features
+          </Link>
+          <Link
+            href="/#how-it-works"
+            className={`transition-colors ${
+              activeSection === "how-it-works"
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            How it works
+          </Link>
+          <Link
+            href="/stories"
+            className={`transition-colors ${
+              activeSection === "stories"
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            Stories
+          </Link>
+          <Link
+            href="/faq"
+            className={`transition-colors ${
+              activeSection === "faq"
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            FAQ
+          </Link>
+          <Link
+            href="/upload"
+            className={`transition-colors ${
+              isRouteActive("/upload")
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            Upload
+          </Link>
+          <Link
+            href="/routes"
+            className={`transition-colors ${
+              isRouteActive("/routes")
+                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
+                : "hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            Routes
+          </Link>
+        </nav>
         {/* CENTER: Navigation Links */}
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
           <nav className="flex items-center gap-6">
