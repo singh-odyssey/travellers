@@ -7,7 +7,7 @@ import {
   UserPlus,
   Quote,
 } from "lucide-react";
-
+import TicketVerificationBanner from "@/components/ticket-verification-banner";
 import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
 import SmartMatching from "@/components/illustrations/SmartMatching";
 import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
@@ -31,7 +31,7 @@ export default function HomePage() {
               <div className="text-slate-900 dark:text-white">
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  Now verifying tickets for fall trips
+                  <TicketVerificationBanner />
                 </div>
 
                 <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
