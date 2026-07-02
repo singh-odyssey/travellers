@@ -97,6 +97,35 @@ export default function SignUpForm() {
     }
   }
 
+  async function resendOTP() {
+  setLoading(true);
+  setError("");
+  setSuccess("");
+
+  try {
+    const res = await fetch("/api/auth/resend-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || "Failed to resend OTP");
+      return;
+    }
+
+    setSuccess("A new OTP has been sent to your email.");
+  } catch {
+    setError("Network error. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+}
+
   const passwordRules = {
     length: password.length >= 8,
     number: /\d/.test(password),
@@ -223,6 +252,17 @@ export default function SignUpForm() {
                       className="mt-1 h-[46px] w-full rounded-xl bg-transparent border border-white/20 px-4 text-white outline-none focus:border-blue-400 transition"
                     />
                   </div>
+
+                  <div className="flex justify-end">
+  <button
+    type="button"
+    onClick={resendOTP}
+    disabled={loading}
+    className="text-sm text-blue-400 hover:text-blue-300 hover:underline disabled:opacity-50"
+  >
+    Resend OTP
+  </button>
+</div>
 
                   <button
                     disabled={loading || otp.length !== 6}
