@@ -16,6 +16,8 @@ const MARKETING_LINKS = [
   { href: "/#how-it-works", key: "how-it-works", label: "How it works" },
   { href: "/#testimonials", key: "testimonials", label: "Stories" },
   { href: "/#faq", key: "faq", label: "FAQ" },
+  { href: "/upload", key: "upload", label: "Upload" },
+  { href: "/routes", key: "routes", label: "Routes" },
 ];
 
 const APP_LINKS = [
