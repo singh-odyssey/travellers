@@ -3,7 +3,7 @@
 import { useTheme } from "@/state/theme";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Plane, X } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -42,6 +42,12 @@ export default function SiteHeader() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  const handleSignOut = async () => {
+    setIsOpen(false);
+    console.log("Signing out...");
+    await signOut({ callbackUrl: "/" });
+  };
 
   const isRouteActive = useCallback((path: string) => pathname === path, [pathname]);
 
@@ -96,69 +102,6 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        {/* NAV LINKS */}
-        <nav className="hidden items-center text-sm font-medium text-slate-600 dark:text-slate-300 gap-8 md:flex">
-          <Link
-            href="/#features"
-            className={`transition-colors ${
-              activeSection === "features"
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Features
-          </Link>
-          <Link
-            href="/#how-it-works"
-            className={`transition-colors ${
-              activeSection === "how-it-works"
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            How it works
-          </Link>
-          <Link
-            href="/stories"
-            className={`transition-colors ${
-              activeSection === "stories"
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Stories
-          </Link>
-          <Link
-            href="/faq"
-            className={`transition-colors ${
-              activeSection === "faq"
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            FAQ
-          </Link>
-          <Link
-            href="/upload"
-            className={`transition-colors ${
-              isRouteActive("/upload")
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Upload
-          </Link>
-          <Link
-            href="/routes"
-            className={`transition-colors ${
-              isRouteActive("/routes")
-                ? "text-slate-900 dark:text-white font-semibold border-b-2 border-slate-900 dark:border-white"
-                : "hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Routes
-          </Link>
-        </nav>
         {/* CENTER: Navigation Links */}
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
           <nav className="flex items-center gap-6">
@@ -190,13 +133,21 @@ export default function SiteHeader() {
 
         {/* RIGHT: Desktop Actions */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {session?.user?.id ? (
-            <Link
-              href="/dashboard"
-              className="flex items-center rounded-lg bg-slate-900 dark:bg-white h-10 px-4 text-sm font-semibold text-white dark:text-slate-900 hover:opacity-90 transition-all shadow-sm"
-            >
-              Dashboard
-            </Link>
+          {session?.user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="flex items-center rounded-lg bg-slate-100 dark:bg-slate-800 h-10 px-4 text-sm font-semibold text-slate-900 dark:text-white hover:opacity-90 transition-all shadow-sm"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="rounded-lg bg-red-600 px-4 h-10 text-sm font-semibold text-white hover:bg-red-700 transition-all shadow-sm"
+              >
+                Sign out
+              </button>
+            </div>
           ) : (
             <>
               <Link
@@ -283,14 +234,22 @@ export default function SiteHeader() {
                 </div>
                 
                 <div className="flex flex-col gap-2 pt-2">
-                  {session?.user?.id ? (
-                    <Link
-                      className="rounded-lg bg-slate-900 dark:bg-white px-4 py-2.5 text-center text-sm font-semibold text-white dark:text-slate-900 shadow-sm"
-                      href="/dashboard"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
+                  {session?.user ? (
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        className="rounded-lg bg-slate-100 dark:bg-slate-800 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 dark:text-white shadow-sm"
+                        href="/dashboard"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="rounded-lg bg-red-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-red-700 transition-all shadow-sm w-full"
+                      >
+                        Sign out
+                      </button>
+                    </div>
                   ) : (
                     <>
                       <Link
