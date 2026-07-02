@@ -7,9 +7,25 @@ import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 
+const adapter = PrismaAdapter(prisma) as any;
+
+adapter.createUser = async (data: any) => {
+  console.log("CUSTOM CREATE USER CALLED");
+
+  return prisma.user.create({
+    data: {
+      name: data.name ?? "",
+      email: data.email,
+      image: data.image,
+      passwordHash: null,
+      emailVerified: true,
+    },
+  });
+};
+
 export const { auth, signIn, signOut, handlers } = NextAuth({
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+  adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -42,6 +58,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           throw new Error("Please verify your email before signing in");
         }
 
+        if (!user.passwordHash) return null;
         const ok = await compare(password, user.passwordHash);
         if (!ok) return null;
 
@@ -75,6 +92,20 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       return session;
     },
   },
+  events: {
+  async signIn(message) {
+    console.log("SIGN IN EVENT:", message);
+  },
+},
+
+logger: {
+  error(error: Error) {
+    console.error("NEXTAUTH ERROR:", error);
+  },
+  warn(code: string) {
+    console.warn("NEXTAUTH WARNING:", code);
+  },
+},
   pages: {
     signIn: '/signin',
     error: '/auth/error',
