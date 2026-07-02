@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { Mail } from "lucide-react";
+import { Mail, CheckCircle2, Circle } from "lucide-react";
 import { FaEye, FaEyeSlash, FaApple } from "react-icons/fa";
 
 export default function SignUpForm() {
@@ -134,6 +134,13 @@ export default function SignUpForm() {
   };
 
   const passwordValid = Object.values(passwordRules).every(Boolean);
+  const passwordRequirements = [
+  { valid: passwordRules.length, text: "At least 8 characters" },
+  { valid: passwordRules.upper, text: "One uppercase letter" },
+  { valid: passwordRules.lower, text: "One lowercase letter" },
+  { valid: passwordRules.number, text: "One number" },
+  { valid: passwordRules.special, text: "One special character" },
+];
 
   return (
     <div className="relative w-full max-w-[1800px] mx-auto rounded-[32px] overflow-hidden bg-[#0a1929] grid grid-cols-1 xl:grid-cols-2">
@@ -196,6 +203,24 @@ export default function SignUpForm() {
                       {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
                   </div>
+                  <div className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+  <p className="mb-2 text-sm font-medium text-white/80">
+    Password must contain:
+  </p>
+  <div className="space-y-2">
+    {passwordRequirements.map((rule) => (
+      <div
+        key={rule.text}
+        className={`flex items-center gap-2 transition-colors ${
+          rule.valid ? "text-green-400" : "text-white/60"
+        }`}
+      >
+        {rule.valid ? <CheckCircle2 size={16} /> : <Circle size={16} />}
+        <span className="text-sm">{rule.text}</span>
+      </div>
+    ))}
+  </div>
+</div>
 
                   <button
                     disabled={loading || !passwordValid}
