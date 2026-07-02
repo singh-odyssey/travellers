@@ -3,11 +3,9 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FormEvent, useState } from "react";
 import { FaCheck, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
-
 export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -100,17 +98,15 @@ export default function SignUpForm() {
     }
   }
 
-  async function resendOTP() {
-  setLoading(true);
+ async function resendOTP() {
+  setResending(true);
   setError("");
   setSuccess("");
 
   try {
     const res = await fetch("/api/auth/resend-otp", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
 
@@ -119,39 +115,15 @@ export default function SignUpForm() {
     if (!res.ok) {
       setError(data.error || "Failed to resend OTP");
       return;
-    setResending(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const res = await fetch("/api/auth/resend-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to resend OTP");
-        return;
-      }
-
-      setSuccess(data.message || "New OTP sent!");
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setResending(false);
     }
 
-    setSuccess("A new OTP has been sent to your email.");
+    setSuccess(data.message || "New OTP sent!");
   } catch {
     setError("Network error. Please try again.");
   } finally {
-    setLoading(false);
+    setResending(false);
   }
 }
-
   const passwordRules = [
     { label: "At least 8 characters", valid: password.length >= 8 },
     { label: "One number", valid: /\d/.test(password) },
