@@ -1,12 +1,12 @@
 "use client";
 
+import { Github, Instagram, Plane, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, Twitter, Instagram, Plane } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 export default function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden text-slate-800 dark:text-white transition-colors duration-300">
+  <footer className="relative overflow-hidden text-slate-800 dark:text-white transition-colors duration-300 ">
 
       {/* Background with theme-aware gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-[#06132a] dark:via-[#071a3d] dark:to-[#06132a] transition-colors duration-500" />
@@ -23,7 +23,7 @@ export default function SiteFooter() {
       </div>
 
       {/* Container */}
-      <div className="relative z-20 max-w-7xl mx-auto px-16 py-16">
+      <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 sm:py-16">
         {/* Logo + Tagline */}
         <div className="text-center -mt-2 mb-8">
           <div className="flex justify-center items-center gap-3">
@@ -45,7 +45,7 @@ export default function SiteFooter() {
         </div>
 
         {/* Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 text-base">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 gap-y-6 sm:gap-6 lg:gap-8 text-base">
 
           {/* Explore */}
           <div>
@@ -125,7 +125,7 @@ export default function SiteFooter() {
                 placeholder="Email address"
                 className="w-full rounded-lg bg-slate-200/50 dark:bg-white/10 border border-slate-300 dark:border-white/20 px-4 py-2 backdrop-blur-sm text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400 focus:outline-none focus:border-slate-400 dark:focus:border-white/40 transition-all duration-300"
               />
-              <button className="bg-slate-900 dark:bg-white text-white dark:text-black px-5 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-gray-200 transition-colors duration-300">
+              <button className="bg-slate-900 dark:bg-white text-white dark:text-black rounded-lg font-medium text-sm hover:bg-slate-800 dark:hover:bg-gray-200 transition-colors duration-300 px-2 py-0">
                 Go
               </button>
             </div>
@@ -133,7 +133,7 @@ export default function SiteFooter() {
         </div>
 
         {/* Divider */}
-        <div className="my-12 relative flex items-center justify-center">
+        <div className="my-6 sm:my-8 relative flex items-center justify-center">
           <div className="absolute w-full border-t border-dashed border-slate-300 dark:border-white/30" />
           <div className="relative bg-slate-50 dark:bg-[#071a3d] px-2 transition-colors duration-500">
             <Plane size={16} className="text-slate-400 dark:text-white" />
