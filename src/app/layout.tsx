@@ -1,14 +1,16 @@
-import FloatingActions from "@/components/FloatingActions";
+import "@/styles/globals.css";
+import { ReactNode } from "react";
+import { Inter } from "next/font/google";
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
+import ScrollToTop from "@/components/ScrollToTop";
+import Chatbot from "@/components/chatbot";
 import { PWAProvider } from "@/components/pwa-provider";
 import AuthSessionProvider from "@/components/session-provider";
-import SiteFooter from "@/components/site-footer";
-import SiteHeader from "@/components/site-header";
-import { Wrapper } from "@/components/theme-wrapper";
 import { auth } from "@/lib/auth";
 import { ThemeProvider } from "@/state/theme";
-import "@/styles/globals.css";
-import { Inter } from "next/font/google";
-import { ReactNode } from "react";
+import { Wrapper } from "@/components/theme-wrapper";
+import FloatingActions from "@/components/FloatingActions";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -55,7 +57,7 @@ export default async function RootLayout({
                 <SiteHeader />
 
                 {/* Main Content */}
-                <main className="flex-1 ">
+                <main className="flex-1 pt-6">
                   {children}
                 </main>
 
