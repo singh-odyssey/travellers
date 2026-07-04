@@ -3,7 +3,7 @@
 import { useTheme } from "@/state/theme";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Plane, X } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -16,6 +16,8 @@ const MARKETING_LINKS = [
   { href: "/#how-it-works", key: "how-it-works", label: "How it works" },
   { href: "/#testimonials", key: "testimonials", label: "Stories" },
   { href: "/#faq", key: "faq", label: "FAQ" },
+  { href: "/upload", key: "upload", label: "Upload" },
+  { href: "/routes", key: "routes", label: "Routes" },
 ];
 
 const APP_LINKS = [
@@ -40,6 +42,12 @@ export default function SiteHeader() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  const handleSignOut = async () => {
+    setIsOpen(false);
+    console.log("Signing out...");
+    await signOut({ callbackUrl: "/" });
+  };
 
   const isRouteActive = useCallback((path: string) => pathname === path, [pathname]);
 
@@ -125,13 +133,21 @@ export default function SiteHeader() {
 
         {/* RIGHT: Desktop Actions */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {session?.user?.id ? (
-            <Link
-              href="/dashboard"
-              className="flex items-center rounded-lg bg-slate-900 dark:bg-white h-10 px-4 text-sm font-semibold text-white dark:text-slate-900 hover:opacity-90 transition-all shadow-sm"
-            >
-              Dashboard
-            </Link>
+          {session?.user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="flex items-center rounded-lg bg-slate-100 dark:bg-slate-800 h-10 px-4 text-sm font-semibold text-slate-900 dark:text-white hover:opacity-90 transition-all shadow-sm"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="rounded-lg bg-red-600 px-4 h-10 text-sm font-semibold text-white hover:bg-red-700 transition-all shadow-sm"
+              >
+                Sign out
+              </button>
+            </div>
           ) : (
             <>
               <Link
@@ -218,14 +234,22 @@ export default function SiteHeader() {
                 </div>
                 
                 <div className="flex flex-col gap-2 pt-2">
-                  {session?.user?.id ? (
-                    <Link
-                      className="rounded-lg bg-slate-900 dark:bg-white px-4 py-2.5 text-center text-sm font-semibold text-white dark:text-slate-900 shadow-sm"
-                      href="/dashboard"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
+                  {session?.user ? (
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        className="rounded-lg bg-slate-100 dark:bg-slate-800 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 dark:text-white shadow-sm"
+                        href="/dashboard"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="rounded-lg bg-red-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-red-700 transition-all shadow-sm w-full"
+                      >
+                        Sign out
+                      </button>
+                    </div>
                   ) : (
                     <>
                       <Link
