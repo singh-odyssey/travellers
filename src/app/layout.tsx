@@ -64,7 +64,7 @@ export default async function RootLayout({
                 {/* Footer and Utilities */}
                 <SiteFooter />
                 <FloatingActions />
-                  <PWAProvider />
+                 {/* <PWAProvider /> */}
               </div>
             </AuthSessionProvider>
           </Wrapper>
