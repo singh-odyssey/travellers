@@ -28,7 +28,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/90 to-transparent dark:from-slate-950/90 dark:via-slate-950/80 dark:to-transparent" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
             <div className="grid items-center gap-16 md:grid-cols-2">
-              <div className="text-slate-900 dark:text-white">
+              <div className="relative z-10 text-slate-900 dark:text-white">
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
                   <TicketVerificationBanner />
@@ -62,17 +62,17 @@ export default function HomePage() {
               </div>
 
               <div className="relative flex justify-center md:justify-end overflow-visible">
-                <div className="absolute -right-40 top-1/2 -translate-y-1/2">
-                  <Image
-                    src="/newhero.png"
-                    alt="Travellers connecting"
-                    width={2000}
-                    height={1500}
-                    priority
-                    className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
-                  />
-                </div>
-              </div>
+  <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2">
+    <Image
+      src="/newhero.png"
+      alt="Travellers connecting"
+      width={2000}
+      height={1500}
+      priority
+      className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
+    />
+  </div>
+</div>
             </div>
           </div>
         </section>
