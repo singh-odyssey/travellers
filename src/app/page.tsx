@@ -8,6 +8,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import TicketVerificationBanner from "@/components/ticket-verification-banner";
+import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
+import SmartMatching from "@/components/illustrations/SmartMatching";
 import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
 import SmartMatching from "@/components/illustrations/SmartMatching";
 import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
@@ -31,6 +34,12 @@ export default function HomePage() {
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-xs sm:text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
                   Now verifying tickets for fall trips
+          <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
+            <div className="grid items-center gap-16 md:grid-cols-2">
+              <div className="relative z-10 text-slate-900 dark:text-white">
+                <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <TicketVerificationBanner />
                 </div>
 
                 <h1 className="mt-6 text-3xl sm:text-4xl font-bold leading-tight text-center md:text-left md:text-6xl">
@@ -63,6 +72,8 @@ export default function HomePage() {
               {/* Image: contained on mobile; large offset/absolute treatment kicks in from md: up */}
 <div className="relative flex justify-center md:justify-end">
   <div className="relative md:absolute md:-right-40 md:top-1/2 md:-translate-y-1/2">
+              <div className="relative flex justify-center md:justify-end overflow-visible">
+  <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2">
     <Image
       src="/newhero.png"
       alt="Travellers connecting"
@@ -80,6 +91,7 @@ export default function HomePage() {
         md:max-w-none
         drop-shadow-2xl
       "
+      className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
     />
   </div>
 </div>
