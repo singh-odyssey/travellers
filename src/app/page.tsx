@@ -12,8 +12,6 @@ import TicketVerificationBanner from "@/components/ticket-verification-banner";
 import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
 import SmartMatching from "@/components/illustrations/SmartMatching";
 import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
-import SmartMatching from "@/components/illustrations/SmartMatching";
-import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
 
 export default function HomePage() {
   return (
@@ -30,15 +28,9 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/90 to-transparent dark:from-slate-950/90 dark:via-slate-950/80 dark:to-transparent" />
           <div className="relative z-10 max-w-7xl mx-auto px-5 py-14 md:px-6 md:py-28">
             <div className="grid items-center gap-10 md:gap-16 md:grid-cols-2">
-              <div className="text-slate-900 dark:text-white">
+              <div className="relative z-10 text-slate-900 dark:text-white">
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-xs sm:text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
-                  Now verifying tickets for fall trips
-          <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
-            <div className="grid items-center gap-16 md:grid-cols-2">
-              <div className="relative z-10 text-slate-900 dark:text-white">
-                <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
                   <TicketVerificationBanner />
                 </div>
 
@@ -70,31 +62,18 @@ export default function HomePage() {
               </div>
 
               {/* Image: contained on mobile; large offset/absolute treatment kicks in from md: up */}
-<div className="relative flex justify-center md:justify-end">
-  <div className="relative md:absolute md:-right-40 md:top-1/2 md:-translate-y-1/2">
-              <div className="relative flex justify-center md:justify-end overflow-visible">
-  <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2">
-    <Image
-      src="/newhero.png"
-      alt="Travellers connecting"
-      width={2000}
-      height={1500}
-      priority
-      className="
-        w-full
-        max-w-[780px]
-        scale-150
-        origin-center
-        -translate-x-28
-        md:scale-100
-        md:w-[1400px]
-        md:max-w-none
-        drop-shadow-2xl
-      "
-      className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
-    />
-  </div>
-</div>
+              <div className="relative flex justify-center md:justify-end">
+                <div className="relative md:absolute md:-right-40 md:top-1/2 md:-translate-y-1/2">
+                  <Image
+                    src="/newhero.png"
+                    alt="Travellers connecting"
+                    width={2000}
+                    height={1500}
+                    priority
+                    className="w-full max-w-[780px] scale-150 origin-center -translate-x-28 md:scale-100 md:w-[1400px] md:max-w-none drop-shadow-2xl"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -320,7 +299,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
     </>
   );
 }
