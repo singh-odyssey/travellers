@@ -8,7 +8,6 @@ const RUNTIME_CACHE = 'travellers-runtime-v1';
 const STATIC_ASSETS = [
   '/',
   '/routes',
-  '/dashboard',
 ];
 
 // API routes to cache
@@ -61,17 +60,33 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
+if (request.method !== 'GET') {
+  return;
+}
 
-  // API routes - Network first, fallback to cache
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      networkFirstStrategy(request, RUNTIME_CACHE)
-    );
-    return;
-  }
+// IMPORTANT:
+// Never intercept NextAuth endpoints.
+// Caching auth/session responses causes stale sessions
+// and random sign-in issues.
+if (url.pathname.startsWith('/api/auth')) {
+  return;
+}
+
+// Don't cache authenticated pages
+if (
+  url.pathname.startsWith('/dashboard') ||
+  url.pathname.startsWith('/upload')
+) {
+  return;
+}
+
+// API routes - Network first, fallback to cache
+if (url.pathname.startsWith('/api/')) {
+  event.respondWith(
+    networkFirstStrategy(request, RUNTIME_CACHE)
+  );
+  return;
+}
 
   // Static assets and pages - Cache first, fallback to network
   event.respondWith(

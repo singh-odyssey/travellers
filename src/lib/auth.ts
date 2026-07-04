@@ -12,9 +12,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+  clientId: process.env.GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  allowDangerousEmailAccountLinking: true,
+}),
     AppleProvider({
       clientId: process.env.APPLE_CLIENT_ID!,
       clientSecret: process.env.APPLE_CLIENT_SECRET!,
@@ -58,14 +59,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
   session: { strategy: "jwt" },
   trustHost: true,
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        // @ts-ignore - role not in default type
-        token.role = user.role;
-      }
-      return token;
-    },
+  async jwt({ token, user, account }) {
+    console.log("JWT CALLBACK");
+    console.log("USER:", user);
+    console.log("ACCOUNT:", account);
+    console.log("TOKEN BEFORE:", token);
+
+    if (user) {
+      token.id = user.id;
+      // @ts-ignore
+      token.role = user.role;
+    }
+
+    console.log("TOKEN AFTER:", token);
+
+    return token;
+  },
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.id as string;

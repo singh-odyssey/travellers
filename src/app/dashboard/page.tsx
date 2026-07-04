@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 
 export default async function DashboardPage() {
   const session = await auth();
+  console.log("SESSION:", session);
   if (!session?.user?.id) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-16">
