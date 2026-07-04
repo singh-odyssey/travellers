@@ -3,10 +3,13 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { FaApple, FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function SignInForm() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -21,28 +24,33 @@ export default function SignInForm() {
     const password = formData.get("password") as string;
 
     try {
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+  const res = await signIn("credentials", {
+    email,
+    password,
+    redirect: false,
+  });
 
-      if (!res?.ok) {
-        setError(
-          res?.error === "CredentialsSignin"
-            ? "Invalid email or password"
-            : res?.error || "Failed to sign in",
-        );
-        setLoading(false);
-        return;
-      }
+  if (!res?.ok || res.error) {
+    const isCredentialsError =
+      res?.error === "CredentialsSignin" ||
+      res?.code === "credentials";
 
-      window.location.href = "/dashboard";
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    setError(
+      isCredentialsError
+        ? "Invalid email or password"
+        : "Failed to sign in. Please try again.",
+    );
+
+    return;
+  }
+
+  router.replace("/dashboard");
+  router.refresh();
+} catch {
+  setError("Something went wrong. Please try again.");
+} finally {
+  setLoading(false);
+}
   }
 
   return (
