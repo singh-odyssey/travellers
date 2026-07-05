@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import GoogleIcon from "./icons/google-icon";
 import { FormEvent, useState } from "react";
 import { FaCheck, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 
@@ -179,6 +180,26 @@ export default function SignUpForm() {
                 <div className="mb-4 p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-200 text-sm">
                   {success}
                 </div>
+              )}
+
+              {step === "signup" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+                    className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold mb-4"
+                  >
+                    <GoogleIcon />
+                    Continue with Google
+                  </button>
+
+                  <div className="relative my-7">
+                    <div className="border-t border-white/10"></div>
+                    <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-[#122b45] px-3 text-xs text-white/50">
+                      OR
+                    </span>
+                  </div>
+                </>
               )}
 
               {step === "signup" ? (
