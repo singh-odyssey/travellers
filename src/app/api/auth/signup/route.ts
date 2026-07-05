@@ -66,10 +66,15 @@ export async function POST(req: NextRequest) {
     });
 
     // Send OTP email
-    try {
-      await sendOTPEmail(email, otp);
-    } catch (emailError) {
-      console.error("Signup email error (non-fatal):", emailError);
+    const emailResult = await sendOTPEmail(email, otp);
+
+    if (!emailResult.success) {
+      console.error("Signup email error:", emailResult.error);
+      return NextResponse.json({
+        ok: true,
+        userId: user.id,
+        error: "Account created, but we couldn't send the verification email. Please use 'Resend OTP' or contact support.",
+      }, { status: 207 }); // 207 = Multi-Status: partial success
     }
 
     return NextResponse.json({ ok: true, userId: user.id, message: "OTP sent to your email" });
