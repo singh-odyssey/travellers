@@ -39,13 +39,7 @@ export default function SignUpForm() {
 
       const data = await res.json();
 
-      // if (!res.ok) {
-      //   setError(data.error || "Signup failed");
-      //   return;
-      // }
 
-      // setSuccess(data.message || "OTP sent! Check your email.");
-      // setStep("verify");
 
       if (!res.ok) {
   setError(data.message || data.error || "Signup failed");

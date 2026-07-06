@@ -10,20 +10,7 @@ function getResendClient() {
   return resend;
 }
 
-// export async function sendOTPEmail(email: string, otp: string) {
-//   // Development/Fall-back: log to console if no API key is provided
-//   if (!process.env.RESEND_API_KEY) {
-//     console.log('='.repeat(50));
-//     console.log('📧 EMAIL VERIFICATION OTP (Terminal Mode)');
-//     console.log('='.repeat(50));
-//     console.log(`To: ${email}`);
-//     console.log(`OTP: ${otp}`);
-//     console.log(`Expires: 10 minutes`);
-//     console.log('='.repeat(50));
-//     console.log('NOTE: Add RESEND_API_KEY to .env to receive actual emails.');
-//     console.log('='.repeat(50));
-//     return { success: true };
-//   }
+
 export async function sendOTPEmail(email: string, otp: string) {
   // Development-only fallback: log to console if no API key is provided.
   // In production, a missing key is a real misconfiguration and should
