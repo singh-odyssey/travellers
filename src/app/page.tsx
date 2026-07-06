@@ -25,21 +25,22 @@ export default function HomePage() {
             style={{ backgroundImage: "url('/worldMap.png')" }}
           />
 
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/90 to-transparent dark:from-slate-950/90 dark:via-slate-950/80 dark:to-transparent" />
+          
           <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
             <div className="grid items-center gap-16 md:grid-cols-2">
               <div className="text-slate-900 dark:text-white">
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span className="h-2 w-2 rounded-full bg-[#0B4B74]" />
                   <TicketVerificationBanner />
                 </div>
 
-                <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
+                <h1 className="mt-6 text-5xl md:text-7xl font-bold leading-tight text-[#0B4B74] dark:text-white">
                   Meet verified travellers. <br />
                   Make real connections.
                 </h1>
 
-                <p className="mt-6 text-lg text-slate-600 dark:text-gray-300 max-w-xl">
+                
+                <p className="mt-6 max-w-xl text-lg text-slate-600 dark:text-slate-300">
                   travellersmeet helps solo travellers find others headed to the
                   same city and dates — verified with a real ticket.
                 </p>
@@ -47,14 +48,14 @@ export default function HomePage() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                   <Link
                     href="/signup"
-                    className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white shadow hover:bg-emerald-600 transition cursor-pointer"
+                    className="inline-flex items-center justify-center rounded-lg bg-[#0B4B74] px-6 py-3 font-medium text-white shadow hover:bg-[#083B5B] transition cursor-pointer"
                   >
                     Get started free <UserPlus className="ml-2 h-4 w-4" />
                   </Link>
 
                   <a
                     href="#how-it-works"
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-200 dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition cursor-pointer"
+                    className="inline-flex items-center justify-center rounded-lg border border-[#E7D5BF] dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-[#F9F6F0] dark:hover:bg-white/10 transition cursor-pointer"
                   >
                     See how it works
                   </a>
@@ -81,15 +82,15 @@ export default function HomePage() {
         <section className="mx-auto max-w-7xl px-6 -mt-16 relative z-20 pb-10">
           <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-xl sm:grid-cols-3 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300">
             <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-500" />
+              <ShieldCheck className="h-5 w-5 text-[#0B4B74]" />
               <p>Ticket-verified profiles</p>
             </div>
             <div className="flex items-center gap-3">
-              <Lock className="h-5 w-5 text-blue-500" />
+              <Lock className="h-5 w-5 text-[#0B4B74]" />
               <p>Zero ads. No selling your data</p>
             </div>
             <div className="flex items-center gap-3">
-              <MessageSquare className="h-5 w-5 text-purple-500" />
+              <MessageSquare className="h-5 w-5 text-[#C67A3D]" />
               <p>Report + block controls</p>
             </div>
           </div>
@@ -123,9 +124,9 @@ export default function HomePage() {
             ].map((f) => (
               <div
                 key={f.title}
-                className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
+                className="overflow-hidden rounded-xl border border-[#E7D5BF] bg-white shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
               >
-                <div className="h-[220px] border-b border-slate-100 bg-slate-50 flex items-center justify-center dark:border-slate-800 dark:bg-slate-800/30">
+                <div className="h-[220px] border-b border-[#E7D5BF] bg-[#F9F6F0] flex items-center justify-center dark:border-slate-800 dark:bg-slate-800/30">
                   {f.illustration}
                 </div>
                 <div className="p-8">
@@ -194,7 +195,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-6 py-3 font-medium text-white hover:bg-emerald-600 transition cursor-pointer"
+              className="inline-flex items-center justify-center rounded-lg bg-[#0B4B74] px-6 py-3 font-medium text-white hover:bg-[#083B5B] transition cursor-pointer"
             >
               Create your account
             </Link>
@@ -226,7 +227,7 @@ export default function HomePage() {
             ].map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-slate-200 dark:border-slate-800 dark:bg-slate-900 bg-white p-8 shadow-sm"
+                className="relative rounded-2xl border border-[#E7D5BF] dark:border-slate-800 dark:bg-slate-900 bg-white p-8 shadow-sm"
               >
                 <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
                 <blockquote className="italic text-slate-800 dark:text-slate-200">
@@ -273,7 +274,7 @@ export default function HomePage() {
             ].map((faq, index) => (
               <details
                 key={index}
-                className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
+                className="group rounded-xl border border-[#E7D5BF] bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
               >
                 <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-slate-900 dark:text-white">
                   {faq.q}
@@ -298,7 +299,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <div className="h-32 bg-gradient-to-b from-white to-slate-100 dark:from-slate-950 dark:to-[#06132a]" />
+      <div className="h-32 bg-gradient-to-b from-[#FFFCF8] to-[#F9F6F0] dark:from-slate-950 dark:to-[#06132a]" />
     </>
   );
 }

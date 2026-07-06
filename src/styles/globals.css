@@ -4,10 +4,29 @@
 
 :root {
   --radius: 0.75rem;
+
+  --color-sapphire: #0B2447;
+  --color-sunrise: #F9F6F0;
+  --color-sand: #EFE9DB;
 }
 
 html {
   scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-body), sans-serif;
+  background-color: var(--color-sunrise);
+  color: #1f2937;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), serif;
+  color: var(--color-sapphire);
 }
 /* ================= Ken Burns ================= */
 @keyframes kenburns {
