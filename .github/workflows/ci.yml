@@ -30,3 +30,6 @@ jobs:
         run: npx tsc --noEmit
       - name: Build
         run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
