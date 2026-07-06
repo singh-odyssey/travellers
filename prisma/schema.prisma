@@ -24,6 +24,8 @@ model User {
   emailVerified Boolean     @default(false)
   otp           String?
   otpExpires    DateTime?
+  resetToken        String?   @unique
+  resetTokenExpires DateTime?
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
