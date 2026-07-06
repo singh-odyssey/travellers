@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import GoogleIcon from "./icons/google-icon";
 import { FormEvent, useState } from "react";
 import { FaCheck, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 
@@ -38,13 +39,22 @@ export default function SignUpForm() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Signup failed");
-        return;
-      }
 
-      setSuccess(data.message || "OTP sent! Check your email.");
-      setStep("verify");
+
+      if (!res.ok) {
+  setError(data.message || data.error || "Signup failed");
+  return;
+}
+
+if (data.error) {
+  // Account created but email failed (status 207 partial success)
+  setError(data.error);
+  setStep("verify");
+  return;
+}
+
+setSuccess(data.message || "OTP sent! Check your email.");
+setStep("verify");
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -136,10 +146,10 @@ export default function SignUpForm() {
   const passwordValid = passwordRules.every((r) => r.valid);
 
   return (
-    <div className="relative w-full max-w-[1600px] mx-auto my-2 px-6 lg:px-8">
-      <div className="rounded-[32px] overflow-hidden bg-[#0a1929] grid grid-cols-1 xl:grid-cols-2">
+    <div className="relative w-full max-w-[1600px] mx-auto my-0 sm:my-2 px-0 sm:px-6 lg:px-8">
+      <div className="rounded-none sm:rounded-[32px] overflow-hidden bg-[#0a1929] grid grid-cols-1 xl:grid-cols-2 min-h-screen sm:min-h-0">
         {/* LEFT IMAGE */}
-        <div className="relative w-full h-64 xl:h-auto xl:min-h-full overflow-hidden">
+        <div className="relative w-full h-40 sm:h-56 xl:h-auto xl:min-h-full overflow-hidden">
           <Image
             src="/travel.jpg"
             alt="Travel"
@@ -151,25 +161,25 @@ export default function SignUpForm() {
         </div>
 
         {/* RIGHT FORM */}
-        <div className="flex items-center justify-center xl:pl-12 xl:pr-8 py-12">
-          <div className="w-full max-w-[560px] px-8 lg:px-12">
-            <div className="mb-8 text-center">
-              <div className="text-white font-semibold text-2xl">
+        <div className="flex items-center justify-center px-4 sm:px-6 xl:pl-12 xl:pr-8 py-8 sm:py-12">
+          <div className="w-full max-w-[560px] sm:px-4 lg:px-12">
+            <div className="mb-6 sm:mb-8 text-center">
+              <div className="text-white font-semibold text-xl sm:text-2xl">
                 ✈️ travellersmeet
               </div>
 
-              <h1 className="mt-5 text-3xl font-bold text-white">
+              <h1 className="mt-4 sm:mt-5 text-2xl sm:text-3xl font-bold text-white">
                 {step === "signup" ? "Create your account" : "Verify your email"}
               </h1>
 
-              <p className="mt-2 text-white/70 text-sm">
+              <p className="mt-2 text-white/70 text-sm break-words">
                 {step === "signup"
                   ? "Join travellers exploring the world together."
                   : `We sent a 6-digit code to ${email}`}
               </p>
             </div>
 
-            <div className="mx-8 rounded-xl border border-white/10 bg-[#122b45]/70 backdrop-blur-xl p-10 shadow-2xl">
+            <div className="rounded-xl border border-white/10 bg-[#122b45]/70 backdrop-blur-xl p-5 sm:p-8 lg:p-10 shadow-2xl">
               {error && (
                 <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-200 text-sm">
                   {error}
@@ -181,8 +191,28 @@ export default function SignUpForm() {
                 </div>
               )}
 
+              {step === "signup" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+                    className="flex items-center justify-center gap-3 w-full h-[46px] rounded-xl bg-white text-gray-800 font-semibold mb-4"
+                  >
+                    <GoogleIcon />
+                    Continue with Google
+                  </button>
+
+                  <div className="relative my-7">
+                    <div className="border-t border-white/10"></div>
+                    <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-[#122b45] px-3 text-xs text-white/50">
+                      OR
+                    </span>
+                  </div>
+                </>
+              )}
+
               {step === "signup" ? (
-                <form onSubmit={onSignup} className="space-y-5">
+                <form onSubmit={onSignup} className="space-y-4 sm:space-y-5">
                   <div>
                     <label className="block mb-2.5 text-sm font-medium text-white/80">
                       Name
@@ -267,6 +297,7 @@ export default function SignUpForm() {
                     </label>
                     <input
                       type="text"
+                      inputMode="numeric"
                       value={otp}
                       onChange={(e) =>
                         setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
@@ -274,7 +305,7 @@ export default function SignUpForm() {
                       required
                       maxLength={6}
                       placeholder="••••••"
-                      className="h-14 w-full rounded-xl bg-white/5 border border-white/15 px-4 text-white placeholder:text-white/20 outline-none focus:border-blue-400 transition text-center text-2xl tracking-[0.5em]"
+                      className="h-14 w-full rounded-xl bg-white/5 border border-white/15 px-2 sm:px-4 text-white placeholder:text-white/20 outline-none focus:border-blue-400 transition text-center text-xl sm:text-2xl tracking-[0.4em] sm:tracking-[0.5em]"
                     />
                   </div>
 
@@ -307,7 +338,7 @@ export default function SignUpForm() {
             </div>
 
             {step === "signup" && (
-              <p className="mt-8 text-center text-sm text-white/70">
+              <p className="mt-6 sm:mt-8 text-center text-sm text-white/70">
                 Already have an account?{" "}
                 <Link
                   href="/signin"

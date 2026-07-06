@@ -1,110 +1,28 @@
-import Link from "next/link";
-import Image from "next/image";
-import {
-  ShieldCheck,
-  Lock,
-  MessageSquare,
-  UserPlus,
-  Quote,
-} from "lucide-react";
-import TicketVerificationBanner from "@/components/ticket-verification-banner";
-import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
-import SmartMatching from "@/components/illustrations/SmartMatching";
-import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
-import SiteFooter from "@/components/site-footer";
+<ShieldCheck className="h-5 w-5 text-[#0B4B74] shrink-0" />
+<p>Ticket-verified profiles</p>
+</div>
 
-export default function HomePage() {
-  return (
-    <>
-      <main>
-        {/* ================= HERO ================= */}
+<div className="flex items-center gap-3">
+  <Lock className="h-5 w-5 text-[#0B4B74] shrink-0" />
+  <p>Zero ads. No selling your data</p>
+</div>
 
-        <section className="relative w-full overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-30"
-            style={{ backgroundImage: "url('/worldMap.png')" }}
-          />
-
-          
-          <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
-            <div className="grid items-center gap-16 md:grid-cols-2">
-              <div className="text-slate-900 dark:text-white">
-                <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
-                  <span className="h-2 w-2 rounded-full bg-[#0B4B74]" />
-                  <TicketVerificationBanner />
-                </div>
-
-                <h1 className="mt-6 text-5xl md:text-7xl font-bold leading-tight text-[#0B4B74] dark:text-white">
-                  Meet verified travellers. <br />
-                  Make real connections.
-                </h1>
-
-                
-                <p className="mt-6 max-w-xl text-lg text-slate-600 dark:text-slate-300">
-                  travellersmeet helps solo travellers find others headed to the
-                  same city and dates — verified with a real ticket.
-                </p>
-
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                  <Link
-                    href="/signup"
-                    className="inline-flex items-center justify-center rounded-lg bg-[#0B4B74] px-6 py-3 font-medium text-white shadow hover:bg-[#083B5B] transition cursor-pointer"
-                  >
-                    Get started free <UserPlus className="ml-2 h-4 w-4" />
-                  </Link>
-
-                  <a
-                    href="#how-it-works"
-                    className="inline-flex items-center justify-center rounded-lg border border-[#E7D5BF] dark:border-white/40 px-6 py-3 font-medium text-slate-900 dark:text-white hover:bg-[#F9F6F0] dark:hover:bg-white/10 transition cursor-pointer"
-                  >
-                    See how it works
-                  </a>
-                </div>
-              </div>
-
-              <div className="relative flex justify-center md:justify-end overflow-visible">
-                <div className="absolute -right-40 top-1/2 -translate-y-1/2">
-                  <Image
-                    src="/newhero.png"
-                    alt="Travellers connecting"
-                    width={2000}
-                    height={1500}
-                    priority
-                    className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= TRUST STRIP ================= */}
-        <section className="mx-auto max-w-7xl px-6 -mt-16 relative z-20 pb-10">
-          <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-xl sm:grid-cols-3 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-[#0B4B74]" />
-              <p>Ticket-verified profiles</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Lock className="h-5 w-5 text-[#0B4B74]" />
-              <p>Zero ads. No selling your data</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <MessageSquare className="h-5 w-5 text-[#C67A3D]" />
+<div className="flex items-center gap-3">
+  <MessageSquare className="h-5 w-5 text-[#C67A3D] shrink-0" />
               <p>Report + block controls</p>
             </div>
           </div>
         </section>
 
         {/* ================= FEATURES ================= */}
-        <section className="mx-auto max-w-7xl px-6 mt-28">
+        <section className="mx-auto max-w-7xl px-4 mt-10 lg:mt-10">
           <div className="text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
               Everything you need
             </h2>
           </div>
 
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
+          <div className="mt-10 grid gap-8 grid-cols-1 md:grid-cols-3">
             {[
               {
                 title: "Verified by ticket",
@@ -126,10 +44,10 @@ export default function HomePage() {
                 key={f.title}
                 className="overflow-hidden rounded-xl border border-[#E7D5BF] bg-white shadow-sm hover:shadow-md transition dark:border-slate-800 dark:bg-slate-900"
               >
-                <div className="h-[220px] border-b border-[#E7D5BF] bg-[#F9F6F0] flex items-center justify-center dark:border-slate-800 dark:bg-slate-800/30">
+<div className="h-[180px] sm:h-[220px] border-b border-[#E7D5BF] bg-[#F9F6F0] flex items-center justify-center dark:border-slate-800 dark:bg-slate-800/30">
                   {f.illustration}
                 </div>
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <h3 className="text-lg font-semibold">{f.title}</h3>
                   <p className="mt-2 text-slate-600 dark:text-slate-400">
                     {f.desc}
@@ -143,13 +61,13 @@ export default function HomePage() {
         {/* ================= HOW IT WORKS ================= */}
         <section
           id="how-it-works"
-          className="mx-auto max-w-7xl px-6 mt-28 scroll-mt-20"
+          className="mx-auto max-w-7xl px-6 mt-10 lg:mt-10 scroll-mt-20"
         >
           <div className="text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">Process</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Process</h2>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
             {[
               {
                 title: "Create account",
@@ -182,7 +100,7 @@ export default function HomePage() {
                     />
                   </div>
                 </div>
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <h3 className="text-lg font-semibold">{s.title}</h3>
                   <p className="mt-2 text-slate-600 dark:text-slate-400">
                     {s.desc}
@@ -203,14 +121,14 @@ export default function HomePage() {
         </section>
 
         {/* ================= TESTIMONIALS ================= */}
-        <section className="mx-auto max-w-7xl px-6 mt-28">
+        <section className="mx-auto max-w-7xl px-6 mt-10 lg:mt-10">
           <div className="text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
               What people say
             </h2>
           </div>
 
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
+          <div className="mt-10 grid gap-8 grid-cols-1 md:grid-cols-3">
             {[
               {
                 quote: "Met two other solo travellers and felt safe.",
@@ -227,10 +145,10 @@ export default function HomePage() {
             ].map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-[#E7D5BF] dark:border-slate-800 dark:bg-slate-900 bg-white p-8 shadow-sm"
+className="relative rounded-2xl border border-[#E7D5BF] dark:border-slate-800 dark:bg-slate-900 bg-white p-6 sm:p-8 shadow-sm"
               >
-                <Quote className="absolute top-6 right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
-                <blockquote className="italic text-slate-800 dark:text-slate-200">
+                <Quote className="absolute top-6 right-6 sm:right-8 h-8 w-8 text-slate-100 dark:text-slate-800" />
+                <blockquote className="italic text-slate-800 dark:text-slate-200 pr-8">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <p className="mt-4 font-semibold">{t.name}</p>
@@ -242,10 +160,10 @@ export default function HomePage() {
         {/* ================= FAQ ================= */}
         <section
           id="faq"
-          className="mx-auto max-w-4xl px-6 mt-28 mb-28 scroll-mt-20"
+          className="mx-auto max-w-4xl px-6 mt-20 lg:mt-10 mb-20 lg:mb-10 scroll-mt-20"
         >
           <div className="text-center">
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
               Frequently Asked Questions
             </h2>
             <p className="mt-3 text-slate-600 dark:text-slate-400">
@@ -274,11 +192,11 @@ export default function HomePage() {
             ].map((faq, index) => (
               <details
                 key={index}
-                className="group rounded-xl border border-[#E7D5BF] bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
+className="group rounded-xl border border-[#E7D5BF] bg-white p-4 sm:p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
               >
-                <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-slate-900 dark:text-white">
-                  {faq.q}
-                  <span className="ml-4 transition-transform group-open:rotate-180">
+                <summary className="cursor-pointer list-none flex justify-between items-center gap-4 font-medium text-slate-900 dark:text-white">
+                  <span>{faq.q}</span>
+                  <span className="shrink-0 transition-transform group-open:rotate-180">
                     ▼
                   </span>
                 </summary>
@@ -299,7 +217,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <div className="h-32 bg-gradient-to-b from-[#FFFCF8] to-[#F9F6F0] dark:from-slate-950 dark:to-[#06132a]" />
+<div className="h-32 bg-gradient-to-b from-[#FFFCF8] to-[#F9F6F0] dark:from-slate-950 dark:to-[#06132a]" />
     </>
   );
 }
