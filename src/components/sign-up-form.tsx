@@ -39,13 +39,22 @@ export default function SignUpForm() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Signup failed");
-        return;
-      }
 
-      setSuccess(data.message || "OTP sent! Check your email.");
-      setStep("verify");
+
+      if (!res.ok) {
+  setError(data.message || data.error || "Signup failed");
+  return;
+}
+
+if (data.error) {
+  // Account created but email failed (status 207 partial success)
+  setError(data.error);
+  setStep("verify");
+  return;
+}
+
+setSuccess(data.message || "OTP sent! Check your email.");
+setStep("verify");
     } catch {
       setError("Network error. Please try again.");
     } finally {

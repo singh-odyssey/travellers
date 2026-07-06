@@ -10,19 +10,27 @@ function getResendClient() {
   return resend;
 }
 
+
 export async function sendOTPEmail(email: string, otp: string) {
-  // Development/Fall-back: log to console if no API key is provided
+  // Development-only fallback: log to console if no API key is provided.
+  // In production, a missing key is a real misconfiguration and should
+  // surface as a failure, not a silent false success.
   if (!process.env.RESEND_API_KEY) {
-    console.log('='.repeat(50));
-    console.log('📧 EMAIL VERIFICATION OTP (Terminal Mode)');
-    console.log('='.repeat(50));
-    console.log(`To: ${email}`);
-    console.log(`OTP: ${otp}`);
-    console.log(`Expires: 10 minutes`);
-    console.log('='.repeat(50));
-    console.log('NOTE: Add RESEND_API_KEY to .env to receive actual emails.');
-    console.log('='.repeat(50));
-    return { success: true };
+    if (process.env.NODE_ENV !== "production") {
+      console.log('='.repeat(50));
+      console.log('📧 EMAIL VERIFICATION OTP (Terminal Mode)');
+      console.log('='.repeat(50));
+      console.log(`To: ${email}`);
+      console.log(`OTP: ${otp}`);
+      console.log(`Expires: 10 minutes`);
+      console.log('='.repeat(50));
+      console.log('NOTE: Add RESEND_API_KEY to .env to receive actual emails.');
+      console.log('='.repeat(50));
+      return { success: true };
+    }
+
+    console.error('RESEND_API_KEY is not configured in production.');
+    return { success: false, error: new Error('Email service not configured') };
   }
 
   // Production: send real email via Resend
