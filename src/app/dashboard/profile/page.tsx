@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Camera, Upload } from "lucide-react";
+import { Camera, Upload, KeyRound } from "lucide-react";
 
 export default function ProfilePage() {
     const [name, setName] = useState("");
@@ -13,6 +13,13 @@ export default function ProfilePage() {
     const [preview, setPreview] = useState<string>("");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordLoading, setPasswordLoading] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchProfile() {
@@ -61,6 +68,45 @@ export default function ProfilePage() {
             alert("Something went wrong.");
         }
         setLoading(false);
+    };
+
+    const handlePasswordSubmit = async () => {
+        setPasswordError(null);
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            setPasswordError("All password fields are required.");
+            return;
+        }
+        if (newPassword.length < 8) {
+            setPasswordError("New password must be at least 8 characters long.");
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            setPasswordError("New password and confirm password do not match.");
+            return;
+        }
+
+        setPasswordLoading(true);
+        try {
+            const res = await fetch("/api/auth/change-password", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ currentPassword, newPassword }),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                setShowSuccessModal(true);
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+            } else {
+                setPasswordError(data.error || "Failed to update password.");
+            }
+        } catch (error) {
+            console.error(error);
+            setPasswordError("Something went wrong. Please try again.");
+        }
+        setPasswordLoading(false);
     };
 
     return (
@@ -184,6 +230,95 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
+
+            <div className="mt-8 rounded-[32px] border border-gray-100 dark:border-gray-800 bg-[#F6F4EC] dark:bg-[#11132B] p-8 md:p-12 shadow-sm transition-colors duration-300">
+                <div className="grid md:grid-cols-[280px_1fr] gap-12 lg:gap-16">
+                    {/* Left: Security Info */}
+                    <div className="flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 gap-4">
+                        <div className="p-4 rounded-full bg-white dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 shadow-inner">
+                            <KeyRound size={40} className="text-gray-400 dark:text-gray-300" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Security</h2>
+                            <p className="text-xs mt-1 text-gray-500 dark:text-gray-400 max-w-[200px]">Update your password to keep your account secure.</p>
+                        </div>
+                    </div>
+
+                    {/* Right: Password Change Form */}
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1">Current Password</label>
+                            <input
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                placeholder="Enter current password"
+                                className="w-full rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-3 bg-white dark:bg-[#0F1129] focus:ring-2 focus:ring-emerald-500 transition-all text-sm outline-none"
+                            />
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1">New Password</label>
+                                <input
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="Enter new password"
+                                    className="w-full rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-3 bg-white dark:bg-[#0F1129] focus:ring-2 focus:ring-emerald-500 transition-all text-sm outline-none"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1">Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Confirm new password"
+                                    className="w-full rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-3 bg-white dark:bg-[#0F1129] focus:ring-2 focus:ring-emerald-500 transition-all text-sm outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        {passwordError && (
+                            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                                ⚠️ {passwordError}
+                            </div>
+                        )}
+
+                        <div className="flex pt-4">
+                            <button
+                                onClick={handlePasswordSubmit}
+                                disabled={passwordLoading}
+                                className="bg-[#1A4D2E] text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:opacity-90 transition shadow-sm disabled:opacity-60 w-full sm:w-auto"
+                            >
+                                {passwordLoading ? "Updating..." : "Update Password"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-[#11132B] border border-gray-800 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                        <div className="mx-auto w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mb-4">
+                            <svg className="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-2">Password Changed!</h3>
+                        <p className="text-gray-400 text-sm mb-6">Your password has been updated successfully. You can now use your new password next time you sign in.</p>
+                        <button
+                            onClick={() => setShowSuccessModal(false)}
+                            className="w-full bg-[#1A4D2E] text-white py-3 rounded-xl font-bold text-sm hover:opacity-90 transition shadow-sm"
+                        >
+                            Got it, thanks!
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
