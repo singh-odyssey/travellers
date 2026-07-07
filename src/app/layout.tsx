@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import { ReactNode } from "react";
-import { Inter } from "next/font/google";
+import { Playfair_Display, DM_Sans } from "next/font/google";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -11,16 +11,21 @@ import { auth } from "@/lib/auth";
 import { ThemeProvider } from "@/state/theme";
 import { Wrapper } from "@/components/theme-wrapper";
 import FloatingActions from "@/components/FloatingActions";
-const inter = Inter({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-heading",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
 });
 
 /* ✅ Force dynamic rendering */
 export const dynamic = "force-dynamic";
 
 export const viewport = {
-  themeColor: "#10b981",
+  themeColor: "#0B2447",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -48,7 +53,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-white dark:bg-gray-950 dark:text-white transition-colors duration-300`}>
+      <body
+       className={`${playfair.variable} ${dmSans.variable} bg-[#F9F6F0] dark:bg-gray-950 dark:text-white transition-colors duration-300`}
+      >
         <ThemeProvider>
           <Wrapper>
             <AuthSessionProvider session={session}>
