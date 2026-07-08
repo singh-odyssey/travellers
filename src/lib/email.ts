@@ -45,7 +45,7 @@ export async function sendOTPEmail(email: string, otp: string) {
     }
 
     await client.emails.send({
-      from: 'Travellers <onboarding@resend.dev>',
+      from: `Travellers <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
       to: email,
       subject: 'Verify your email - Travellers',
       html: `
@@ -97,7 +97,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
   // Development/Fall-back: log to console if no API key is provided
   if (!process.env.RESEND_API_KEY) {
     console.log('='.repeat(50));
-    console.log('📧 PASSWORD RESET EMAIL (Terminal Mode)');
+    console.log(' PASSWORD RESET EMAIL (Terminal Mode)');
     console.log('='.repeat(50));
     console.log(`To: ${email}`);
     console.log(`Reset URL: ${resetUrl}`);
@@ -116,7 +116,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     }
 
     await client.emails.send({
-      from: 'Travellers <onboarding@resend.dev>',
+      from: `Travellers <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
       to: email,
       subject: 'Reset your password - Travellers',
       html: `
@@ -141,7 +141,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
               </div>
               
               <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                ⏱️ This link will expire in <strong>1 hour</strong>.
+               This link will expire in <strong>1 hour</strong>.
               </p>
               
               <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
