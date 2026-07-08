@@ -7,6 +7,10 @@ on:
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
+    
+    env:
+      DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+      NEXTAUTH_SECRET: "12345678901234567890123456789012" # Dummy 32-char key
 
     steps:
       - name: Checkout
@@ -30,4 +34,5 @@ jobs:
       - name: Type check
         run: npx tsc --noEmit
       - name: Build
-        run: npm run build
+        
+        run: npx next build
