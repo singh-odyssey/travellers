@@ -1,15 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
 
 export default function PrivateMessaging() {
   return (
     <div
-      className="
+      className={`
         relative
         w-full
-        h-[220px]               /* ✅ explicit height (CRITICAL FIX) */
+        h-[220px]
         bg-slate-50
         dark:bg-slate-900/50
         flex
@@ -19,22 +18,21 @@ export default function PrivateMessaging() {
         p-6
         rounded-xl
         group
-      "
+      `}
     >
       <div
-        className="
+        className={`
           relative
-          w-[200px]              /* ✅ explicit width */
-          h-[200px]              /* ✅ explicit height */
-
-          transition-transform duration-300 ease-out
+          w-[200px]
+          h-[200px]
+          transition-transform
+          duration-300
+          ease-out
           group-hover:scale-105
           group-hover:-translate-y-1
-
           group-hover:drop-shadow-[0_12px_28px_rgba(99,102,241,0.35)]
-
           animate-float
-        "
+        `}
       >
         <Image
           src="/privateMessaging.png"
@@ -45,12 +43,13 @@ export default function PrivateMessaging() {
         />
       </div>
 
-      {/* animation styles */}
       <style jsx>{`
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
+
           50% {
             transform: translateY(-6px);
           }
