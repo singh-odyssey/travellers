@@ -5,10 +5,11 @@ import React from "react";
 
 export default function VerifiedTicket() {
   return (
-    <div className="relative w-full h-full bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center overflow-hidden p-6 rounded-xl group">
+    <div className={`relative w-full h-full bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center overflow-hidden p-6 rounded-xl group  `}
+>
 
       <div
-        className="
+        className={`
           relative
           w-full max-w-[280px]
 
@@ -22,8 +23,8 @@ export default function VerifiedTicket() {
 
           /* gentle floating */
           animate-float
-        "
-      >
+        `}
+>
         <Image
           src="/verified-ticket.png"
           alt="Verified by ticket illustration"
@@ -59,3 +60,4 @@ export default function VerifiedTicket() {
     </div>
   );
 }
+

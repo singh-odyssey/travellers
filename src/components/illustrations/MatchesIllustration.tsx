@@ -5,9 +5,10 @@ import React from "react";
 
 export default function MatchesIllustration() {
   return (
-    <div className="relative w-full flex items-center justify-center group">
+    <div className={`relative w-full flex items-center justify-center group  `}
+>
       <div
-        className="
+        className={`
           relative
           w-[96px] h-[96px]
           md:w-[120px] md:h-[120px]
@@ -22,8 +23,8 @@ export default function MatchesIllustration() {
 
           /* gentle floating */
           animate-float
-        "
-      >
+         `}
+>
         <Image
           src="/matching.png"
           alt="Smart matching illustration"
@@ -58,3 +59,4 @@ export default function MatchesIllustration() {
     </div>
   );
 }
+
