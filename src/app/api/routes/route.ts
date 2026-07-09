@@ -87,10 +87,24 @@ export async function POST(request: NextRequest) {
 
     // If ID provided, update existing route
     if (validatedData.id) {
-      const route = await prisma.route.update({
+
+    const existing = await prisma.route.findFirst({
         where: {
-          id: validatedData.id,
-          userId: session.user.id, // Ensure user owns the route
+            id: validatedData.id,
+            userId: session.user.id,
+        },
+    });
+
+    if (!existing) {
+        return NextResponse.json(
+            { error: "Route not found" },
+            { status: 404 }
+        );
+    }
+
+    const route = await prisma.route.update({
+        where: {
+            id: validatedData.id,
         },
         data: {
           originLat: validatedData.origin.lat,
@@ -171,12 +185,25 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await prisma.route.delete({
-      where: {
+    const existing = await prisma.route.findFirst({
+    where:{
         id: routeId,
-        userId: session.user.id, // Ensure user owns the route
-      },
-    });
+        userId: session.user.id,
+    }
+});
+
+if(!existing){
+    return NextResponse.json(
+        {error:"Route not found"},
+        {status:404}
+    );
+}
+
+await prisma.route.delete({
+    where:{
+        id: routeId
+    }
+});
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -6,7 +6,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { GoogleMapsRoute } from './google-maps-route';
+import { MapLibreRoute } from './maplibre-route';
 import { OfflineRouteRenderer } from './offline-route-renderer';
 import { OfflineModeIndicator } from './offline-mode-indicator';
 import { useConnectivity } from '@/lib/hooks/useConnectivity';
@@ -232,7 +232,7 @@ export function RouteViewer({
       {/* Map display - switch between online/offline */}
       <div className="w-full h-full">
         {isOnline ? (
-          <GoogleMapsRoute
+          <MapLibreRoute
             origin={route.metadata.origin}
             destination={route.metadata.destination}
             waypoints={route.metadata.waypoints}

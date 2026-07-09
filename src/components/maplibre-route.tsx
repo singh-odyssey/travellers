@@ -1,0 +1,115 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Map,
+  Marker,
+  NavigationControl,
+  Source,
+  Layer,
+} from "@vis.gl/react-maplibre";
+import 'maplibre-gl/dist/maplibre-gl.css';
+
+import type { Location, RouteWaypoint } from '@/lib/types/route';
+import { getRoute } from '@/lib/utils/osrm';
+
+console.log("Map:", Map);
+console.log("Marker:", Marker);
+console.log("Source:", Source);
+console.log("Layer:", Layer);
+console.log("NavigationControl:", NavigationControl);
+
+console.log({
+  Map,
+  Marker,
+  NavigationControl,
+  Source,
+  Layer,
+});
+
+interface MapLibreRouteProps {
+  origin: Location;
+  destination: Location;
+  waypoints?: RouteWaypoint[];
+  onRouteCalculated?: (route: {
+    distance: number;
+    duration: number;
+    encodedPolyline: string;
+  }) => void;
+  className?: string;
+}
+
+export function MapLibreRoute({
+  origin,
+  destination,
+  onRouteCalculated,
+  className = '',
+}: MapLibreRouteProps) {
+  const [coordinates, setCoordinates] = useState<[number, number][]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function loadRoute() {
+      try {
+        setLoading(true);
+        setError('');
+
+        const route = await getRoute(origin, destination);
+        console.log("ROUTE:",route);
+
+        setCoordinates(route.coordinates);
+
+        onRouteCalculated?.({
+          distance: route.distance,
+          duration: route.duration,
+          encodedPolyline: route.encodedPolyline,
+        });
+      } catch (err) {
+        console.error("OSRM ERROR:", err);
+        setError('Unable to calculate route');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRoute();
+  }, [origin, destination, onRouteCalculated]);
+
+  const geoJson = useMemo(
+    () => ({
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates,
+      },
+    }),
+    [coordinates]
+  );
+
+  if (loading) {
+    return (
+      <div
+        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 ${className}`}
+      >
+        Loading Route...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 ${className}`}
+      >
+        {error}
+      </div>
+    );
+  }
+
+  return (
+  <div style={{ padding: 20, background: "lightgreen" }}>
+    MapLibreRoute Component Works!
+  </div>
+);
+}

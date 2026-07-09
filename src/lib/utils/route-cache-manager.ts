@@ -134,27 +134,24 @@ class RouteCacheManager {
    * Sync route with server (when online)
    */
   async syncRoute(route: RouteMetadata): Promise<void> {
-    try {
-      const response = await fetch('/api/routes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(route),
-      });
+  const response = await fetch('/api/routes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(route),
+  });
 
-      if (!response.ok) {
-        throw new Error('Failed to sync route with server');
-      }
+  const data = await response.json();
 
-      // Update local cache
-      await this.cacheRoute(route);
-    } catch (error) {
-      console.error('Route sync error:', error);
-      // If sync fails, still cache locally
-      await this.cacheRoute(route);
-    }
+  console.log("SERVER RESPONSE:", data);
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to save route");
   }
+
+  await this.cacheRoute(route);
+}
 
   /**
    * Load route from server and cache
