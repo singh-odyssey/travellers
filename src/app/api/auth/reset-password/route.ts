@@ -2,25 +2,16 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { z } from "zod";
+import { withValidation } from "@/lib/withValidation";
 
 const resetPasswordSchema = z.object({
   token: z.string().min(1, "Reset token is required"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withValidation(resetPasswordSchema, async (req, data) => {
   try {
-    const body = await req.json();
-    const result = resetPasswordSchema.safeParse(body);
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: "Invalid inputs", details: result.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { token, password } = result.data;
+    const { token, password } = data;
 
     // Find the user with matching and unexpired reset token
     const user = await prisma.user.findFirst({
@@ -64,4 +55,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-}
+});

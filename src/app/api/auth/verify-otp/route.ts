@@ -2,25 +2,16 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { isValidOTPFormat } from "@/lib/otp";
+import { withValidation } from "@/lib/withValidation";
 
 const verifySchema = z.object({
   email: z.string().email("Invalid email"),
   otp: z.string().length(6, "OTP must be 6 digits"),
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withValidation(verifySchema, async (req, data) => {
   try {
-    const body = await req.json();
-    const result = verifySchema.safeParse(body);
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: "Invalid input", details: result.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { email, otp } = result.data;
+    const { email, otp } = data;
 
     if (!isValidOTPFormat(otp)) {
       return NextResponse.json(
@@ -88,4 +79,4 @@ export async function POST(req: NextRequest) {
     console.error("Verify OTP error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
-}
+});

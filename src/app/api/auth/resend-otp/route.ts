@@ -3,24 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { generateOTP } from "@/lib/otp";
 import { sendOTPEmail } from "@/lib/email";
+import { withValidation } from "@/lib/withValidation";
 
 const resendSchema = z.object({
   email: z.string().email("Invalid email"),
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withValidation(resendSchema, async (req, data) => {
   try {
-    const body = await req.json();
-    const result = resendSchema.safeParse(body);
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: "Invalid input", details: result.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { email } = result.data;
+    const { email } = data;
 
     // Find user
     const user = await prisma.user.findUnique({ where: { email } });
@@ -60,4 +51,4 @@ export async function POST(req: NextRequest) {
     console.error("Resend OTP error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
-}
+});

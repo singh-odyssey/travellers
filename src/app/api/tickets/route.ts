@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { withValidation } from "@/lib/withValidation";
 
 const ticketSchema = z.object({
   destination: z.string().min(1, "Destination required"),
@@ -11,7 +12,7 @@ const ticketSchema = z.object({
   file: z.any().refine((val) => val instanceof File && val.size > 0, "File required"),
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withValidation(ticketSchema, async (req, data) => {
   // 🔒 Verify authentication
   const session = await auth();
   if (!session?.user?.id) {
@@ -19,21 +20,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const form = await req.formData();
-    const result = ticketSchema.safeParse({
-      destination: form.get("destination"),
-      departureDate: form.get("departureDate"),
-      file: form.get("file"),
-    });
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: "Invalid input", details: result.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { destination, departureDate } = result.data;
+    const { destination, departureDate, file } = data;
 
     // TODO: Upload file to S3/UploadThing and get URL
     // For now, use placeholder
@@ -57,7 +44,7 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
 // Get user's tickets
 export async function GET(req: NextRequest) {

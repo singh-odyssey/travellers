@@ -3,24 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import crypto from "crypto";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { withValidation } from "@/lib/withValidation";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-export async function POST(req: NextRequest) {
+export const POST = withValidation(forgotPasswordSchema, async (req, data) => {
   try {
-    const body = await req.json();
-    const result = forgotPasswordSchema.safeParse(body);
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: "Invalid email input", details: result.error.flatten() },
-        { status: 400 }
-      );
-    }
-
-    const { email } = result.data;
+    const { email } = data;
 
     // Find user
     const user = await prisma.user.findUnique({ where: { email } });
@@ -64,4 +55,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
