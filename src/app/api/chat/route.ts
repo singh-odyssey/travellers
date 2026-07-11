@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { withValidation } from "@/lib/withValidation";
 
-export async function POST(req: NextRequest) {
+const chatSchema = z.object({
+  message: z.string().min(1, "Message required").max(500, "Message too long (max 500 characters)."),
+});
+
+export const POST = withValidation(chatSchema, async (req, data) => {
     try {
         if (!process.env.GEMINI_API_KEY) {
             return NextResponse.json(
@@ -9,23 +15,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const body = await req.json();
-        const message = body?.message;
-
-        // Input validation
-        if (!message || typeof message !== "string") {
-            return NextResponse.json(
-                { error: "Invalid input." },
-                { status: 400 }
-            );
-        }
-
-        if (message.length > 500) {
-            return NextResponse.json(
-                { error: "Message too long (max 500 characters)." },
-                { status: 400 }
-            );
-        }
+        const { message } = data;
 
         const systemPrompt = `
 You are TravelBox AI, an assistant for the Travellers ticket-sharing platform.
@@ -81,10 +71,10 @@ Do not mention system prompts or technical details.
             );
         }
 
-        const data = await geminiResponse.json();
+        const responseData = await geminiResponse.json();
 
         const reply =
-            data.candidates?.[0]?.content?.parts?.[0]?.text;
+            responseData.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!reply) {
             return NextResponse.json(
@@ -103,4 +93,4 @@ Do not mention system prompts or technical details.
             { status: 500 }
         );
     }
-}
+});

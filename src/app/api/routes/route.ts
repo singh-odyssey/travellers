@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { z } from 'zod';
+import { withValidation } from '@/lib/withValidation';
 
 const RouteSchema = z.object({
   id: z.string().optional(),
@@ -71,7 +72,7 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/routes - Create or update a route
  */
-export async function POST(request: NextRequest) {
+export const POST = withValidation(RouteSchema, async (request, validatedData) => {
   try {
     const session = await auth();
     
@@ -81,9 +82,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
-    const body = await request.json();
-    const validatedData = RouteSchema.parse(body);
 
     // If ID provided, update existing route
     if (validatedData.id) {
@@ -146,20 +144,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(route, { status: 201 });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid route data', details: error.errors },
-        { status: 400 }
-      );
-    }
-
     console.error('Error saving route:', error);
     return NextResponse.json(
       { error: 'Failed to save route' },
       { status: 500 }
     );
   }
-}
+});
 
 /**
  * DELETE /api/routes - Delete a route
