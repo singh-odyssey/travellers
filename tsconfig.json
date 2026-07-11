@@ -36,7 +36,6 @@
     },
     "types": [
       "vitest/globals",
-      "google.maps"
     ]
   },
   "include": [
