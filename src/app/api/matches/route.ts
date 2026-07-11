@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import redis from "@/lib/redis";
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -20,6 +21,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const cacheKey = `matches:${destination.toLowerCase()}:${date}:${session.user.id}`;
+    
+    // Check cache
+    const cachedMatches = await redis.get(cacheKey);
+    if (cachedMatches) {
+      return NextResponse.json({ matches: JSON.parse(cachedMatches), cached: true });
+    }
+
     // Find verified tickets for same destination within ±3 days
     const targetDate = new Date(date);
     const startDate = new Date(targetDate);
@@ -52,7 +61,10 @@ export async function GET(req: NextRequest) {
       take: 20,
     });
 
-    return NextResponse.json({ matches });
+    // Save to cache (TTL: 5 minutes)
+    await redis.set(cacheKey, JSON.stringify(matches), "EX", 300);
+
+    return NextResponse.json({ matches, cached: false });
   } catch (error) {
     console.error("Match search error:", error);
     return NextResponse.json(
