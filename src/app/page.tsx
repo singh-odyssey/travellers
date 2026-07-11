@@ -12,6 +12,7 @@ import VerifiedTicket from "@/components/illustrations/VerifiedTicket";
 import SmartMatching from "@/components/illustrations/SmartMatching";
 import PrivateMessaging from "@/components/illustrations/PrivateMessaging";
 import SiteFooter from "@/components/site-footer";
+import SpatialTravelExperience from "@/components/spatial/SpatialTravelExperience";
 
 export default function HomePage() {
   return (
@@ -95,6 +96,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <SpatialTravelExperience />
 
         {/* ================= FEATURES ================= */}
         <section className="mx-auto max-w-7xl px-6 mt-28">
