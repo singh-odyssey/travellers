@@ -163,6 +163,61 @@ travellers/
 ```
 
 ---
+## API Endpoints
+
+The current backend is organized around the route handlers in the `src/app/api` directory. The following table reflects the endpoints that are implemented in the codebase today.
+
+### Authentication & Session
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET / POST | `/api/auth/[...nextauth]` | NextAuth catch-all handler used for credential sign-in and session callbacks. |
+| POST | `/api/auth/signup` | Register a new user, hash the password, create an OTP, and send a verification email. |
+| POST | `/api/auth/verify-otp` | Verify a user's email using the 6-digit OTP they received. |
+| POST | `/api/auth/resend-otp` | Generate and send a fresh OTP for an unverified account. |
+| POST | `/api/auth/forgot-password` | Send a password reset email with a one-time token. |
+| POST | `/api/auth/reset-password` | Reset the user's password using a valid reset token. |
+| PUT | `/api/auth/change-password` | Update the currently authenticated user's password. |
+| GET / POST | `/api/auth/signin` | Re-export of the NextAuth route for the sign-in flow. |
+
+### User Profile
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| PATCH | `/api/user/profile` | Update profile fields such as `name`, `bio`, and `location` for the current authenticated user. |
+
+### Tickets
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/tickets` | Create a ticket submission for the authenticated user. Expects `destination`, `departureDate`, and a `file` input. |
+| GET | `/api/tickets` | List the authenticated user's tickets in reverse chronological order. |
+
+### Admin Ticket Review
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/tickets` | List tickets for admin review. Supports an optional `status` query parameter and requires an `ADMIN` role. |
+| GET | `/api/admin/tickets/[id]` | Fetch one ticket record for admin inspection. |
+| PATCH | `/api/admin/tickets/[id]` | Update a ticket's verification status to `VERIFIED` or `REJECTED`. |
+
+### Saved Routes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/routes` | Retrieve all saved routes for the authenticated user, ordered by most recent update. |
+| POST | `/api/routes` | Create a new route or update an existing route when an `id` is supplied. |
+| DELETE | `/api/routes?id=<routeId>` | Delete a saved route owned by the current user. |
+| GET | `/api/routes/[id]` | Retrieve a single route by ID, restricted to the authenticated owner. |
+
+### Match Discovery & AI Chat
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/matches?destination=<name>&date=<YYYY-MM-DD>` | Find verified travellers headed to the same destination within a ±3 day window, excluding the current user. |
+| POST | `/api/chat` | Send a user message to the Gemini-powered TravelBox AI assistant. Expects a JSON body with `message`. |
+
+> Note: The `/api/chat` route requires `GEMINI_API_KEY` to be configured in the environment.
 
 ## 🤝 Contributing
 
@@ -192,6 +247,7 @@ We welcome contributions from developers of all skill levels!
 ## 📑 Documentation
 
 - **[Tech Stack](docs/TECH_STACK.md)** — Detailed technology overview
+- **[API Reference](docs/API.md)** — Backend endpoint overview and request examples
 - **[Contributing Guide](docs/CONTRIBUTING.md)** — How to contribute
 - **[Code of Conduct](docs/CODE_OF_CONDUCT.md)** — Community guidelines
 - **[Backend Setup](docs/BACKEND_SETUP.md)** — Backend configuration
