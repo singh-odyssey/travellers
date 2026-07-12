@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import redis from '@/lib/redis';
 import { z } from 'zod';
 
 const RouteSchema = z.object({
@@ -49,6 +50,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const cacheKey = `routes:${session.user.id}`;
+    const cachedRoutes = await redis.get(cacheKey);
+
+    if (cachedRoutes) {
+      return NextResponse.json(JSON.parse(cachedRoutes));
+    }
+
     const routes = await prisma.route.findMany({
       where: {
         userId: session.user.id,
@@ -57,6 +65,8 @@ export async function GET(request: NextRequest) {
         updatedAt: 'desc',
       },
     });
+
+    await redis.set(cacheKey, JSON.stringify(routes), 'EX', 300); // 5 minutes cache
 
     return NextResponse.json(routes);
   } catch (error) {
@@ -85,6 +95,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = RouteSchema.parse(body);
 
+    const cacheKey = `routes:${session.user.id}`;
+
     // If ID provided, update existing route
     if (validatedData.id) {
       const route = await prisma.route.update({
@@ -108,6 +120,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
+      await redis.del(cacheKey);
       return NextResponse.json(route);
     }
 
@@ -130,6 +143,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    await redis.del(cacheKey);
     return NextResponse.json(route, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -177,6 +191,9 @@ export async function DELETE(request: NextRequest) {
         userId: session.user.id, // Ensure user owns the route
       },
     });
+
+    const cacheKey = `routes:${session.user.id}`;
+    await redis.del(cacheKey);
 
     return NextResponse.json({ success: true });
   } catch (error) {

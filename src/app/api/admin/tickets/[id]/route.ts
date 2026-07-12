@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import redis from "@/lib/redis";
 
 const updateSchema = z.object({
   status: z.enum(["VERIFIED", "REJECTED"]),
@@ -52,6 +53,24 @@ export async function PATCH(
         },
       },
     });
+
+    const cacheKeys = [
+      "admin:tickets:all",
+      "admin:tickets:VERIFIED",
+      "admin:tickets:REJECTED",
+      "admin:tickets:PENDING"
+    ];
+    await redis.del(...cacheKeys);
+
+    // Invalidate user's tickets cache
+    await redis.del(`tickets:${ticket.userId}`);
+
+    // Invalidate match search cache if verified
+    if (status === "VERIFIED") {
+      const targetDate = ticket.departureDate.toISOString();
+      const matchCacheKey = `matches:${ticket.destination.toLowerCase()}:${targetDate}:${ticket.userId}`;
+      await redis.del(matchCacheKey);
+    }
 
     return NextResponse.json({ ok: true, ticket });
   } catch (error) {

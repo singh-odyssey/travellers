@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import redis from "@/lib/redis";
 
 const ticketSchema = z.object({
   destination: z.string().min(1, "Destination required"),
@@ -49,6 +50,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const cacheKey = `tickets:${session.user.id}`;
+    await redis.del(cacheKey);
+
     return NextResponse.json({ ok: true, ticket });
   } catch (error) {
     console.error("Ticket upload error:", error);
@@ -67,10 +71,19 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const cacheKey = `tickets:${session.user.id}`;
+    const cachedTickets = await redis.get(cacheKey);
+
+    if (cachedTickets) {
+      return NextResponse.json({ tickets: JSON.parse(cachedTickets) });
+    }
+
     const tickets = await prisma.ticket.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
     });
+
+    await redis.set(cacheKey, JSON.stringify(tickets), "EX", 300);
 
     return NextResponse.json({ tickets });
   } catch (error) {

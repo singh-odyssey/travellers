@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import redis from "@/lib/redis";
 
 // Get all tickets for admin review
 export async function GET(req: NextRequest) {
@@ -23,6 +24,13 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const status = url.searchParams.get("status");
 
+    const cacheKey = `admin:tickets:${status || 'all'}`;
+    const cachedTickets = await redis.get(cacheKey);
+
+    if (cachedTickets) {
+      return NextResponse.json({ tickets: JSON.parse(cachedTickets) });
+    }
+
     const where = status ? { status: status as any } : {};
 
     const tickets = await prisma.ticket.findMany({
@@ -40,6 +48,8 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
       take: 100,
     });
+
+    await redis.set(cacheKey, JSON.stringify(tickets), "EX", 300);
 
     return NextResponse.json({ tickets });
   } catch (error) {
