@@ -163,6 +163,46 @@ travellers/
 ```
 
 ---
+## API Endpoints
+
+## Admin Endpoints 
+
+  ## Admin API
+
+  ### Ticket Routes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/tickets` | Retrieve all support tickets for admin review. Supports an optional `status` query parameter. |
+| GET | `/api/admin/tickets/:id` | Retrieve details of a specific support ticket. |
+| PATCH | `/api/admin/tickets/:id` | Update a ticket's status or other details. |
+| DELETE | `/api/admin/tickets/:id` | Delete a support ticket. |
+
+
+### Authentication Routes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| PUT | `/api/admin/auth/change-password` | Change the password of the currently authenticated user. |
+| POST | `/api/admin/auth/forgot-password` | Send a password reset email. |
+| POST | `/api/admin/auth/resend-otp` | Generate and send a new OTP. |
+| POST | `/api/admin/auth/reset-password` | Reset the user's password using a valid OTP or reset token. |
+| POST | `/api/admin/auth/sign-up` | Register a new admin user with name, email, and password. |
+| POST | `/api/admin/auth/verify-otp` | Verify the session-based OTP. |
+
+
+
+
+## Chat API Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/admin/chats` | Connect openAi api ` |
+
+## Match API Endpoints 
+// Find verified tickets for same destination within ±3 days
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/admin/chats` | Connect openAi api ` |
 
 ## 🤝 Contributing
 
