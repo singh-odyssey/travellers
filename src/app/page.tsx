@@ -19,28 +19,25 @@ export default function HomePage() {
     <>
       <main>
         {/* ================= HERO ================= */}
-
         <section className="relative w-full overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-30"
             style={{ backgroundImage: "url('/worldMap.png')" }}
           />
 
-          
-          <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
-            <div className="grid items-center gap-16 md:grid-cols-2">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 sm:py-20 md:py-28">
+            <div className="grid items-center gap-10 md:gap-16 md:grid-cols-2">
               <div className="text-slate-900 dark:text-white">
                 <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-white/10 px-4 py-1 text-sm text-slate-600 dark:text-gray-200 backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-[#0B4B74]" />
                   <TicketVerificationBanner />
                 </div>
 
-                <h1 className="mt-6 text-5xl md:text-7xl font-bold leading-tight text-[#0B4B74] dark:text-white">
+                <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-[#0B4B74] dark:text-white">
                   Meet verified travellers. <br />
                   Make real connections.
                 </h1>
 
-                
                 <p className="mt-6 max-w-xl text-lg text-slate-600 dark:text-slate-300">
                   travellersmeet helps solo travellers find others headed to the
                   same city and dates — verified with a real ticket.
@@ -63,15 +60,16 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="relative flex justify-center md:justify-end overflow-visible">
-                <div className="absolute -right-40 top-1/2 -translate-y-1/2">
+              {/* Responsive Hero Image Container */}
+              <div className="relative flex justify-center md:justify-end overflow-visible mt-8 md:mt-0 min-h-[250px] sm:min-h-[350px] md:min-h-0">
+                <div className="relative md:absolute md:-right-20 lg:-right-40 md:top-1/2 md:-translate-y-1/2 w-full max-w-[450px] sm:max-w-[550px] md:max-w-none md:w-[1000px] lg:w-[1200px] xl:w-[1400px] flex justify-center md:block">
                   <Image
                     src="/newhero.png"
                     alt="Travellers connecting"
                     width={2000}
                     height={1500}
                     priority
-                    className="w-[1000px] md:w-[1400px] max-w-none drop-shadow-2xl"
+                    className="w-full h-auto md:w-full object-contain drop-shadow-2xl"
                   />
                 </div>
               </div>
@@ -80,8 +78,8 @@ export default function HomePage() {
         </section>
 
         {/* ================= TRUST STRIP ================= */}
-        <section className="mx-auto max-w-7xl px-6 -mt-16 relative z-20 pb-10">
-          <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-8 py-6 text-sm text-slate-600 shadow-xl sm:grid-cols-3 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300">
+        <section className="mx-auto max-w-7xl px-6 mt-8 md:-mt-16 relative z-20 pb-10">
+          <div className="grid items-center gap-6 rounded-xl border border-slate-200 bg-white px-6 py-5 md:px-8 md:py-6 text-sm text-slate-600 shadow-xl sm:grid-cols-3 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300">
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-5 w-5 text-[#0B4B74]" />
               <p>Ticket-verified profiles</p>
@@ -100,7 +98,7 @@ export default function HomePage() {
         <SpatialTravelExperience />
 
         {/* ================= FEATURES ================= */}
-        <section className="mx-auto max-w-7xl px-6 mt-28">
+        <section id="features" className="mx-auto max-w-7xl px-6 mt-16 md:mt-28 scroll-mt-20">
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-tight">
               Everything you need
@@ -146,7 +144,7 @@ export default function HomePage() {
         {/* ================= HOW IT WORKS ================= */}
         <section
           id="how-it-works"
-          className="mx-auto max-w-7xl px-6 mt-28 scroll-mt-20"
+          className="mx-auto max-w-7xl px-6 mt-16 md:mt-28 scroll-mt-20"
         >
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-tight">Process</h2>
@@ -206,7 +204,7 @@ export default function HomePage() {
         </section>
 
         {/* ================= TESTIMONIALS ================= */}
-        <section className="mx-auto max-w-7xl px-6 mt-28">
+        <section id="testimonials" className="mx-auto max-w-7xl px-6 mt-16 md:mt-28 scroll-mt-20">
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-tight">
               What people say
@@ -245,7 +243,7 @@ export default function HomePage() {
         {/* ================= FAQ ================= */}
         <section
           id="faq"
-          className="mx-auto max-w-4xl px-6 mt-28 mb-28 scroll-mt-20"
+          className="mx-auto max-w-4xl px-6 mt-16 mb-16 md:mt-28 md:mb-28 scroll-mt-20"
         >
           <div className="text-center">
             <h2 className="text-3xl font-semibold tracking-tight">
@@ -277,7 +275,7 @@ export default function HomePage() {
             ].map((faq, index) => (
               <details
                 key={index}
-                className="group rounded-xl border border-[#E7D5BF] bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
+                className="group rounded-xl border border-[#E7D5BF] bg-white p-4 sm:p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900"
               >
                 <summary className="cursor-pointer list-none flex justify-between items-center font-medium text-slate-900 dark:text-white">
                   {faq.q}
