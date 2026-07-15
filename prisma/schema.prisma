@@ -12,11 +12,12 @@ model User {
   name          String
   email         String   @unique
   passwordHash  String?
-  image         String?     // Profile avatar URL
+  image         String?  @db.Text  // Profile avatar (base64 data URI)
 
   // ✅ NEW PROFILE FIELDS (Safe Additions)
   bio           String?     @db.Text
   location      String?
+  homeLocation  String?
   phone         String?
   isDeleted     Boolean     @default(false)  // Soft delete support
 
