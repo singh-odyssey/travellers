@@ -98,7 +98,7 @@ export default function SiteHeader() {
             <Plane className="h-5 w-5 rotate-[-45deg] group-hover:rotate-0 transition-transform duration-500" />
           </div>
           <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-            travellersmeet
+            Travellersmeet
           </span>
         </Link>
 
