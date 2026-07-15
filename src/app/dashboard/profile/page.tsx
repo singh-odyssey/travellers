@@ -24,7 +24,8 @@ export default function ProfilePage() {
     useEffect(() => {
         async function fetchProfile() {
             try {
-                const res = await fetch("/api/user/me");
+                // const res = await fetch("/api/user/me");
+                const res = await fetch("/api/user/profile");
                 if (res.ok) {
                     const data = await res.json();
                     setName(data.name ?? "");
@@ -189,7 +190,7 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1">Location</label>
+                                <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1">Home Location</label>
                                 <input
                                     value={homeLocation}
                                     onChange={(e) => setHomeLocation(e.target.value)}
