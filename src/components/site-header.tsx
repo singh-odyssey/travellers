@@ -32,7 +32,7 @@ const getLinkClasses = (isActive: boolean) =>
   `text-sm pb-0.5 border-b-2 transition-colors duration-200 ${
     isActive
       ? "text-slate-900 dark:text-white font-semibold border-slate-900 dark:border-white"
-      : "text-slate-600 dark:text-slate-300 font-medium border-transparent hover:text-slate-900 dark:hover:text-white"
+      : "text-slate-600 dark:text-slate-300 font-medium border-transparent hover:text-slate-900 dark:hover:text-white hover:border-slate-900 dark:hover:border-white"
   }`;
 
 export default function SiteHeader() {
@@ -105,30 +105,25 @@ export default function SiteHeader() {
         {/* CENTER: Navigation Links */}
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
           <nav className="flex items-center gap-6">
-            {MARKETING_LINKS.map((link) => (
-              <Link
-                key={link.key}
-                href={link.href}
-                className={getLinkClasses(activeSection === link.key)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {MARKETING_LINKS.map((link) => {
+              // Determine if section is active (scroll-based for hash links, path-based for routes)
+              const isActive = link.href.startsWith("/#")
+                ? (pathname === "/" && activeSection === link.key)
+                : pathname === link.href;
+
+              return (
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  className={getLinkClasses(isActive)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="h-4 w-px bg-slate-200 dark:bg-slate-700" />
-
-          <nav className="flex items-center gap-6">
-            {APP_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={getLinkClasses(isRouteActive(link.href))}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
 
         {/* RIGHT: Desktop Actions */}
