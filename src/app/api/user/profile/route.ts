@@ -20,6 +20,9 @@ export async function GET() {
         location: true,
         image: true,
         homeLocation: true,
+        phone: true,
+        emailVerified: true,
+        createdAt: true,
       },
     });
 

@@ -9,6 +9,8 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import Toggle from "./toggle";
+import Image from "next/image";
+import { User as UserIcon } from "lucide-react";
 
 // --- Constants ---
 const MARKETING_LINKS = [
@@ -130,6 +132,26 @@ export default function SiteHeader() {
         <div className="hidden md:flex items-center gap-3 shrink-0">
           {session?.user ? (
             <div className="flex items-center gap-3">
+             <Link
+  href="/dashboard/profile"
+  className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors shrink-0"
+  aria-label="View profile"
+>
+  {session.user.image ? (
+    <Image
+      src={session.user.image}
+      alt="Profile"
+      fill
+      className="object-cover"
+      unoptimized
+    />
+  ) : (
+    <div className="h-full w-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
+      <UserIcon size={18} />
+    </div>
+  )}
+</Link>
+              
               <Link
                 href="/dashboard"
                 className="flex items-center rounded-lg bg-slate-100 dark:bg-slate-800 h-10 px-4 text-sm font-semibold text-slate-900 dark:text-white hover:opacity-90 transition-all shadow-sm"
