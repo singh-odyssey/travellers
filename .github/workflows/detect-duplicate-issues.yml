@@ -21,9 +21,30 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // Combine title + body
-            const newText = `${newIssue.title}\n${newIssue.body || ""}`
-              .toLowerCase();
+            // Words that show up in nearly every issue because they come from
+            // the bug/feature-request templates or the project name, not from
+            // the reporter's actual content. Left unfiltered, these alone clear
+            // the old 3-word threshold and flag every new issue as a duplicate
+            // of unrelated ones.
+            const STOPWORDS = new Set([
+              "description", "expected", "behavior", "behaviour", "actual",
+              "steps", "reproduce", "screenshot", "screenshots", "environment",
+              "additional", "context", "problem", "proposal", "alternatives",
+              "applicable", "explain", "clearly", "solution", "feature",
+              "consider", "relevant", "acceptance", "criteria", "observe",
+              "notice", "affects", "impact", "would", "should", "could",
+              "please", "issue", "issues", "website", "working", "travellersmeet",
+            ]);
+
+            const toWordSet = (text) =>
+              new Set(
+                text
+                  .toLowerCase()
+                  .split(/\W+/)
+                  .filter(w => w.length > 5 && !STOPWORDS.has(w))
+              );
+
+            const newWords = toWordSet(`${newIssue.title}\n${newIssue.body || ""}`);
 
             // Fetch recent issues (open + closed)
             const issues = await github.paginate(
@@ -38,25 +59,27 @@ jobs:
 
             const similarIssues = [];
 
-            for (const issue of issues) {
-              // Skip self & PRs
-              if (issue.number === newIssue.number) continue;
-              if (issue.pull_request) continue;
+            // Too little real content to judge similarity from (e.g. an
+            // unfilled template) — skip rather than flag against everything.
+            if (newWords.size >= 3) {
+              for (const issue of issues) {
+                // Skip self & PRs
+                if (issue.number === newIssue.number) continue;
+                if (issue.pull_request) continue;
 
-              const oldText = `${issue.title}\n${issue.body || ""}`
-                .toLowerCase();
+                const oldWords = toWordSet(`${issue.title}\n${issue.body || ""}`);
+                let matches = 0;
+                for (const word of newWords) {
+                  if (oldWords.has(word)) matches++;
+                }
 
-              // Basic keyword similarity check
-              const words = newText.split(/\W+/).filter(w => w.length > 4);
-              let matches = 0;
-
-              for (const word of words) {
-                if (oldText.includes(word)) matches++;
-              }
-
-              // Heuristic threshold
-              if (matches >= 3) {
-                similarIssues.push(issue);
+                // Jaccard similarity (shared words / total distinct words across
+                // both issues) so a small overlap on a large issue, or a couple
+                // of incidental shared words, doesn't trigger a false match.
+                const union = new Set([...newWords, ...oldWords]).size;
+                if (matches >= 3 && matches / union >= 0.3) {
+                  similarIssues.push(issue);
+                }
               }
             }
 
