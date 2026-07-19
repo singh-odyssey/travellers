@@ -55,4 +55,4 @@ export const POST = withValidation(resetPasswordSchema, async (req, data) => {
       { status: 500 }
     );
   }
-});
+}, "Invalid inputs");

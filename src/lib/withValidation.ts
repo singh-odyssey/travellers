@@ -11,10 +11,10 @@ type Handler<T> = (req: NextRequest, data: T) => Promise<NextResponse>;
  * @param schema The Zod schema to validate the request payload against
  * @param handler The route handler function to execute if validation succeeds
  */
-export function withValidation<T>(schema: z.ZodSchema<T>, handler: Handler<T>) {
+export function withValidation<T>(schema: z.ZodSchema<T>, handler: Handler<T>, customErrorMsg?: string) {
   return async (req: NextRequest) => {
     try {
-      const contentType = req.headers.get("content-type") ?? "";
+      const contentType = req.headers?.get("content-type") ?? "";
       let rawData: unknown;
 
       try {
@@ -27,10 +27,18 @@ export function withValidation<T>(schema: z.ZodSchema<T>, handler: Handler<T>) {
           const form = await req.formData();
           rawData = Object.fromEntries(form.entries());
         } else {
-          // Default to JSON parsing if no content-type is provided or recognized,
-          // but wrap in try-catch in case body is completely empty.
-          const text = await req.text();
-          rawData = text ? JSON.parse(text) : {};
+          // If no content-type is provided (e.g. in test mocks), check available methods
+          if (typeof req.formData === "function") {
+            const form = await req.formData();
+            rawData = Object.fromEntries(form.entries());
+          } else if (typeof req.json === "function") {
+            rawData = await req.json();
+          } else if (typeof req.text === "function") {
+            const text = await req.text();
+            rawData = text ? JSON.parse(text) : {};
+          } else {
+            rawData = {};
+          }
         }
       } catch (parseError) {
         console.error("Payload parse error:", parseError);
@@ -44,7 +52,7 @@ export function withValidation<T>(schema: z.ZodSchema<T>, handler: Handler<T>) {
 
       if (!result.success) {
         return NextResponse.json(
-          { error: "Invalid input", details: result.error.flatten() },
+          { error: customErrorMsg ?? "Invalid input", details: result.error.flatten() },
           { status: 400 }
         );
       }

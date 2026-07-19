@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Map, Settings } from "lucide-react"
+import { Home, User, Map, Settings, MessageSquare } from "lucide-react"
 
 export default function Sidebar() {
     const pathname = usePathname()
 
     const navItems = [
         { label: "Dashboard", icon: Home, href: "/dashboard" },
+        { label: "Messages", icon: MessageSquare, href: "/dashboard/messages" },
         { label: "Profile", icon: User, href: "/dashboard/profile" },
         { label: "Trips", icon: Map, href: "#" },
         { label: "Settings", icon: Settings, href: "#" },
