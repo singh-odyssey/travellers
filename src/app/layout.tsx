@@ -11,7 +11,7 @@ import { auth } from "@/lib/auth";
 import { ThemeProvider } from "@/state/theme";
 import { Wrapper } from "@/components/theme-wrapper";
 import FloatingActions from "@/components/FloatingActions";
-const playfair = Playfair_Display({
+import CustomCursor from "@/components/CustomCursor";const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-heading",
 });
@@ -70,8 +70,8 @@ export default async function RootLayout({
 
                 {/* Footer and Utilities */}
                 <SiteFooter />
-                <FloatingActions />
-                 {/* <PWAProvider /> */}
+<FloatingActions />
+                <CustomCursor />                 {/* <PWAProvider /> */}
               </div>
             </AuthSessionProvider>
           </Wrapper>
