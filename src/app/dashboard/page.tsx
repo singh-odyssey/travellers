@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import DashboardMatches from "@/components/DashboardMatches";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -35,8 +36,11 @@ export default async function DashboardPage() {
                   <p className="font-medium">{t.destination}</p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Departure: {new Date(t.departureDate).toDateString()}</p>
                 </div>
-                <span className="rounded-full border px-3 py-1 text-sm dark:border-slate-600">{t.status}</span>
+                <span className={`rounded-full border px-3 py-1 text-sm ${t.status === "VERIFIED" ? "border-green-500 text-green-600 dark:text-green-400" : "dark:border-slate-600"}`}>{t.status}</span>
               </div>
+              {t.status === "VERIFIED" && (
+                <DashboardMatches destination={t.destination} departureDate={t.departureDate.toISOString()} />
+              )}
             </div>
           ))
         )}

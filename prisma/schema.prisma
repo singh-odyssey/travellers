@@ -32,10 +32,14 @@ model User {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  tickets       Ticket[]
-  accounts      Account[]
-  sessions      Session[]
-  routes        Route[]
+  tickets          Ticket[]
+  accounts         Account[]
+  sessions         Session[]
+  routes           Route[]
+  conversations    Conversation[]      @relation("UserConversations")
+  sentMessages     Message[]           @relation("SentMessages")
+  sentRequests     ConnectionRequest[] @relation("SentRequests")
+  receivedRequests ConnectionRequest[] @relation("ReceivedRequests")
 
   @@index([email])
 }
@@ -138,4 +142,47 @@ model Route {
   updatedAt        DateTime   @updatedAt
 
   @@index([userId, updatedAt])
+}
+
+model ConnectionRequest {
+  id         String                  @id @default(cuid())
+  senderId   String
+  sender     User                    @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User                    @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     ConnectionRequestStatus @default(PENDING)
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+enum ConnectionRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]    @relation("UserConversations")
+  messages  Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  text           String       @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([conversationId])
+  @@index([senderId])
 }

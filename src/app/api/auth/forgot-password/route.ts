@@ -55,4 +55,4 @@ export const POST = withValidation(forgotPasswordSchema, async (req, data) => {
       { status: 500 }
     );
   }
-});
+}, "Invalid email input");

@@ -21,10 +21,11 @@ const ticketSchema = z.object({
   }),
   file: z
   .any()
+  .refine((val) => val instanceof File, "File required")
   .refine((val) => val instanceof File && val.size > 0, "File required")
-  .refine((val) => val.size <= MAX_FILE_SIZE, "File size exceeds 10MB")
+  .refine((val) => val instanceof File && val.size <= MAX_FILE_SIZE, "File size exceeds 10MB")
   .refine(
-    (val) => ALLOWED_TYPES.includes(val.type),
+    (val) => val instanceof File && ALLOWED_TYPES.includes(val.type),
     "Unsupported file type"
   ),
 });

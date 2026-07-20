@@ -5,7 +5,7 @@ import AppleProvider from "next-auth/providers/apple";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
-import { z } from "zod";
+import { credentialsSchema } from "@/lib/validation/auth";
 
 const adapter = PrismaAdapter(prisma) as any;
 
@@ -63,6 +63,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
         const parsed = schema.safeParse(credentials ?? {});
 
+        const parsed = credentialsSchema.safeParse(credentials ?? {});
         if (!parsed.success) return null;
 
         const { email, password } = parsed.data;
