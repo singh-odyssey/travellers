@@ -72,6 +72,8 @@ try {
             id: true,
             name: true,
             image: true,
+            bio: true,
+            location: true,
           },
         },
       },
