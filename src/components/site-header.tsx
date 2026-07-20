@@ -11,6 +11,7 @@ import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import Toggle from "./toggle";
 import Image from "next/image";
 import { User as UserIcon } from "lucide-react";
+import NotificationBell from "./notification-bell";
 
 // --- Constants ---
 const MARKETING_LINKS = [
@@ -132,6 +133,7 @@ export default function SiteHeader() {
         <div className="hidden md:flex items-center gap-3 shrink-0">
           {session?.user ? (
             <div className="flex items-center gap-3">
+              <NotificationBell />
              <Link
   href="/dashboard/profile"
   className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors shrink-0"
