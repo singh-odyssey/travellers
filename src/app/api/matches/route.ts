@@ -55,6 +55,8 @@ export async function GET(req: NextRequest) {
             id: true,
             name: true,
             image: true,
+            bio: true,
+            location: true,
           },
         },
       },
