@@ -1,6 +1,12 @@
 import SignInForm from "@/components/sign-in-form";
 import { auth } from "@/lib/auth";
 import RoutesClient from "./routes-client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Your Routes",
+  description: "View and manage your saved travel routes on travellersmeet.",
+};
 
 export default async function RoutesPage() {
   const session = await auth();

@@ -1,6 +1,12 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import ChatInterface from "@/components/ChatInterface";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Messages",
+  description: "Chat with your travellersmeet matches.",
+};
 
 export default async function MessagesPage() {
   const session = await auth();

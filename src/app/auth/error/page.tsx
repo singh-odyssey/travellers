@@ -1,4 +1,10 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Authentication Error",
+  description: "There was a problem signing you in to travellersmeet.",
+};
 
 interface AuthErrorPageProps {
   searchParams?: {

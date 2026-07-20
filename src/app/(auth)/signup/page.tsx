@@ -1,6 +1,12 @@
 import SignUpForm from "@/components/sign-up-form";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description: "Create your travellersmeet account to connect with verified solo travellers.",
+};
 
 export default async function SignUpPage() {
   const session = await auth();
