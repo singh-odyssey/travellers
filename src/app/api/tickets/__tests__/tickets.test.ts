@@ -18,6 +18,10 @@ vi.mock("@/lib/auth", () => ({
     auth: vi.fn(),
 }))
 
+vi.mock("@/lib/cloudinary-upload", () => ({
+    uploadFileToCloudinary: vi.fn(() => Promise.resolve({ url: "about:blank" })),
+}))
+
 class MockFile extends Blob {
     name: string
     lastModified: number
