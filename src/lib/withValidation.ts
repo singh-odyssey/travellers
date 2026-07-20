@@ -28,11 +28,11 @@ export function withValidation<T>(schema: z.ZodSchema<T>, handler: Handler<T>, c
           rawData = Object.fromEntries(form.entries());
         } else {
           // If no content-type is provided (e.g. in test mocks), check available methods
-          if (typeof req.formData === "function") {
+          if (typeof req.json === "function") {
+            rawData = await req.json();
+          } else if (typeof req.formData === "function") {
             const form = await req.formData();
             rawData = Object.fromEntries(form.entries());
-          } else if (typeof req.json === "function") {
-            rawData = await req.json();
           } else if (typeof req.text === "function") {
             const text = await req.text();
             rawData = text ? JSON.parse(text) : {};

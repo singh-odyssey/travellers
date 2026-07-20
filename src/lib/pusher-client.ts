@@ -1,10 +1,11 @@
 import PusherClient from "pusher-js";
 
-const key = process.env.NEXT_PUBLIC_PUSHER_KEY || "dummy-key";
-const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "mt1";
+const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
 export const getPusherClient = () => {
   if (typeof window === "undefined") return null;
+  if (!key || !cluster) return null;
 
   const globalWithPusher = window as typeof window & {
     pusherClient?: PusherClient;
@@ -14,6 +15,7 @@ export const getPusherClient = () => {
     globalWithPusher.pusherClient = new PusherClient(key, {
       cluster,
       forceTLS: true,
+      authEndpoint: "/api/pusher/auth",
     });
   }
 

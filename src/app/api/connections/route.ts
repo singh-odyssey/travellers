@@ -161,7 +161,7 @@ export async function POST(req: NextRequest) {
             },
           });
 
-          await triggerPusher(`user-${userId}`, "connection-request", {
+          await triggerPusher(`private-user-${userId}`, "connection-request", {
             request: updated,
           });
 
@@ -182,7 +182,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      await triggerPusher(`user-${userId}`, "connection-request", {
+      await triggerPusher(`private-user-${userId}`, "connection-request", {
         request: newRequest,
       });
 
@@ -232,7 +232,7 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      await triggerPusher(`user-${userId}`, "connection-accepted", {
+      await triggerPusher(`private-user-${userId}`, "connection-accepted", {
         conversationId: conversation.id,
         connectedUser: {
           id: currentUserId,

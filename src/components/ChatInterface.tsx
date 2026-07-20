@@ -121,7 +121,7 @@ export default function ChatInterface({
     const pusher = getPusherClient();
     if (!pusher || !currentUser.id) return;
 
-    const channelName = `user-${currentUser.id}`;
+    const channelName = `private-user-${currentUser.id}`;
     const channel = pusher.subscribe(channelName);
 
     channel.bind("connection-request", (data: { request: Request }) => {
@@ -161,7 +161,7 @@ export default function ChatInterface({
     const pusher = getPusherClient();
     if (!pusher || !activeConvId) return;
 
-    const channelName = `chat-${activeConvId}`;
+    const channelName = `private-chat-${activeConvId}`;
     const currentSubscribedChats = pusherSubscribedChats.current;
     
     // Check if we are already subscribed to avoid duplicate bindings

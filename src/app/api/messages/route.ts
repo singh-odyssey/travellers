@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     ]);
 
     // Trigger Pusher event
-    await triggerPusher(`chat-${conversationId}`, "new-message", {
+    await triggerPusher(`private-chat-${conversationId}`, "new-message", {
       message,
     });
 
@@ -129,12 +129,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (users) {
-      for (const u of users.users) {
-        await triggerPusher(`user-${u.id}`, "conversation-updated", {
-          conversationId,
-          lastMessage: message,
-        });
-      }
+      await Promise.all(
+        users.users.map((u) =>
+          triggerPusher(`private-user-${u.id}`, "conversation-updated", {
+            conversationId,
+            lastMessage: message,
+          })
+        )
+      );
     }
 
     return NextResponse.json({ success: true, message });
