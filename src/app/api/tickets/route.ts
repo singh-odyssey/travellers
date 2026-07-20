@@ -3,13 +3,30 @@ import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withValidation } from "@/lib/withValidation";
+import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+const ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/pdf",
+];
 
 const ticketSchema = z.object({
   destination: z.string().min(1, "Destination required"),
   departureDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "Invalid date format",
   }),
-  file: z.any().refine((val) => val instanceof File && val.size > 0, "File required"),
+  file: z
+  .any()
+  .refine((val) => val instanceof File && val.size > 0, "File required")
+  .refine((val) => val.size <= MAX_FILE_SIZE, "File size exceeds 10MB")
+  .refine(
+    (val) => ALLOWED_TYPES.includes(val.type),
+    "Unsupported file type"
+  ),
 });
 
 export const POST = withValidation(ticketSchema, async (req, data) => {
@@ -22,9 +39,12 @@ export const POST = withValidation(ticketSchema, async (req, data) => {
   try {
     const { destination, departureDate, file } = data;
 
-    // TODO: Upload file to S3/UploadThing and get URL
-    // For now, use placeholder
-    const ticketUrl = "about:blank"; // Replace with actual upload
+    const uploaded = await uploadFileToCloudinary(
+      file,
+      "travellers/tickets"
+    );
+
+    const ticketUrl = uploaded.url;
 
     const ticket = await prisma.ticket.create({
       data: {
@@ -40,9 +60,14 @@ export const POST = withValidation(ticketSchema, async (req, data) => {
   } catch (error) {
     console.error("Ticket upload error:", error);
     return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+  {
+    error:
+      error instanceof Error
+        ? error.message
+        : "Failed to upload ticket",
+  },
+  { status: 500 }
+);
   }
 });
 
