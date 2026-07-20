@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -34,15 +35,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const base64 = buffer.toString("base64");
-    const dataUri = `data:${file.type};base64,${base64}`;
+    const uploaded = await uploadFileToCloudinary(
+  file,
+  "travellers/avatars"
+);
 
-    const updatedUser = await prisma.user.update({
-      where: { email: session.user.email },
-      data: { image: dataUri },
-    });
-
+const updatedUser = await prisma.user.update({
+  where: {
+    email: session.user.email,
+  },
+  data: {
+    image: uploaded.url,
+  },
+});
     return NextResponse.json({ ok: true, image: updatedUser.image });
   } catch (error) {
     console.error("Avatar upload error:", error);
