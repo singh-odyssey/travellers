@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Compass, UserPlus, Check, X, MessageSquare, MapPin, Calendar, RefreshCw, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import BlockUserModal from "./modals/BlockUserModal";
+import ReportUserModal from "./modals/ReportUserModal";
 
 interface Match {
   id: string;
@@ -329,7 +331,7 @@ export default function DashboardMatches({
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Verified Matches</h3>
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="text-xs inline-flex items-center gap-1 text-slate-500 hover:text-blue-600 dark:text-slate-450 dark:hover:text-indigo-400 font-semibold transition"
+              className="text-xs inline-flex items-center gap-1 text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-indigo-400 font-semibold transition"
             >
               Filter Matches {isFilterOpen ? "▲" : "▼"}
             </button>
@@ -672,90 +674,26 @@ export default function DashboardMatches({
         </div>
       )}
       {/* Global Block Confirmation Overlay */}
-      {blockingUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#0F1129] border border-gray-150 dark:border-gray-800 shadow-2xl p-6 text-center">
-            <div className="rounded-full bg-rose-50 dark:bg-rose-500/10 p-4 text-rose-500 w-fit mx-auto mb-4">
-              <ShieldAlert size={32} />
-            </div>
-            <h4 className="font-bold text-gray-950 dark:text-white text-base">Block {blockingUser.user.name}?</h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-              You won&apos;t see each other&apos;s posts or matching trips. This action is immediate and cannot be undone easily.
-            </p>
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setBlockingUser(null)}
-                className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2.5 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleBlockUser(blockingUser)}
-                disabled={submittingModeration}
-                className="flex-1 rounded-xl bg-rose-505 bg-rose-500 text-white px-4 py-2.5 text-xs font-semibold hover:bg-rose-600 transition"
-              >
-                Block
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BlockUserModal
+        isOpen={Boolean(blockingUser)}
+        userName={blockingUser?.user.name || ""}
+        onConfirm={() => blockingUser && handleBlockUser(blockingUser)}
+        onCancel={() => setBlockingUser(null)}
+        isLoading={submittingModeration}
+      />
 
       {/* Global Report Profile Overlay */}
-      {reportingUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#0F1129] border border-gray-150 dark:border-gray-800 shadow-2xl p-6">
-            <div className="flex items-center gap-2 text-amber-500 mb-4">
-              <AlertCircle size={22} />
-              <h4 className="font-bold text-gray-950 dark:text-white text-base">Report {reportingUser.user.name}</h4>
-            </div>
-            <form onSubmit={handleReportUser}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-450 uppercase mb-1">Reason for Report</label>
-                  <select
-                    value={reportReason}
-                    onChange={(e) => setReportReason(e.target.value)}
-                    className="w-full rounded-xl bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2.5 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-550"
-                  >
-                    <option value="Inappropriate behavior">Inappropriate behavior</option>
-                    <option value="Spam / Commercial advertising">Spam / Advertising</option>
-                    <option value="Fake profile / Not a traveler">Fake profile / Impersonation</option>
-                    <option value="Harassment or abusive speech">Harassment or abusive speech</option>
-                    <option value="Other / Safety concern">Other / Safety concern</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-450 uppercase mb-1">Details</label>
-                  <textarea
-                    value={reportDetails}
-                    onChange={(e) => setReportDetails(e.target.value)}
-                    placeholder="Provide details about the safety issue..."
-                    rows={3}
-                    className="w-full rounded-xl bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2.5 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-550 resize-none"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setReportingUser(null)}
-                  className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2.5 text-xs font-semibold text-gray-650 dark:text-gray-305 hover:bg-gray-105 dark:hover:bg-white/5 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submittingModeration}
-                  className="flex-1 rounded-xl bg-amber-500 text-white px-4 py-2.5 text-xs font-semibold hover:bg-amber-600 transition"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ReportUserModal
+        isOpen={Boolean(reportingUser)}
+        userName={reportingUser?.user.name || ""}
+        reason={reportReason}
+        setReason={setReportReason}
+        details={reportDetails}
+        setDetails={setReportDetails}
+        onSubmit={handleReportUser}
+        onCancel={() => setReportingUser(null)}
+        isLoading={submittingModeration}
+      />
     </div>
   );
 }

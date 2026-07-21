@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { MessageCircle, ShieldAlert, Flag, User, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import TravelerChatModal from "./TravelerChatModal";
+import BlockUserModal from "./modals/BlockUserModal";
+import ReportUserModal from "./modals/ReportUserModal";
 
 interface TripMatchesProps {
   destination: string;
@@ -212,91 +214,26 @@ export default function TripMatches({ destination, departureDate }: TripMatchesP
       )}
 
       {/* Global Block Confirmation Overlay */}
-      {blockingMatch && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#0F1129] border border-gray-100 dark:border-gray-800 shadow-2xl p-6 text-center">
-            <div className="rounded-full bg-rose-50 dark:bg-rose-500/10 p-4 text-rose-500 w-fit mx-auto mb-4">
-              <ShieldAlert size={32} />
-            </div>
-            <h4 className="font-bold text-gray-900 dark:text-white text-base">Block {blockingMatch.user.name}?</h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-              You won&apos;t see each other&apos;s posts or matching trips. This action is immediate and cannot be undone easily.
-            </p>
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setBlockingMatch(null)}
-                className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2.5 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleBlock(blockingMatch)}
-                disabled={submittingModeration}
-                className="flex-1 rounded-xl bg-rose-500 text-white px-4 py-2.5 text-xs font-semibold hover:bg-rose-600 transition"
-              >
-                Block
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BlockUserModal
+        isOpen={Boolean(blockingMatch)}
+        userName={blockingMatch?.user.name || ""}
+        onConfirm={() => blockingMatch && handleBlock(blockingMatch)}
+        onCancel={() => setBlockingMatch(null)}
+        isLoading={submittingModeration}
+      />
 
       {/* Global Report Profile Overlay */}
-      {reportingMatch && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#0F1129] border border-gray-100 dark:border-gray-800 shadow-2xl p-6">
-            <div className="flex items-center gap-2 text-amber-500 mb-4">
-              <AlertCircle size={22} />
-              <h4 className="font-bold text-gray-950 dark:text-white text-base">Report {reportingMatch.user.name}</h4>
-            </div>
-            <form onSubmit={handleReport}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Reason for Report</label>
-                  <select
-                    value={reportReason}
-                    onChange={(e) => setReportReason(e.target.value)}
-                    className="w-full rounded-xl bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2.5 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-500"
-                  >
-                    <option value="Inappropriate behavior">Inappropriate behavior</option>
-                    <option value="Spam / Commercial advertising">Spam / Advertising</option>
-                    <option value="Fake profile / Not a traveler">Fake profile / Impersonation</option>
-                    <option value="Harassment or abusive speech">Harassment or abusive speech</option>
-                    <option value="Other / Safety concern">Other / Safety concern</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Details</label>
-                  <textarea
-                    value={reportDetails}
-                    onChange={(e) => setReportDetails(e.target.value)}
-                    placeholder="Provide details about the safety issue..."
-                    rows={3}
-                    className="w-full rounded-xl bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2.5 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-500 resize-none"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setReportingMatch(null)}
-                  className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2.5 text-xs font-semibold text-gray-650 dark:text-gray-305 hover:bg-gray-105 dark:hover:bg-white/5 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submittingModeration}
-                  className="flex-1 rounded-xl bg-amber-500 text-white px-4 py-2.5 text-xs font-semibold hover:bg-amber-600 transition"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
+      <ReportUserModal
+        isOpen={Boolean(reportingMatch)}
+        userName={reportingMatch?.user.name || ""}
+        reason={reportReason}
+        setReason={setReportReason}
+        details={reportDetails}
+        setDetails={setReportDetails}
+        onSubmit={handleReport}
+        onCancel={() => setReportingMatch(null)}
+        isLoading={submittingModeration}
+      />
     </div>
   );
 }
