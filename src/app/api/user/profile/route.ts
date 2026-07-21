@@ -23,6 +23,14 @@ export async function GET() {
         phone: true,
         emailVerified: true,
         createdAt: true,
+        languages: true,
+        travelInterests: true,
+        accommodationPrefs: true,
+        budgetRange: true,
+        socialLinks: true,
+        age: true,
+        gender: true,
+        travelStyle: true,
       },
     });
 
@@ -56,7 +64,15 @@ export async function PATCH(req: NextRequest) {
                 name: body.name ?? undefined,
                 bio: body.bio ?? undefined,
                 location: body.location ?? undefined,
-                homeLocation: body.homeLocation ?? undefined, // include if exists in schema
+                homeLocation: body.homeLocation ?? undefined,
+                languages: body.languages ?? undefined,
+                travelInterests: body.travelInterests ?? undefined,
+                accommodationPrefs: body.accommodationPrefs ?? undefined,
+                budgetRange: body.budgetRange ?? undefined,
+                socialLinks: body.socialLinks ?? undefined,
+                age: body.age !== undefined && body.age !== null ? (isNaN(parseInt(body.age.toString())) ? undefined : parseInt(body.age.toString(), 10)) : undefined,
+                gender: body.gender ?? undefined,
+                travelStyle: body.travelStyle ?? undefined,
             },
         });
 

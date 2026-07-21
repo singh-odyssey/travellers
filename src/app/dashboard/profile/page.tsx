@@ -15,6 +15,14 @@ interface ProfileData {
   emailVerified: boolean;
   phone: string | null;
   createdAt: string;
+  languages?: string[];
+  travelInterests?: string[];
+  accommodationPrefs?: string[];
+  budgetRange?: string | null;
+  socialLinks?: string[];
+  age?: number | null;
+  gender?: string | null;
+  travelStyle?: string | null;
 }
 
 interface RouteItem {
@@ -143,6 +151,99 @@ export default function ProfileViewPage() {
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                   <MapPin size={16} className="text-gray-400 shrink-0" />
                   From {profile.homeLocation}
+                </div>
+              )}
+            </div>
+
+            {/* Extended Profile Fields */}
+            <div className="border-t border-slate-200 dark:border-slate-800/80 pt-6 space-y-5">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">Languages Spoken</h4>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    {profile.languages?.length ? profile.languages.join(", ") : "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">Budget Range</h4>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    {profile.budgetRange || "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">Travel Style</h4>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    {profile.travelStyle || "Not set"}
+                  </p>
+                </div>
+              </div>
+
+              {(profile.age || profile.gender) && (
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {profile.age && (
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">Age</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">{profile.age} years old</p>
+                    </div>
+                  )}
+                  {profile.gender && (
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">Gender</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">{profile.gender}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">Travel Interests</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {profile.travelInterests?.length ? (
+                    profile.travelInterests.map((interest) => (
+                      <span key={interest} className="text-xs bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-full font-medium">
+                        {interest}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-gray-500">None selected</span>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">Preferred Accommodation</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {profile.accommodationPrefs?.length ? (
+                    profile.accommodationPrefs.map((pref) => (
+                      <span key={pref} className="text-xs bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full font-medium">
+                        {pref}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-gray-500">None selected</span>
+                  )}
+                </div>
+              </div>
+
+              {profile.socialLinks && profile.socialLinks.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 block">Social Links</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {profile.socialLinks.map((link) => {
+                      const isInstagram = link.includes("instagram.com");
+                      return (
+                        <a
+                          key={link}
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-350 px-3 py-1.5 rounded-xl transition"
+                        >
+                          {isInstagram ? "Instagram" : "Twitter/X"}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
