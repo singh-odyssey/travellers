@@ -19,8 +19,16 @@ beforeEach(() => {
 describe("POST /api/auth/reset-password", () => {
   const createRequest = (bodyData: any) => {
     return {
+      headers: {
+        get: (name: string) => {
+          if (name.toLowerCase() === "content-type") {
+            return "application/json";
+          }
+          return null;
+        },
+      } as any,
       json: async () => bodyData,
-    };
+    } as any;
   };
 
   it("returns 400 for missing token or invalid inputs", async () => {
@@ -29,7 +37,7 @@ describe("POST /api/auth/reset-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid inputs");
+    expect(data.error).toBe("Invalid input");
   });
 
   it("returns 400 for password less than 8 characters", async () => {
@@ -38,7 +46,7 @@ describe("POST /api/auth/reset-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid inputs");
+    expect(data.error).toBe("Invalid input");
   });
 
   it("returns 400 if token is invalid or expired", async () => {

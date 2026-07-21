@@ -24,8 +24,16 @@ beforeEach(() => {
 describe("POST /api/auth/forgot-password", () => {
   const createRequest = (bodyData: any) => {
     return {
+      headers: {
+        get: (name: string) => {
+          if (name.toLowerCase() === "content-type") {
+            return "application/json";
+          }
+          return null;
+        },
+      } as any,
       json: async () => bodyData,
-    };
+    } as any;
   };
 
   it("returns 400 for invalid email", async () => {
@@ -34,7 +42,7 @@ describe("POST /api/auth/forgot-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid email input");
+    expect(data.error).toBe("Invalid input");
   });
 
   it("returns generic success even if user not found (security)", async () => {

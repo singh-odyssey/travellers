@@ -28,23 +28,39 @@ export async function GET(req: NextRequest) {
     console.log("Date:", date);
     const cacheKey = `matches:${destination.toLowerCase()}:${date}:${session.user.id}`;
     
-    // Check cache (skip if Redis is unavailable)
-let cachedMatches: string | null = null;
-
-try {
-  if (redis) {
-    cachedMatches = await redis.get(cacheKey);
-  }
-
-  if (cachedMatches) {
-    return NextResponse.json({
-      matches: JSON.parse(cachedMatches),
-      cached: true,
+    // Get all blocked user IDs (both blocker and blocked)
+    const blocks = await prisma.block.findMany({
+      where: {
+        OR: [
+          { blockerId: session.user.id },
+          { blockedId: session.user.id },
+        ],
+      },
+      select: {
+        blockerId: true,
+        blockedId: true,
+      },
     });
-  }
-} catch {
-  console.warn("Redis unavailable. Skipping cache.");
-}
+    const blockedUserIds = blocks.map((b) =>
+      b.blockerId === session.user.id ? b.blockedId : b.blockerId
+    );
+
+    // Check cache (skip if Redis is unavailable)
+    let cachedMatches: string | null = null;
+    try {
+      if (redis) {
+        cachedMatches = await redis.get(cacheKey);
+      }
+      if (cachedMatches) {
+        const parsedMatches = JSON.parse(cachedMatches);
+        const filteredMatches = parsedMatches.filter(
+          (m: any) => !blockedUserIds.includes(m.userId)
+        );
+        return NextResponse.json({ matches: filteredMatches, cached: true });
+      }
+    } catch {
+      console.warn("Redis unavailable. Skipping cache.");
+    }
 
     // Find verified tickets for same destination within ±3 days
     const targetDate = new Date(date);
@@ -64,7 +80,9 @@ try {
           lte: endDate,
         },
         status: "VERIFIED",
-        userId: { not: session.user.id }, // Exclude current user
+        userId: {
+          notIn: [session.user.id, ...blockedUserIds],
+        },
       },
       include: {
         user: {
