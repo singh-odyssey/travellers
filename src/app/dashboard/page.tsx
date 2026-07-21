@@ -12,6 +12,21 @@ export const metadata: Metadata = {
   description: "Manage your travellersmeet profile, matches, and ticket verification.",
 };
 
+function calculateCompleteness(user: any) {
+  let score = 0;
+  if (user.name) score += 10;
+  if (user.bio) score += 10;
+  if (user.location) score += 10;
+  if (user.image) score += 10;
+  if (user.languages && user.languages.length > 0) score += 15;
+  if (user.travelInterests && user.travelInterests.length > 0) score += 15;
+  if (user.accommodationPrefs && user.accommodationPrefs.length > 0) score += 15;
+  if (user.budgetRange) score += 5;
+  if (user.age) score += 5;
+  if (user.gender) score += 5;
+  if (user.travelStyle) score += 5;
+  return score;
+}
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.id) {
@@ -27,7 +42,23 @@ export default async function DashboardPage() {
   // Fetch tickets and user onboarded status in parallel
   const [tickets, user] = await Promise.all([
     prisma.ticket.findMany({ where: { userId: session.user.id }, orderBy: { createdAt: "desc" } }),
-    prisma.user.findUnique({ where: { id: session.user.id }, select: { onboarded: true } }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        onboarded: true,
+        name: true,
+        bio: true,
+        location: true,
+        image: true,
+        languages: true,
+        travelInterests: true,
+        accommodationPrefs: true,
+        budgetRange: true,
+        age: true,
+        gender: true,
+        travelStyle: true,
+      },
+    }),
   ]);
 
   const onboarded = user?.onboarded ?? false;
