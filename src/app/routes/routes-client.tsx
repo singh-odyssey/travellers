@@ -5,6 +5,7 @@ import { RouteViewer } from '@/components/route-viewer';
 import { routeCacheManager } from '@/lib/utils/route-cache-manager';
 import type { CachedRoute } from '@/lib/types/route';
 import { Map, Plus, Search, Loader2 } from "lucide-react";
+import RouteCalendarExportButton from '@/components/route-calendar-export-button';
 import Link from 'next/link';
 
 export default function RoutesClient() {
@@ -12,6 +13,7 @@ export default function RoutesClient() {
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
 
   useEffect(() => {
     loadRoutes();
@@ -93,6 +95,14 @@ export default function RoutesClient() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <p
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+        >
+          {statusMessage}
+        </p>
+
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -127,32 +137,43 @@ export default function RoutesClient() {
               </h2>
               <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto">
                 {filteredRoutes.map((route) => (
-                  <button
+                  <div
                     key={route.id}
-                    onClick={() => setSelectedRoute(route.id)}
-                    className={`w-full text-left p-4 rounded-lg border transition-all ${
+                    className={`w-full rounded-lg border p-4 transition-all ${
                       selectedRoute === route.id
                         ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700'
                         : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                      {route.tripName || 'Unnamed Route'}
-                    </h3>
-                    <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      <p className="truncate">
-                        From: {route.originName || `${route.origin.lat.toFixed(4)}, ${route.origin.lng.toFixed(4)}`}
-                      </p>
-                      <p className="truncate">
-                        To: {route.destinationName || `${route.destination.lat.toFixed(4)}, ${route.destination.lng.toFixed(4)}`}
-                      </p>
-                    </div>
-                    <div className="mt-2 flex gap-3 text-xs text-gray-500 dark:text-gray-400">
-                      <span>{routeCacheManager.formatDistance(route.distance)}</span>
-                      <span>•</span>
-                      <span>{routeCacheManager.formatDuration(route.duration)}</span>
-                    </div>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRoute(route.id)}
+                      className="w-full text-left rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                      aria-label={`View ${route.tripName || 'saved route'} on the map`}
+                    >
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                        {route.tripName || 'Unnamed Route'}
+                      </h3>
+                      <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                        <p className="truncate">
+                          From: {route.originName || `${route.origin.lat.toFixed(4)}, ${route.origin.lng.toFixed(4)}`}
+                        </p>
+                        <p className="truncate">
+                          To: {route.destinationName || `${route.destination.lat.toFixed(4)}, ${route.destination.lng.toFixed(4)}`}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex gap-3 text-xs text-gray-500 dark:text-gray-400">
+                        <span>{routeCacheManager.formatDistance(route.distance)}</span>
+                        <span>•</span>
+                        <span>{routeCacheManager.formatDuration(route.duration)}</span>
+                      </div>
+                    </button>
+
+                    <RouteCalendarExportButton
+                      route={route}
+                      onStatusChange={setStatusMessage}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
