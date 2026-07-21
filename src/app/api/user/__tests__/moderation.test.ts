@@ -50,7 +50,7 @@ describe("Safety & Moderation API Endpoints", () => {
 
   describe("POST /api/user/block", () => {
     it("returns 401 if unauthorized", async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      (auth as any).mockResolvedValue(null);
       const req = makeJsonRequest({ blockedId: "target-user-1" });
 
       const res = await blockPOST(req as any);
@@ -61,7 +61,7 @@ describe("Safety & Moderation API Endpoints", () => {
     });
 
     it("returns 400 if user tries to block themselves", async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: "user-1" } });
+      (auth as any).mockResolvedValue({ user: { id: "user-1" } });
       const req = makeJsonRequest({ blockedId: "user-1" });
 
       const res = await blockPOST(req as any);
@@ -72,7 +72,7 @@ describe("Safety & Moderation API Endpoints", () => {
     });
 
     it("creates block successfully if target user exists and not blocked yet", async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: "user-1" } });
+      (auth as any).mockResolvedValue({ user: { id: "user-1" } });
       vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: "user-2", name: "Target User" } as any);
       vi.mocked(prisma.block.findUnique).mockResolvedValue(null);
       vi.mocked(prisma.block.create).mockResolvedValue({ id: "block-1", blockerId: "user-1", blockedId: "user-2" } as any);
@@ -94,7 +94,7 @@ describe("Safety & Moderation API Endpoints", () => {
 
   describe("POST /api/user/report", () => {
     it("returns 401 if unauthorized", async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      (auth as any).mockResolvedValue(null);
       const req = makeJsonRequest({ reportedId: "user-2", reason: "Spam" });
 
       const res = await reportPOST(req as any);
@@ -105,7 +105,7 @@ describe("Safety & Moderation API Endpoints", () => {
     });
 
     it("creates report successfully if valid payload", async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: "user-1" } });
+      (auth as any).mockResolvedValue({ user: { id: "user-1" } });
       vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: "user-2", name: "Target User" } as any);
       vi.mocked(prisma.report.create).mockResolvedValue({ id: "report-1" } as any);
 
@@ -128,7 +128,7 @@ describe("Safety & Moderation API Endpoints", () => {
 
   describe("POST /api/user/onboard", () => {
     it("completes onboarding successfully for authorized user", async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: "user-1" } });
+      (auth as any).mockResolvedValue({ user: { id: "user-1" } });
       vi.mocked(prisma.user.update).mockResolvedValue({ id: "user-1", onboarded: true } as any);
 
       const res = await onboardPOST({} as any);
