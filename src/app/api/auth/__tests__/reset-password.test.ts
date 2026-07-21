@@ -37,7 +37,7 @@ describe("POST /api/auth/reset-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid input");
+    expect(data.error).toBe("Invalid inputs");
   });
 
   it("returns 400 for password less than 8 characters", async () => {
@@ -46,7 +46,7 @@ describe("POST /api/auth/reset-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid input");
+    expect(data.error).toBe("Invalid inputs");
   });
 
   it("returns 400 if token is invalid or expired", async () => {

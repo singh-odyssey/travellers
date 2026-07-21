@@ -42,7 +42,7 @@ describe("POST /api/auth/forgot-password", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data.error).toBe("Invalid input");
+    expect(data.error).toBe("Invalid email input");
   });
 
   it("returns generic success even if user not found (security)", async () => {
