@@ -502,10 +502,13 @@ export default function DashboardMatches({
                       <div>
                         <div className="flex items-start gap-3">
                           {match.user.image ? (
-                            <img
+                            <Image
                               src={match.user.image}
                               alt={match.user.name}
+                              width={44}
+                              height={44}
                               className="w-11 h-11 rounded-full object-cover border-2 border-blue-500/20"
+                              unoptimized
                             />
                           ) : (
                             <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
