@@ -86,6 +86,65 @@ html {
   transform: translateZ(0);
 }
 
+
+/* ================= Custom Cursor ================= */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button {
+    cursor: none;
+  }
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0b2447;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease-out, background-color 0.2s ease;
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #0b2447;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.15s ease-out, width 0.2s ease, height 0.2s ease,
+    opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-cursor-ring--hover {
+  width: 48px;
+  height: 48px;
+  border-color: #f9c74f;
+  background-color: rgba(249, 199, 79, 0.1);
+}
+
+.custom-cursor-ring--click {
+  width: 26px;
+  height: 26px;
+  opacity: 0.6;
+}
+
+.dark .custom-cursor-dot {
+  background-color: #ffffff;
+}
+
+.dark .custom-cursor-ring {
+  border-color: #ffffff;
+}
+
 /* ================= Date Input Calendar Icon ================= */
 /* Improve visibility of the native calendar picker icon on dark backgrounds */
 .dark input[type="date"]::-webkit-calendar-picker-indicator {
@@ -93,3 +152,4 @@ html {
   opacity: 0.7;
   cursor: pointer;
 }
+
