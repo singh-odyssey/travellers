@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
     const blocks = await prisma.block.findMany({
       where: {
         OR: [
-          { blockerId: session.user.id },
-          { blockedId: session.user.id },
+          { blockerId: session.user!.id },
+          { blockedId: session.user!.id },
         ],
       },
       select: {
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
       },
     });
     const blockedUserIds = blocks.map((b) =>
-      b.blockerId === session.user.id ? b.blockedId : b.blockerId
+      b.blockerId === session.user!.id ? b.blockedId : b.blockerId
     );
 
     // Check cache (skip if Redis is unavailable)
