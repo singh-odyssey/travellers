@@ -730,6 +730,7 @@ className="w-full rounded-md bg-slate-800 text-white placeholder:text-slate-400 
         )}
       </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <RoutePickerModal
   open={showRoutePicker}
   onClose={() => setShowRoutePicker(false)}
@@ -738,28 +739,6 @@ className="w-full rounded-md bg-slate-800 text-white placeholder:text-slate-400 
     setShowRoutePicker(false);
   }}
 />
-=======
-      {/* Global Block Confirmation Overlay */}
-      <BlockUserModal
-        isOpen={Boolean(blockingUser)}
-        userName={blockingUser?.name || ""}
-        onConfirm={() => blockingUser && handleBlockUser(blockingUser)}
-        onCancel={() => setBlockingUser(null)}
-        isLoading={submittingModeration}
-      />
-
-      {/* Global Report Profile Overlay */}
-      <ReportUserModal
-        isOpen={Boolean(reportingUser)}
-        userName={reportingUser?.name || ""}
-        reason={reportReason}
-        setReason={setReportReason}
-        details={reportDetails}
-        setDetails={setReportDetails}
-        onSubmit={handleReportUser}
-        onCancel={() => setReportingUser(null)}
-        isLoading={submittingModeration}
-      />
     </div>
   );
 }

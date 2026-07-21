@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Compass, UserPlus, Check, X, MessageSquare, MapPin, Calendar, RefreshCw, Loader2 } from "lucide-react";
+import { Compass, UserPlus, Check, X, MessageSquare, MapPin, Calendar, RefreshCw, Loader2, ShieldAlert, Flag } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import BlockUserModal from "./modals/BlockUserModal";
@@ -607,7 +607,6 @@ export default function DashboardMatches({
                             )}
                           </div>
                         )}
-                      </div>
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-slate-50 dark:border-slate-800/60 flex justify-end">
