@@ -123,12 +123,24 @@ export async function GET(req: NextRequest) {
     } catch {
       console.warn("Redis unavailable. Skipping cache.");
     if (cachedMatches) {
-      const parsed = JSON.parse(cachedMatches);
+      const parsedMatches: any[] = JSON.parse(cachedMatches);
       // Filter out any newly blocked users from cached results
-      const filteredMatches = parsed.matches.filter(
+      const filteredMatches = parsedMatches.filter(
         (m: any) => !blockedUserIds.includes(m.userId)
       );
-      return NextResponse.json({ ...parsed, matches: filteredMatches, cached: true });
+      const total = filteredMatches.length;
+      const skip = (page - 1) * limit;
+      const paginatedMatches = filteredMatches.slice(skip, skip + limit);
+      const hasMore = skip + limit < total;
+
+      return NextResponse.json({
+        matches: paginatedMatches,
+        total,
+        hasMore,
+        page,
+        limit,
+        cached: true,
+      });
     }
 
     // Load current user profile details for scoring comparisons
@@ -189,8 +201,10 @@ export async function GET(req: NextRequest) {
       whereClause.user = userWhere;
     }
 
+    // Fetch up to 100 candidate tickets to prevent high-memory queries
     const matches = await prisma.ticket.findMany({
       where: whereClause,
+      take: 100,
       include: {
         user: {
           select: {
@@ -250,24 +264,23 @@ export async function GET(req: NextRequest) {
       };
     }).sort((a: any, b: any) => b.relevanceScore - a.relevanceScore);
 
+    // Save full scored matches list to cache (TTL: 5 minutes)
+    await redis.set(cacheKey, JSON.stringify(scoredMatches), "EX", 300);
+
     // Apply pagination
     const total = scoredMatches.length;
     const skip = (page - 1) * limit;
     const paginatedMatches = scoredMatches.slice(skip, skip + limit);
     const hasMore = skip + limit < total;
 
-    const responsePayload = {
+    return NextResponse.json({
       matches: paginatedMatches,
       total,
       hasMore,
       page,
       limit,
-    };
-
-    // Save to cache (TTL: 5 minutes)
-    await redis.set(cacheKey, JSON.stringify(responsePayload), "EX", 300);
-
-    return NextResponse.json({ ...responsePayload, cached: false });
+      cached: false,
+    });
   } catch (error) {
     console.error("Match search error:", error);
     return NextResponse.json(

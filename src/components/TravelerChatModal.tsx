@@ -242,7 +242,7 @@ export default function TravelerChatModal({
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 placeholder="Type your message safely..."
-                className="flex-1 bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500"
+                className="flex-1 bg-gray-50 dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500"
               />
               <button
                 onClick={handleSendMessage}
@@ -296,7 +296,7 @@ export default function TravelerChatModal({
                 <select
                   value={reportReason}
                   onChange={(e) => setReportReason(e.target.value)}
-                  className="w-full rounded-xl bg-white dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-500"
+                  className="w-full rounded-xl bg-white dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-1 focus:ring-amber-500"
                 >
                   <option value="Inappropriate behavior">Inappropriate behavior</option>
                   <option value="Spam / Commercial advertising">Spam / Advertising</option>
@@ -313,7 +313,7 @@ export default function TravelerChatModal({
                   onChange={(e) => setReportDetails(e.target.value)}
                   placeholder="Provide additional details or screenshots link..."
                   rows={4}
-                  className="w-full rounded-xl bg-white dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2 text-sm text-gray-850 dark:text-white outline-none focus:ring-1 focus:ring-amber-500 resize-none"
+                  className="w-full rounded-xl bg-white dark:bg-[#1A1C3D] border border-gray-100 dark:border-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-white outline-none focus:ring-1 focus:ring-amber-500 resize-none"
                 />
               </div>
             </div>
