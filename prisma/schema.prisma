@@ -5,37 +5,37 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  
 }
 
 model User {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  passwordHash  String?
-  image         String?  @db.Text  // Profile avatar (base64 data URI)
+  id           String  @id @default(cuid())
+  name         String
+  email        String  @unique
+  passwordHash String?
+  image        String? @db.Text // Profile avatar (base64 data URI)
 
   // ✅ NEW PROFILE FIELDS (Safe Additions)
-  bio           String?     @db.Text
-  location      String?
-  homeLocation  String?
-  phone         String?
-  isDeleted     Boolean     @default(false)  // Soft delete support
+  bio          String? @db.Text
+  location     String?
+  homeLocation String?
+  phone        String?
+  isDeleted    Boolean @default(false) // Soft delete support
 
-  role          Role        @default(USER)
-  emailVerified Boolean     @default(false)
-  otp           String?
-  otpExpires    DateTime?
+  role              Role      @default(USER)
+  emailVerified     Boolean   @default(false)
+  otp               String?
+  otpExpires        DateTime?
   resetToken        String?   @unique
   resetTokenExpires DateTime?
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   tickets          Ticket[]
   accounts         Account[]
   sessions         Session[]
   routes           Route[]
+  meetupPlans      MeetupPlan[]
   conversations    Conversation[]      @relation("UserConversations")
   sentMessages     Message[]           @relation("SentMessages")
   sentRequests     ConnectionRequest[] @relation("SentRequests")
@@ -45,15 +45,15 @@ model User {
 }
 
 model Ticket {
-  id            String        @id @default(cuid())
-  user          User          @relation(fields: [userId], references: [id])
+  id            String       @id @default(cuid())
+  user          User         @relation(fields: [userId], references: [id])
   userId        String
   destination   String
   departureDate DateTime
   ticketUrl     String
-  status        TicketStatus  @default(PENDING)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  status        TicketStatus @default(PENDING)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 
   @@index([destination, departureDate])
   @@index([userId])
@@ -82,14 +82,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @map("refreshToken")
-  access_token      String?  @map("accessToken")
-  expires_at        Int?     @map("expiresAt")
-  token_type        String?  @map("tokenType")
+  refresh_token     String? @map("refreshToken")
+  access_token      String? @map("accessToken")
+  expires_at        Int?    @map("expiresAt")
+  token_type        String? @map("tokenType")
   scope             String?
-  id_token          String?  @map("idToken")
-  session_state     String?  @map("sessionState")
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id_token          String? @map("idToken")
+  session_state     String? @map("sessionState")
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -119,29 +119,77 @@ model VerificationToken {
 //
 
 model Route {
-  id               String   @id @default(cuid())
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId           String
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
-  originLat        Float
-  originLng        Float
-  destinationLat   Float
-  destinationLng   Float
+  originLat      Float
+  originLng      Float
+  destinationLat Float
+  destinationLng Float
 
-  originName       String?
-  destinationName  String?
+  originName      String?
+  destinationName String?
 
-  distance         Float      // meters
-  duration         Float      // seconds
-  encodedPolyline  String     @db.Text
-  waypoints        String?    @db.Text
-  tripName         String?
-  notes            String?    @db.Text
+  distance        Float // meters
+  duration        Float // seconds
+  encodedPolyline String  @db.Text
+  waypoints       String? @db.Text
+  tripName        String?
+  notes           String? @db.Text
 
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  // NEW
+  sharedMessages Message[]
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  MeetupPlan MeetupPlan[]
 
   @@index([userId, updatedAt])
+}
+
+model MeetupPlan {
+  id String @id @default(cuid())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  routeId String?
+  route   Route?  @relation(fields: [routeId], references: [id], onDelete: SetNull)
+
+  title        String
+  locationName String
+
+  latitude  Float
+  longitude Float
+
+  meetupTime DateTime
+
+  notes String? @db.Text
+
+  checklist MeetupChecklistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([conversationId])
+  @@index([creatorId])
+}
+
+model MeetupChecklistItem {
+  id String @id @default(cuid())
+
+  meetupPlanId String
+  meetupPlan   MeetupPlan @relation(fields: [meetupPlanId], references: [id], onDelete: Cascade)
+
+  text String
+
+  completed Boolean @default(false)
+
+  createdAt DateTime @default(now())
 }
 
 model ConnectionRequest {
@@ -166,23 +214,33 @@ enum ConnectionRequestStatus {
 }
 
 model Conversation {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  users     User[]    @relation("UserConversations")
-  messages  Message[]
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  users       User[]       @relation("UserConversations")
+  messages    Message[]
+  meetupPlans MeetupPlan[]
 }
 
 model Message {
-  id             String       @id @default(cuid())
+  id String @id @default(cuid())
+
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderId       String
-  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  text           String       @db.Text
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  senderId String
+  sender   User   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  text String @db.Text
+
+  // Optional shared route
+  routeId String?
+  route   Route?  @relation(fields: [routeId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([conversationId])
   @@index([senderId])
+  @@index([routeId])
 }

@@ -33,18 +33,41 @@ export async function GET(req: NextRequest) {
     }
 
     const messages = await prisma.message.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: "asc" },
-      include: {
-        sender: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
-        },
+  where: { conversationId },
+  orderBy: {
+    createdAt: "asc",
+  },
+  include: {
+    sender: {
+      select: {
+        id: true,
+        name: true,
+        image: true,
       },
-    });
+    },
+
+    route: {
+      select: {
+        id: true,
+        tripName: true,
+
+        originName: true,
+        destinationName: true,
+
+        originLat: true,
+        originLng: true,
+
+        destinationLat: true,
+        destinationLng: true,
+
+        distance: true,
+        duration: true,
+
+        encodedPolyline: true,
+      },
+    },
+  },
+});
 
     return NextResponse.json({ messages });
   } catch (error) {
@@ -67,11 +90,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { conversationId, text } = body;
+  const {
+  conversationId,
+  text,
+  routeId,
+} = body;
 
-  if (!conversationId || !text || text.trim() === "") {
-    return NextResponse.json({ error: "conversationId and non-empty text are required" }, { status: 400 });
-  }
+  if (!conversationId) {
+  return NextResponse.json(
+    { error: "conversationId is required" },
+    { status: 400 }
+  );
+}
+
+if ((!text || text.trim() === "") && !routeId) {
+  return NextResponse.json(
+    {
+      error: "Either message text or a shared route is required",
+    },
+    { status: 400 }
+  );
+}
 
   try {
     // Check if user is participant of conversation
@@ -90,27 +129,48 @@ export async function POST(req: NextRequest) {
 
     // Save message and update conversation's updatedAt timestamp
     const [message] = await prisma.$transaction([
-      prisma.message.create({
-        data: {
-          conversationId,
-          senderId: userId,
-          text: text.trim(),
+  prisma.message.create({
+    data: {
+      conversationId,
+      senderId: userId,
+      text: text?.trim() ?? "",
+      routeId: routeId ?? null,
+    },
+    include: {
+      sender: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
         },
-        include: {
-          sender: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
+      },
+      route: {
+        select: {
+          id: true,
+          tripName: true,
+          originName: true,
+          destinationName: true,
+          originLat: true,
+          originLng: true,
+          destinationLat: true,
+          destinationLng: true,
+          distance: true,
+          duration: true,
+          encodedPolyline: true,
         },
-      }),
-      prisma.conversation.update({
-        where: { id: conversationId },
-        data: { updatedAt: new Date() },
-      }),
-    ]);
+      },
+    },
+  }),
+
+  prisma.conversation.update({
+    where: {
+      id: conversationId,
+    },
+    data: {
+      updatedAt: new Date(),
+    },
+  }),
+]);
 
     // Trigger Pusher event
     await triggerPusher(`private-chat-${conversationId}`, "new-message", {
