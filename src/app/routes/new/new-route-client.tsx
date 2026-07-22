@@ -10,9 +10,6 @@ import { ArrowLeft, Save, MapPin } from "lucide-react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-console.log("PlaceAutocomplete:", PlaceAutocomplete);
-console.log("MapLibreRoute:", MapLibreRoute);
-
 export default function NewRouteClient({ userId }: { userId: string }) {
   const router = useRouter();
   
