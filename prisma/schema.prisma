@@ -31,12 +31,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tickets       Ticket[]
-  notifications Notification[]
-  accounts      Account[]
-  sessions      Session[]
-  routes        Route[]
   tickets          Ticket[]
+  notifications    Notification[]
   accounts         Account[]
   sessions         Session[]
   routes           Route[]
@@ -175,8 +171,6 @@ model Route {
   tripName        String?
   notes           String? @db.Text
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   // NEW
   sharedMessages Message[]
 
