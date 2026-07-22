@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import FindMatchesButton from "@/components/FindMatchesButton";
 import DashboardMatches from "@/components/DashboardMatches";
 import type { Metadata } from "next";
 
@@ -41,7 +42,26 @@ export default async function DashboardPage() {
                   <p className="font-medium">{t.destination}</p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Departure: {new Date(t.departureDate).toDateString()}</p>
                 </div>
-                <span className={`rounded-full border px-3 py-1 text-sm ${t.status === "VERIFIED" ? "border-green-500 text-green-600 dark:text-green-400" : "dark:border-slate-600"}`}>{t.status}</span>
+<div className="flex items-center gap-3">
+  <span
+    className={`rounded-full border px-3 py-1 text-sm ${
+      t.status === "VERIFIED"
+        ? "border-green-500 text-green-600 dark:text-green-400"
+        : "dark:border-slate-600"
+    }`}
+  >
+    {t.status}
+  </span>
+
+  {t.status === "VERIFIED" && (
+    <FindMatchesButton
+      destination={t.destination}
+      departureDate={new Date(t.departureDate)
+        .toISOString()
+        .split("T")[0]}
+    />
+  )}
+</div>
               </div>
               {t.status === "VERIFIED" && (
                 <DashboardMatches destination={t.destination} departureDate={t.departureDate.toISOString()} />

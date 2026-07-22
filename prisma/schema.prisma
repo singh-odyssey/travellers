@@ -32,6 +32,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   tickets          Ticket[]
+  notifications    Notification[]
   accounts         Account[]
   sessions         Session[]
   routes           Route[]
@@ -59,10 +60,42 @@ model Ticket {
   @@index([userId])
 }
 
+model Notification {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  type NotificationType
+
+  title   String
+  content String
+
+  read Boolean @default(false)
+
+  link String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+}
+
 enum TicketStatus {
   PENDING
   VERIFIED
   REJECTED
+}
+
+enum NotificationType {
+  TICKET_VERIFIED
+  TICKET_REJECTED
+  ACCOUNT_VERIFIED
+  CONNECTION_REQUEST
+  CONNECTION_ACCEPTED
+  MATCH_FOUND
+  MESSAGE
 }
 
 enum Role {

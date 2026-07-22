@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { createNotification } from "@/lib/notifications";
 import { z } from "zod";
 
 const updateSchema = z.object({
@@ -53,6 +54,27 @@ export async function PATCH(
       },
     });
 
+  if (status === "VERIFIED") {
+  await createNotification({
+    userId: ticket.user.id,
+    type: "TICKET_VERIFIED",
+    title: "Ticket verified",
+    content:
+      "Your travel ticket has been verified. You can now appear in traveller matches.",
+    link: "/dashboard",
+  });
+}
+
+if (status === "REJECTED") {
+  await createNotification({
+    userId: ticket.user.id,
+    type: "TICKET_REJECTED",
+    title: "Ticket rejected",
+    content:
+      "Your uploaded ticket was rejected. Please upload a valid ticket.",
+    link: "/upload",
+  });
+}
     return NextResponse.json({ ok: true, ticket });
   } catch (error) {
     console.error("Ticket verification error:", error);
