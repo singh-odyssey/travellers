@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions",
+  description:
+    "Read the terms and conditions for using travellersmeet to connect with fellow verified travellers.",
+};
+
 export default function TermsPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">

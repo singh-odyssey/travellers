@@ -1,6 +1,12 @@
 import SignInForm from "@/components/sign-in-form";
 import TicketUploadForm from "@/components/ticket-upload-form";
 import { auth } from "@/lib/auth";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Upload Ticket",
+  description: "Upload your travel ticket to get verified on travellersmeet.",
+};
 
 export default async function UploadPage() {
   const session = await auth();

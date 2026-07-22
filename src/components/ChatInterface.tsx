@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getPusherClient } from "@/lib/pusher-client";
+import RoutePickerModal from "./chat/RoutePickerModal";
 import { 
   MessageSquare, Send, Compass, UserCheck, UserX, 
   MapPin, Calendar, Loader2, Sparkles, Inbox, RefreshCw 
 } from "lucide-react";
+import TripBoard from "@/components/TripBoard";
 
 interface User {
   id: string;
@@ -47,6 +49,25 @@ interface Request {
   };
 }
 
+interface SharedRoute {
+  id: string;
+  tripName?: string | null;
+
+  originName?: string | null;
+  destinationName?: string | null;
+
+  distance: number;
+  duration: number;
+
+  encodedPolyline: string;
+
+  originLat: number;
+  originLng: number;
+
+  destinationLat: number;
+  destinationLng: number;
+}
+
 export default function ChatInterface({
   currentUser,
 }: {
@@ -57,6 +78,12 @@ export default function ChatInterface({
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState("");
+  const [showRoutePicker, setShowRoutePicker] = useState(false);
+  const [meetupPlan, setMeetupPlan] = useState<any>(null);
+  const [showMeetup, setShowMeetup] = useState(false);
+
+  const [selectedRoute, setSelectedRoute] =
+  useState<SharedRoute | null>(null);
   
   const [loadingConvs, setLoadingConvs] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
@@ -185,6 +212,29 @@ export default function ChatInterface({
     };
   }, [activeConvId]);
 
+  useEffect(() => {
+  if (!activeConvId) return;
+
+  async function loadMeetup() {
+    try {
+      const res = await fetch(
+  `/api/meetup-plans?conversationId=${activeConvId}`
+);
+
+      if (!res.ok) return;
+
+      const plan = await res.json();
+
+setMeetupPlan(plan);
+setShowMeetup(!!plan);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  loadMeetup();
+}, [activeConvId]);
+
   // Scroll to bottom of message list on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -192,10 +242,17 @@ export default function ChatInterface({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim() || !activeConvId || sending) return;
+
+if (!activeConvId || sending) return;
+
+if (!inputText.trim() && !selectedRoute) {
+  return;
+}
 
     const messageText = inputText.trim();
+    const route = selectedRoute;
     setInputText("");
+    setSelectedRoute(null);
     setSending(true);
 
     // Optimistic message object
@@ -203,6 +260,7 @@ export default function ChatInterface({
     const optimisticMessage = {
       id: tempId,
       text: messageText,
+      route,
       createdAt: new Date().toISOString(),
       senderId: currentUser.id,
       sender: {
@@ -221,6 +279,7 @@ export default function ChatInterface({
         body: JSON.stringify({
           conversationId: activeConvId,
           text: messageText,
+          routeId: route?.id,
         }),
       });
 
@@ -282,6 +341,38 @@ export default function ChatInterface({
       setActionLoading(null);
     }
   };
+
+  async function createMeetupPlan() {
+  if (!activeConvId) return;
+
+  try {
+    const res = await fetch("/api/meetup-plans", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conversationId: activeConvId,
+        title: "New Meetup",
+        locationName: "Choose a location",
+        meetupTime: new Date().toISOString(),
+        notes: "",
+        routeId: null,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to create meetup");
+    }
+
+    const plan = await res.json();
+    setMeetupPlan(plan);
+    setShowMeetup(true);
+  } catch (err) {
+    console.error(err);
+    alert("Couldn't create meetup.");
+  }
+}
 
   const activeConv = conversations.find((c) => c.id === activeConvId);
 
@@ -428,7 +519,7 @@ export default function ChatInterface({
       </div>
 
       {/* Main Chat Workspace */}
-      <div className="flex-1 flex flex-col bg-slate-50/20 dark:bg-[#0A0B1E]/10">
+      <div className="flex flex-1 flex-col min-h-0 bg-slate-50/20 dark:bg-[#0A0B1E]/10">
         {activeConvId && activeConv && activeConv.otherUser ? (
           <>
             {/* Header info */}
@@ -458,8 +549,55 @@ export default function ChatInterface({
               )}
             </div>
 
+            <div className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+
+  <div className="flex items-center justify-between px-4 py-3">
+
+    <h3 className="font-semibold">
+      Meetup Plan
+    </h3>
+
+    {meetupPlan ? (
+      <button
+  onClick={() => setShowMeetup(!showMeetup)}
+  className="rounded-md border border-slate-300 px-3 py-1 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+>
+        {showMeetup ? "Hide" : "Open"}
+      </button>
+    ) : (
+      <button
+        onClick={createMeetupPlan}
+        className="rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700"
+      >
+        Create Meetup
+      </button>
+    )}
+
+  </div>
+
+  {meetupPlan && showMeetup && (
+
+    <div className="px-4 pb-4">
+
+      <TripBoard
+  meetupPlanId={meetupPlan.id}
+  title={meetupPlan.title}
+  location={meetupPlan.locationName}
+  meetupTime={meetupPlan.meetupTime}
+  notes={meetupPlan.notes}
+  routeId={meetupPlan.routeId}
+/>
+
+    </div>
+
+  )}
+
+</div>
+
             {/* Messages body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div
+  className="flex-1 overflow-y-auto p-4 space-y-4"
+>
               {loadingMessages ? (
                 <div className="flex flex-col items-center justify-center h-full text-slate-400">
                   <Loader2 className="animate-spin text-blue-500 mb-2" size={24} />
@@ -478,6 +616,7 @@ export default function ChatInterface({
                   const isMe = msg.senderId === currentUser.id;
                   const showSenderHeader = index === 0 || messages[index - 1].senderId !== msg.senderId;
 
+                  
                   return (
                     <div 
                       key={msg.id} 
@@ -495,7 +634,27 @@ export default function ChatInterface({
                             : "bg-white dark:bg-[#0F1129] border border-slate-100 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none"
                         }`}
                       >
-                        <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                        {msg.route && (
+  <div className="mb-3 rounded-lg border border-blue-200 bg-blue-50 dark:bg-slate-900 p-3">
+    <div className="font-semibold text-sm">
+      📍 {msg.route.tripName || "Shared Route"}
+    </div>
+
+    <div className="text-xs mt-1">
+      {msg.route.originName} → {msg.route.destinationName}
+    </div>
+
+    <div className="text-xs text-slate-500 mt-1">
+      {(msg.route.distance / 1000).toFixed(1)} km
+    </div>
+  </div>
+)}
+
+{msg.text && (
+  <p className="leading-relaxed whitespace-pre-wrap">
+    {msg.text}
+  </p>
+)}
                       </div>
                       <span className="text-[8px] text-slate-400 mt-1 mx-1">
                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -507,6 +666,30 @@ export default function ChatInterface({
               <div ref={messagesEndRef} />
             </div>
 
+            {selectedRoute && (
+  <div className="px-4 py-2 border-t border-slate-200 dark:border-slate-700 bg-blue-50 dark:bg-slate-900">
+    <div className="flex items-center justify-between rounded-lg border border-blue-200 p-3">
+      <div>
+        <p className="text-sm font-semibold">
+          {selectedRoute.tripName || "Shared Route"}
+        </p>
+
+        <p className="text-xs text-slate-500">
+          {selectedRoute.originName} → {selectedRoute.destinationName}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setSelectedRoute(null)}
+        className="text-red-500 text-sm"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+)}
+
             {/* Input form */}
             <form 
               onSubmit={handleSendMessage}
@@ -517,8 +700,15 @@ export default function ChatInterface({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={`Message ${activeConv.otherUser.name}...`}
-                className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              />
+className="w-full rounded-md bg-slate-800 text-white placeholder:text-slate-400 border border-slate-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"              />
+              <button
+  type="button"
+  onClick={() => setShowRoutePicker(true)}
+  className="rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+  title="Share Route"
+>
+  <MapPin size={16} />
+</button>
               <button
                 type="submit"
                 disabled={!inputText.trim() || sending}
@@ -538,6 +728,14 @@ export default function ChatInterface({
           </div>
         )}
       </div>
+      <RoutePickerModal
+  open={showRoutePicker}
+  onClose={() => setShowRoutePicker(false)}
+  onSelect={(route) => {
+    setSelectedRoute(route);
+    setShowRoutePicker(false);
+  }}
+/>
     </div>
   );
 }

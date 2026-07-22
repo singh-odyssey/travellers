@@ -36,6 +36,11 @@ model User {
   accounts      Account[]
   sessions      Session[]
   routes        Route[]
+  tickets          Ticket[]
+  accounts         Account[]
+  sessions         Session[]
+  routes           Route[]
+  meetupPlans      MeetupPlan[]
   conversations    Conversation[]      @relation("UserConversations")
   sentMessages     Message[]           @relation("SentMessages")
   sentRequests     ConnectionRequest[] @relation("SentRequests")
@@ -172,8 +177,58 @@ model Route {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // NEW
+  sharedMessages Message[]
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  MeetupPlan MeetupPlan[]
 
   @@index([userId, updatedAt])
+}
+
+model MeetupPlan {
+  id String @id @default(cuid())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  routeId String?
+  route   Route?  @relation(fields: [routeId], references: [id], onDelete: SetNull)
+
+  title        String
+  locationName String
+
+  latitude  Float
+  longitude Float
+
+  meetupTime DateTime
+
+  notes String? @db.Text
+
+  checklist MeetupChecklistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([conversationId])
+  @@index([creatorId])
+}
+
+model MeetupChecklistItem {
+  id String @id @default(cuid())
+
+  meetupPlanId String
+  meetupPlan   MeetupPlan @relation(fields: [meetupPlanId], references: [id], onDelete: Cascade)
+
+  text String
+
+  completed Boolean @default(false)
+
+  createdAt DateTime @default(now())
 }
 
 model ConnectionRequest {
@@ -198,23 +253,33 @@ enum ConnectionRequestStatus {
 }
 
 model Conversation {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  users     User[]    @relation("UserConversations")
-  messages  Message[]
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  users       User[]       @relation("UserConversations")
+  messages    Message[]
+  meetupPlans MeetupPlan[]
 }
 
 model Message {
-  id             String       @id @default(cuid())
+  id String @id @default(cuid())
+
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderId       String
-  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  text           String       @db.Text
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  senderId String
+  sender   User   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  text String @db.Text
+
+  // Optional shared route
+  routeId String?
+  route   Route?  @relation(fields: [routeId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([conversationId])
   @@index([senderId])
+  @@index([routeId])
 }

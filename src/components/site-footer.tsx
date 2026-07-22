@@ -52,7 +52,7 @@ export default function SiteFooter() {
             <h3 className="font-semibold mb-3 transition-colors duration-300">Explore</h3>
             <ul className="space-y-2 text-slate-600 dark:text-gray-300 transition-colors duration-300">
               <li>
-                <Link href="/demo-routes" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                <Link href="/dashboard" className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   Find Travellers
                 </Link>
               </li>
@@ -168,35 +168,29 @@ export default function SiteFooter() {
               <Github className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
             </a>
 
-            <a
-              href="https://twitter.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
+            <Link
+              href="/coming-soon"
+              aria-label="Twitter — coming soon"
               className="hover:scale-110 transition-transform duration-200"
             >
               <Twitter className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
-            </a>
+            </Link>
 
-            <a
-              href="https://instagram.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
+            <Link
+              href="/coming-soon"
+              aria-label="Instagram — coming soon"
               className="hover:scale-110 transition-transform duration-200"
             >
               <Instagram className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
-            </a>
+            </Link>
 
-            <a
-              href="https://linkedin.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
+            <Link
+              href="/coming-soon"
+              aria-label="LinkedIn — coming soon"
               className="hover:scale-110 transition-transform duration-200"
             >
               <FaLinkedin className="w-5 h-5 text-slate-600 dark:text-white hover:text-slate-900 dark:hover:text-slate-300 transition-colors duration-300 cursor-pointer" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { Users, ShieldCheck, Globe2 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "travellersmeet helps solo travellers safely connect with others going to the same destination and dates — verified through real tickets.",
+};
 
 export default function AboutPage() {
   return (
