@@ -52,7 +52,7 @@ export default function SiteFooter() {
             <h3 className="font-semibold mb-3 transition-colors duration-300">Explore</h3>
             <ul className="space-y-2 text-slate-600 dark:text-gray-300 transition-colors duration-300">
               <li>
-                <Link href="/demo-routes" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                <Link href="/dashboard" className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   Find Travellers
                 </Link>
               </li>
