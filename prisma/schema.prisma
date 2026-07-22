@@ -15,11 +15,22 @@ model User {
   image        String? @db.Text // Profile avatar (base64 data URI)
 
   // ✅ NEW PROFILE FIELDS (Safe Additions)
-  bio          String? @db.Text
-  location     String?
-  homeLocation String?
-  phone        String?
-  isDeleted    Boolean @default(false) // Soft delete support
+  bio                 String?     @db.Text
+  location            String?
+  homeLocation        String?
+  phone               String?
+  isDeleted           Boolean     @default(false)  // Soft delete support
+  onboarded           Boolean     @default(false)  // Onboarding status
+
+  // ✅ EXPANDED TRAVELER PROFILE FIELDS
+  languages           String[]
+  travelInterests     String[]
+  accommodationPrefs  String[]
+  budgetRange         String?
+  socialLinks         String[]
+  age                 Int?
+  gender              String?
+  travelStyle         String?
 
   role              Role      @default(USER)
   emailVerified     Boolean   @default(false)
@@ -41,8 +52,39 @@ model User {
   sentMessages     Message[]           @relation("SentMessages")
   sentRequests     ConnectionRequest[] @relation("SentRequests")
   receivedRequests ConnectionRequest[] @relation("ReceivedRequests")
+  blockedUsers     Block[]             @relation("Blocker")
+  blockedBy        Block[]             @relation("Blocked")
+  reportsSent      Report[]            @relation("Reporter")
+  reportsRecvd     Report[]            @relation("Reported")
 
   @@index([email])
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  reporter   User     @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedId String
+  reported   User     @relation("Reported", fields: [reportedId], references: [id], onDelete: Cascade)
+  reason     String
+  details    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  @@index([reporterId])
+  @@index([reportedId])
 }
 
 model Ticket {
@@ -52,9 +94,10 @@ model Ticket {
   destination   String
   departureDate DateTime
   ticketUrl     String
-  status        TicketStatus @default(PENDING)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  status        TicketStatus  @default(PENDING)
+  tripPurpose   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([destination, departureDate])
   @@index([userId])

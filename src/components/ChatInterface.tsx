@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { getPusherClient } from "@/lib/pusher-client";
 import RoutePickerModal from "./chat/RoutePickerModal";
 import { 
@@ -407,7 +408,7 @@ if (!inputText.trim() && !selectedRoute) {
                 >
                   <div className="flex items-center gap-2">
                     {req.sender.image ? (
-                      <img src={req.sender.image} alt={req.sender.name} className="w-8 h-8 rounded-full object-cover" />
+                      <Image src={req.sender.image} alt={req.sender.name} width={32} height={32} className="w-8 h-8 rounded-full object-cover" unoptimized />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-semibold">
                         {req.sender.name.charAt(0).toUpperCase()}
@@ -478,7 +479,7 @@ if (!inputText.trim() && !selectedRoute) {
                 >
                   <div className="relative flex-shrink-0">
                     {other.image ? (
-                      <img src={other.image} alt={other.name} className="w-10 h-10 rounded-full object-cover" />
+                      <Image src={other.image} alt={other.name} width={40} height={40} className="w-10 h-10 rounded-full object-cover" unoptimized />
                     ) : (
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${
                         isActive ? "bg-slate-700 text-white" : "bg-blue-100 dark:bg-blue-900/30 text-blue-600"
@@ -526,7 +527,7 @@ if (!inputText.trim() && !selectedRoute) {
             <div className="p-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#0A0B1E] flex justify-between items-center shadow-sm">
               <div className="flex items-center gap-3">
                 {activeConv.otherUser.image ? (
-                  <img src={activeConv.otherUser.image} alt={activeConv.otherUser.name} className="w-10 h-10 rounded-full object-cover" />
+                  <Image src={activeConv.otherUser.image} alt={activeConv.otherUser.name} width={40} height={40} className="w-10 h-10 rounded-full object-cover" unoptimized />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-xs">
                     {activeConv.otherUser.name.charAt(0).toUpperCase()}

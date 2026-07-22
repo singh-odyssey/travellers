@@ -17,8 +17,8 @@ vi.mock("next/image", () => ({
   }: MockImageProps) => {
     // Next.js-only Image props are intentionally removed before
     // forwarding the remaining attributes to the native img element.
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} />;
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    return <img alt="" {...props} />;
   },
 }));
 
