@@ -729,8 +729,6 @@ className="w-full rounded-md bg-slate-800 text-white placeholder:text-slate-400 
           </div>
         )}
       </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <RoutePickerModal
   open={showRoutePicker}
   onClose={() => setShowRoutePicker(false)}
