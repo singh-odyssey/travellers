@@ -214,9 +214,6 @@ export async function GET(req: NextRequest) {
             name: true,
             image: true,
             bio: true,
-            location: true,
-<<<<<<< HEAD
-=======
             languages: true,
             travelInterests: true,
             accommodationPrefs: true,
