@@ -214,9 +214,6 @@ export async function GET(req: NextRequest) {
             name: true,
             image: true,
             bio: true,
-            location: true,
-<<<<<<< HEAD
-=======
             languages: true,
             travelInterests: true,
             accommodationPrefs: true,
@@ -281,13 +278,12 @@ export async function GET(req: NextRequest) {
     const paginatedMatches = scoredMatches.slice(skip, skip + limit);
     const hasMore = skip + limit < total;
 
-    return NextResponse.json({
+    const responsePayload = {
       matches: paginatedMatches,
       total,
       hasMore,
       page,
       limit,
-<<<<<<< HEAD
     };
 
     // Save to cache (TTL: 5 minutes)

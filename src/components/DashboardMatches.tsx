@@ -446,54 +446,6 @@ export default function DashboardMatches({
                   const connState = getConnectionState(match.userId);
                   const isUserActionLoading = actionLoading === match.userId;
 
-<<<<<<< HEAD
-                return (
-                  <div
-                    key={match.id}
-                    className="flex flex-col justify-between rounded-xl bg-white dark:bg-[#0F1129] border border-slate-150 dark:border-slate-800 p-4 shadow-sm transition hover:shadow-md hover:translate-y-[-2px] duration-200"
-                  >
-                    <div>
-                      <div className="flex items-start gap-3">
-                        {match.user.image ? (
-                          <Image
-                            src={match.user.image}
-                            alt={match.user.name}
-                            width={44}
-                            height={44}
-                            className="w-11 h-11 rounded-full object-cover border-2 border-blue-500/20"
-                            unoptimized
-                          />
-                        ) : (
-                          <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-                            {match.user.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-sm truncate dark:text-white">{match.user.name}</h4>
-                          {match.user.location && (
-                            <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                              <MapPin size={12} /> {match.user.location}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      {match.user.bio && (
-                        <p className="mt-3 text-xs text-slate-600 dark:text-slate-300 line-clamp-2 italic bg-slate-50/80 dark:bg-slate-800/40 p-2 rounded-lg border border-slate-100/50 dark:border-slate-800/40">
-                          &quot;{match.user.bio}&quot;
-                        </p>
-                      )}
-
-                      <div className="mt-3 flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                        <span className="flex items-center gap-1 font-medium text-indigo-600 dark:text-indigo-400">
-                          <Compass size={12} /> {match.destination}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Calendar size={12} /> {new Date(match.departureDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-=======
                   return (
                     <div
                       key={match.id}
