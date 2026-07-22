@@ -267,7 +267,13 @@ export async function GET(req: NextRequest) {
     }).sort((a: any, b: any) => b.relevanceScore - a.relevanceScore);
 
     // Save full scored matches list to cache (TTL: 5 minutes)
-    await redis.set(cacheKey, JSON.stringify(scoredMatches), "EX", 300);
+    try {
+      if (redis) {
+        await redis.set(cacheKey, JSON.stringify(scoredMatches), "EX", 300);
+      }
+    } catch {
+      console.warn("Redis unavailable. Cache write skipped.");
+    }
 
     // Apply pagination
     const total = scoredMatches.length;
