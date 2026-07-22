@@ -105,6 +105,7 @@ describe("Matching Engine Logic & Filters API Endpoint", () => {
       },
     ];
 
+    vi.mocked(prisma.ticket.findMany).mockResolvedValue(matchesMock as any);
     if (redis) {
       vi.mocked(redis.get).mockResolvedValue(null);
     }
