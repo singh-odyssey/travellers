@@ -122,6 +122,8 @@ export async function GET(req: NextRequest) {
       }
     } catch {
       console.warn("Redis unavailable. Skipping cache.");
+    }
+
     if (cachedMatches) {
       const parsedMatches: any[] = JSON.parse(cachedMatches);
       // Filter out any newly blocked users from cached results
