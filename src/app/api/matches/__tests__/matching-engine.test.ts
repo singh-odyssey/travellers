@@ -106,7 +106,9 @@ describe("Matching Engine Logic & Filters API Endpoint", () => {
     ];
 
     vi.mocked(prisma.ticket.findMany).mockResolvedValue(matchesMock as any);
-    vi.mocked(redis.get).mockResolvedValue(null);
+    if (redis) {
+      vi.mocked(redis.get).mockResolvedValue(null);
+    }
 
     const req = makeGetRequest(
       "http://localhost/api/matches?destination=Tokyo&date=2026-08-01&gender=Male"
