@@ -1,5 +1,12 @@
 import React from 'react';
 import { Mail, Send } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Questions, safety concerns, or partnership ideas — get in touch with the travellersmeet team.",
+};
 
 export default function ContactPage() {
   return (

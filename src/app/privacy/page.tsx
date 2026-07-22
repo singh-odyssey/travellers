@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Learn how travellersmeet collects, uses, and protects your account details and ticket-verification data.",
+};
+
 export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">

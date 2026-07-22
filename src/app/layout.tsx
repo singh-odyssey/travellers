@@ -32,15 +32,34 @@ export const viewport = {
   userScalable: true,
 };
 
+const siteTitle = "travellersmeet — Meet verified travellers";
+const siteDescription =
+  "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.";
+
 export const metadata = {
-  title: "travellersmeet — Meet verified travellers",
-  description:
-    "Connect with fellow solo travellers going to the same destination. Verified by ticket uploads.",
+  title: {
+    default: siteTitle,
+    template: "%s — travellersmeet",
+  },
+  description: siteDescription,
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "travellersmeet",
+  },
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    siteName: "travellersmeet",
+    images: ["/cover.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/cover.png"],
   },
 };
 

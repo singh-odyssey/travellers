@@ -2,6 +2,12 @@ import { auth } from "@/lib/auth";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import DashboardMatches from "@/components/DashboardMatches";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Manage your travellersmeet profile, matches, and ticket verification.",
+};
 
 export default async function DashboardPage() {
   const session = await auth();
