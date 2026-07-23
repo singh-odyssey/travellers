@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withValidation } from "@/lib/withValidation";
 import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
+import { invalidateMatchCachesForTicket } from "@/lib/match-cache";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
@@ -55,6 +56,11 @@ export const POST = withValidation(ticketSchema, async (req, data) => {
         ticketUrl,
         status: "PENDING",
       },
+    });
+
+    await invalidateMatchCachesForTicket({
+      destination: ticket.destination,
+      departureDate: ticket.departureDate,
     });
 
     return NextResponse.json({ ok: true, ticket });

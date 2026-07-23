@@ -1,7 +1,11 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import redis from "@/lib/redis";
+import {
+  buildMatchCacheKey,
+  readMatchCache,
+  writeMatchCache,
+} from "@/lib/match-cache";
 import { createNotification } from "@/lib/notifications";
 
 function calculateRelevance(
@@ -95,8 +99,20 @@ export async function GET(req: NextRequest) {
     console.log("User:", session.user.id);
     console.log("Destination:", destination);
     console.log("Date:", date);
-    const cacheKey = `matches:${destination.toLowerCase()}:${date}:${session.user.id}`;
-    
+    const cacheKey = await buildMatchCacheKey({
+      destination,
+      date,
+      userId: session.user.id,
+      filters: {
+        gender: genderFilter,
+        tripPurpose: tripPurposeFilter,
+        ageMin,
+        ageMax,
+        startDate: filterStartDate?.toISOString(),
+        endDate: filterEndDate?.toISOString(),
+      },
+    });
+
     // Get all blocked user IDs (both blocker and blocked)
     const blocks = await prisma.block.findMany({
       where: {
@@ -114,18 +130,11 @@ export async function GET(req: NextRequest) {
       b.blockerId === session.user!.id ? b.blockedId : b.blockerId
     );
 
-    // Check cache (skip if Redis is unavailable)
-    let cachedMatches: string | null = null;
-    try {
-      if (redis) {
-        cachedMatches = await redis.get(cacheKey);
-      }
-    } catch {
-      console.warn("Redis unavailable. Skipping cache.");
-    }
+    // Check cache. Redis failures safely fall back to the database.
+    const parsedMatches =
+      await readMatchCache<any[]>(cacheKey);
 
-    if (cachedMatches) {
-      const parsedMatches: any[] = JSON.parse(cachedMatches);
+    if (parsedMatches) {
       // Filter out any newly blocked users from cached results
       const filteredMatches = parsedMatches.filter(
         (m: any) => !blockedUserIds.includes(m.userId)
@@ -229,14 +238,8 @@ export async function GET(req: NextRequest) {
 
     const foundMatches = matches || [];
     console.log("Matches found:", foundMatches.length);
-    // Save to cache (TTL: 5 minutes)
-    try {
-      if (redis) {
-        await redis.set(cacheKey, JSON.stringify(foundMatches), "EX", 300);
-      }
-    } catch {
-      console.warn("Redis unavailable. Cache not saved.");
-    }
+    // Save to cache. The helper retains the existing five-minute TTL.
+    await writeMatchCache(cacheKey, foundMatches);
 
     if (foundMatches.length > 0) {
       console.log("Creating MATCH_FOUND notification...");
