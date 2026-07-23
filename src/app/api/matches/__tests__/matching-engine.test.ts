@@ -15,6 +15,9 @@ vi.mock("@/lib/prisma", () => ({
     ticket: {
       findMany: vi.fn(),
     },
+    notification: {
+      create: vi.fn(),
+    },
   },
 }));
 

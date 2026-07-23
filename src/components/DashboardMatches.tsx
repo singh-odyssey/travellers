@@ -381,7 +381,7 @@ export default function DashboardMatches({
                     placeholder="Min"
                     min={18}
                     max={99}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-2 py-1.5 bg-white dark:bg-[#0A0B1E] text-xs outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-205"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-2 py-1.5 bg-white dark:bg-[#0A0B1E] text-xs outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-200"
                   />
                   <span className="text-slate-400 text-xs">-</span>
                   <input
@@ -391,7 +391,7 @@ export default function DashboardMatches({
                     placeholder="Max"
                     min={18}
                     max={99}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-2 py-1.5 bg-white dark:bg-[#0A0B1E] text-xs outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-205"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-2 py-1.5 bg-white dark:bg-[#0A0B1E] text-xs outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-200"
                   />
                 </div>
               </div>
@@ -404,14 +404,14 @@ export default function DashboardMatches({
                     type="date"
                     value={customStartDate}
                     onChange={(e) => setCustomStartDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-1 py-1.5 bg-white dark:bg-[#0A0B1E] text-[10px] outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-205"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-1 py-1.5 bg-white dark:bg-[#0A0B1E] text-[10px] outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-200"
                   />
                   <span className="text-slate-400 text-xs">to</span>
                   <input
                     type="date"
                     value={customEndDate}
                     onChange={(e) => setCustomEndDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-1 py-1.5 bg-white dark:bg-[#0A0B1E] text-[10px] outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-205"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-1 py-1.5 bg-white dark:bg-[#0A0B1E] text-[10px] outline-none focus:ring-1 focus:ring-blue-500 text-slate-700 dark:text-slate-200"
                   />
                 </div>
               </div>
@@ -584,7 +584,7 @@ export default function DashboardMatches({
                           <div className="flex gap-2 w-full sm:w-auto">
                             <button
                               onClick={() => handleDecline(match.userId)}
-                              className="inline-flex items-center justify-center p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-red-500 transition dark:border-slate-800 dark:hover:bg-slate-850"
+                              className="inline-flex items-center justify-center p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-red-500 transition dark:border-slate-800 dark:hover:bg-slate-800"
                               title="Decline"
                             >
                               <X size={14} />
@@ -616,7 +616,7 @@ export default function DashboardMatches({
                   <button
                     onClick={handleLoadMore}
                     disabled={loading}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-55 dark:hover:bg-slate-800/50 text-xs font-semibold text-slate-650 dark:text-slate-300 transition shadow-sm"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-xs font-semibold text-slate-600 dark:text-slate-300 transition shadow-sm"
                   >
                     {loading && <Loader2 size={13} className="animate-spin" />}
                     Load More Matches

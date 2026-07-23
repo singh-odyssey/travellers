@@ -16,7 +16,6 @@ export async function createNotification({
   content,
   link,
 }: CreateNotificationParams) {
-  if (!prisma.notification) return null;
   return prisma.notification.create({
     data: {
       userId,

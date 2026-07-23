@@ -5,7 +5,6 @@ import FindMatchesButton from "@/components/FindMatchesButton";
 import DashboardMatches from "@/components/DashboardMatches";
 import type { Metadata } from "next";
 import DashboardClient from "@/components/DashboardClient";
-import TripMatches from "@/components/TripMatches";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -105,10 +104,7 @@ export default async function DashboardPage() {
 </div>
               </div>
               {t.status === "VERIFIED" && (
-                <div className="space-y-4">
-                  <DashboardMatches destination={t.destination} departureDate={t.departureDate.toISOString()} />
-                  <TripMatches destination={t.destination} departureDate={t.departureDate.toISOString()} />
-                </div>
+                <DashboardMatches destination={t.destination} departureDate={t.departureDate.toISOString()} />
               )}
             </div>
           ))
