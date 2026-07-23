@@ -4,6 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withValidation } from "@/lib/withValidation";
 import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
+import {
+  applyRateLimitHeaders,
+  checkRateLimit,
+  getRateLimitIdentifier,
+  rateLimitExceededResponse,
+} from "@/lib/rate-limit";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
@@ -37,6 +43,17 @@ export const POST = withValidation(ticketSchema, async (req, data) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const rateLimit = await checkRateLimit({
+    namespace: "tickets:upload",
+    identifier: getRateLimitIdentifier(req, session.user.id),
+    limit: 5,
+    windowSeconds: 60 * 60,
+  });
+
+  if (!rateLimit.allowed) {
+    return rateLimitExceededResponse(rateLimit);
+  }
+
   try {
     const { destination, departureDate, file } = data;
 
@@ -57,7 +74,10 @@ export const POST = withValidation(ticketSchema, async (req, data) => {
       },
     });
 
-    return NextResponse.json({ ok: true, ticket });
+    return applyRateLimitHeaders(
+      NextResponse.json({ ok: true, ticket }),
+      rateLimit,
+    ) as NextResponse;
   } catch (error) {
     console.error("Ticket upload error:", error);
     return NextResponse.json(
