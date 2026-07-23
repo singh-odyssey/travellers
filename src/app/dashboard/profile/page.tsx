@@ -237,7 +237,7 @@ export default function ProfileViewPage() {
                           href={link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-350 px-3 py-1.5 rounded-xl transition"
+                          className="text-xs inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl transition"
                         >
                           {isInstagram ? "Instagram" : "Twitter/X"}
                         </a>
