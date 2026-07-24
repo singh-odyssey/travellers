@@ -14,25 +14,6 @@ import {
 import { normalizeDestination } from "@/lib/normalize-destination";
 import prisma from "@/lib/prisma";
 import { withValidation } from "@/lib/withValidation";
-import { NextRequest } from "next/server";
-import { z } from "zod";
-
-import {
-  API_ERROR_CODES,
-  logApiError,
-} from "@/lib/api-error";
-import { apiError, apiJson } from "@/lib/api-response";
-import { auth } from "@/lib/auth";
-import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
-import prisma from "@/lib/prisma";
-import { getRequestId } from "@/lib/request-id";
-import { withValidation } from "@/lib/withValidation";
-import {
-  applyRateLimitHeaders,
-  checkRateLimit,
-  getRateLimitIdentifier,
-  rateLimitExceededResponse,
-} from "@/lib/rate-limit";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -76,18 +57,6 @@ const ticketSchema = z.object({
       (value) =>
         value instanceof File && value.size > 0,
       "File required",
-  destination: z.string().min(1, "Destination is required"),
-  departureDate: z
-    .string()
-    .refine((date) => !Number.isNaN(Date.parse(date)), {
-      message: "Departure date is invalid",
-    }),
-  file: z
-    .any()
-    .refine((value) => value instanceof File, "File is required")
-    .refine(
-      (value) => value instanceof File && value.size > 0,
-      "File is required",
     )
     .refine(
       (value) =>
@@ -112,29 +81,6 @@ async function findDuplicateTicket(
     normalizeDestination(destination);
   const { start, end } =
     getUtcDateRange(departureDate);
-export const POST = withValidation(
-  ticketSchema,
-  async (_request, data, { requestId }) => {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return apiError(
-        requestId,
-        API_ERROR_CODES.UNAUTHORIZED,
-        "Authentication is required",
-        401,
-      );
-    }
-  const rateLimit = await checkRateLimit({
-    namespace: "tickets:upload",
-    identifier: getRateLimitIdentifier(req, session.user.id),
-    limit: 5,
-    windowSeconds: 60 * 60,
-  });
-
-  if (!rateLimit.allowed) {
-    return rateLimitExceededResponse(rateLimit);
-  }
 
   const candidates = await prisma.ticket.findMany({
     where: {
@@ -329,64 +275,6 @@ export async function GET(_request: NextRequest) {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401 },
-    try {
-      const uploaded = await uploadFileToCloudinary(
-        data.file,
-        "travellers/tickets",
-      );
-
-      const ticket = await prisma.ticket.create({
-        data: {
-          userId: session.user.id,
-          destination: data.destination,
-          departureDate: new Date(data.departureDate),
-          ticketUrl: uploaded.url,
-          status: "PENDING",
-        },
-      });
-
-      return apiJson(
-        { ok: true, ticket },
-        requestId,
-        { status: 201 },
-      );
-    } catch (error) {
-      logApiError(requestId, "Ticket upload failed", error);
-
-      return apiError(
-        requestId,
-        API_ERROR_CODES.INTERNAL_ERROR,
-        "Unable to upload the ticket",
-        500,
-      );
-    }
-    return applyRateLimitHeaders(
-      NextResponse.json({ ok: true, ticket }),
-      rateLimit,
-    ) as NextResponse;
-  } catch (error) {
-    console.error("Ticket upload error:", error);
-    return NextResponse.json(
-  {
-    error:
-      error instanceof Error
-        ? error.message
-        : "Failed to upload ticket",
-  },
-  undefined,
-  { standardizeErrors: true },
-);
-
-export async function GET(request: NextRequest) {
-  const requestId = getRequestId(request);
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return apiError(
-      requestId,
-      API_ERROR_CODES.UNAUTHORIZED,
-      "Authentication is required",
-      401,
     );
   }
 
@@ -396,19 +284,12 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    return apiJson({ tickets }, requestId);
+    return NextResponse.json({ tickets });
   } catch (error) {
     console.error("Fetch tickets error:", error);
     return NextResponse.json(
       { error: "Server error" },
       { status: 500 },
-    logApiError(requestId, "Ticket listing failed", error);
-
-    return apiError(
-      requestId,
-      API_ERROR_CODES.INTERNAL_ERROR,
-      "Unable to fetch tickets",
-      500,
     );
   }
 }
