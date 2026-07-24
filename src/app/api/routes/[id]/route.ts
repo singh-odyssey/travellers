@@ -27,10 +27,12 @@ export async function GET(
       );
     }
 
+    // SECURITY FIX: Prevent IDOR (Insecure Direct Object Reference)
+    // We explicitly require the userId to match the session user's ID
     const route = await prisma.route.findUnique({
       where: {
         id: params.id,
-        userId: session.user.id,
+        userId: session.user.id, // IDOR Protection: Ensure user owns the route
       },
     });
 
