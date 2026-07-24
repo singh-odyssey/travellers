@@ -11,6 +11,12 @@ import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
 import prisma from "@/lib/prisma";
 import { getRequestId } from "@/lib/request-id";
 import { withValidation } from "@/lib/withValidation";
+import {
+  applyRateLimitHeaders,
+  checkRateLimit,
+  getRateLimitIdentifier,
+  rateLimitExceededResponse,
+} from "@/lib/rate-limit";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -62,6 +68,19 @@ export const POST = withValidation(
         401,
       );
     }
+  const rateLimit = await checkRateLimit({
+    namespace: "tickets:upload",
+    identifier: getRateLimitIdentifier(req, session.user.id),
+    limit: 5,
+    windowSeconds: 60 * 60,
+  });
+
+  if (!rateLimit.allowed) {
+    return rateLimitExceededResponse(rateLimit);
+  }
+
+  try {
+    const { destination, departureDate, file } = data;
 
     try {
       const uploaded = await uploadFileToCloudinary(
@@ -94,6 +113,18 @@ export const POST = withValidation(
         500,
       );
     }
+    return applyRateLimitHeaders(
+      NextResponse.json({ ok: true, ticket }),
+      rateLimit,
+    ) as NextResponse;
+  } catch (error) {
+    console.error("Ticket upload error:", error);
+    return NextResponse.json(
+  {
+    error:
+      error instanceof Error
+        ? error.message
+        : "Failed to upload ticket",
   },
   undefined,
   { standardizeErrors: true },
