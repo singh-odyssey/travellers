@@ -181,8 +181,7 @@ export async function GET(req: NextRequest) {
     const blocks = await prisma.block.findMany({
       where: {
         OR: [
-          { blockerId: session.user.id },
-          { blockedId: session.user.id },
+          { blockerId: currentUserId },
         ],
       },
       select: {
