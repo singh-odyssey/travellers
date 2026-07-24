@@ -6,7 +6,12 @@ import {
   readMatchCache,
   writeMatchCache,
 } from "@/lib/match-cache";
+import { NextRequest } from "next/server";
+import redis from "@/lib/redis";
 import { createNotification } from "@/lib/notifications";
+import { API_ERROR_CODES, logApiError } from "@/lib/api-error";
+import { apiError, apiJson } from "@/lib/api-response";
+import { getRequestId } from "@/lib/request-id";
 
 function calculateRelevance(
   currentUser: any,
@@ -68,9 +73,15 @@ function calculateRelevance(
 }
 
 export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req);
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return apiError(
+      requestId,
+      API_ERROR_CODES.UNAUTHORIZED,
+      "Authentication is required",
+      401,
+    );
   }
 
   const url = new URL(req.url);
@@ -78,9 +89,17 @@ export async function GET(req: NextRequest) {
   const date = url.searchParams.get("date");
 
   if (!destination || !date) {
-    return NextResponse.json(
-      { error: "destination and date query parameters required" },
-      { status: 400 }
+    return apiError(
+      requestId,
+      API_ERROR_CODES.VALIDATION_ERROR,
+      "The request data is invalid",
+      400,
+      {
+        destination: destination
+          ? []
+          : ["Destination is required"],
+        date: date ? [] : ["Date is required"],
+      },
     );
   }
 
@@ -112,6 +131,7 @@ export async function GET(req: NextRequest) {
         endDate: filterEndDate?.toISOString(),
       },
     });
+    const cacheKey = `matches:${destination.toLowerCase()}:${date}:${session.user.id}`;
 
     // Get all blocked user IDs (both blocker and blocked)
     const blocks = await prisma.block.findMany({
@@ -144,14 +164,17 @@ export async function GET(req: NextRequest) {
       const paginatedMatches = filteredMatches.slice(skip, skip + limit);
       const hasMore = skip + limit < total;
 
-      return NextResponse.json({
-        matches: paginatedMatches,
-        total,
-        hasMore,
-        page,
-        limit,
-        cached: true,
-      });
+      return apiJson(
+        {
+          matches: paginatedMatches,
+          total,
+          hasMore,
+          page,
+          limit,
+          cached: true,
+        },
+        requestId,
+      );
     }
 
     // Load current user profile details for scoring comparisons
@@ -281,19 +304,24 @@ export async function GET(req: NextRequest) {
     const paginatedMatches = scoredMatches.slice(skip, skip + limit);
     const hasMore = skip + limit < total;
 
-    return NextResponse.json({
-      matches: paginatedMatches,
-      total,
-      hasMore,
-      page,
-      limit,
-      cached: false,
-    });
+    return apiJson(
+      {
+        matches: paginatedMatches,
+        total,
+        hasMore,
+        page,
+        limit,
+        cached: false,
+      },
+      requestId,
+    );
   } catch (error) {
-    console.error("Match search error:", error);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
+    logApiError(requestId, "Match search failed", error);
+    return apiError(
+      requestId,
+      API_ERROR_CODES.INTERNAL_ERROR,
+      "Unable to search for traveller matches",
+      500,
     );
   }
 }
