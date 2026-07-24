@@ -100,7 +100,7 @@ function filterFingerprint(
 export async function getMatchCacheVersion(
   destination: string,
   date: string,
-  store: MatchCacheStore | null = redis,
+  store: MatchCacheStore | null = redis as unknown as MatchCacheStore | null,
 ): Promise<number> {
   if (!store) {
     return 0;
@@ -126,7 +126,7 @@ export async function getMatchCacheVersion(
 
 export async function buildMatchCacheKey(
   input: MatchCacheKeyInput,
-  store: MatchCacheStore | null = redis,
+  store: MatchCacheStore | null = redis as unknown as MatchCacheStore | null,
 ): Promise<string> {
   const destination =
     normalizeMatchDestination(input.destination);
@@ -149,7 +149,7 @@ export async function buildMatchCacheKey(
 
 export async function readMatchCache<T>(
   key: string,
-  store: MatchCacheStore | null = redis,
+  store: MatchCacheStore | null = redis as unknown as MatchCacheStore | null,
 ): Promise<T | null> {
   if (!store) {
     return null;
@@ -170,7 +170,7 @@ export async function readMatchCache<T>(
 export async function writeMatchCache<T>(
   key: string,
   value: T,
-  store: MatchCacheStore | null = redis,
+  store: MatchCacheStore | null = redis as unknown as MatchCacheStore | null,
 ): Promise<void> {
   if (!store) {
     return;
@@ -239,7 +239,7 @@ async function incrementVersion(
 export async function invalidateMatchCachesForTicket(
   current: TicketCacheIdentity,
   previous?: TicketCacheIdentity | null,
-  store: MatchCacheStore | null = redis,
+  store: MatchCacheStore | null = redis as unknown as MatchCacheStore | null,
 ): Promise<void> {
   if (!store) {
     return;

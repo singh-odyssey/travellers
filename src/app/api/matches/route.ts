@@ -6,7 +6,6 @@ import {
   readMatchCache,
   writeMatchCache,
 } from "@/lib/match-cache";
-import { NextRequest } from "next/server";
 import redis from "@/lib/redis";
 import { createNotification } from "@/lib/notifications";
 import { API_ERROR_CODES, logApiError } from "@/lib/api-error";
@@ -83,6 +82,7 @@ export async function GET(req: NextRequest) {
       401,
     );
   }
+  
 
   const url = new URL(req.url);
   const destination = url.searchParams.get("destination");
