@@ -1,207 +1,72 @@
-/**
- * API Route: /api/routes
- * Handles route CRUD operations
- */
+import { NextRequest } from "next/server";
 
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import prisma from '@/lib/prisma';
-import { z } from 'zod';
-import { withValidation } from '@/lib/withValidation';
+import {
+  API_ERROR_CODES,
+  logApiError,
+} from "@/lib/api-error";
+import { apiError, apiJson } from "@/lib/api-response";
+import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { getRequestId } from "@/lib/request-id";
 
-const RouteSchema = z.object({
-  id: z.string().optional(),
-  origin: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }),
-  destination: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }),
-  waypoints: z.array(z.object({
-    location: z.object({
-      lat: z.number(),
-      lng: z.number(),
-    }),
-    stopover: z.boolean(),
-    name: z.string().optional(),
-  })).optional(),
-  originName: z.string().optional(),
-  destinationName: z.string().optional(),
-  distance: z.number(),
-  duration: z.number(),
-  encodedPolyline: z.string(),
-  tripName: z.string().optional(),
-  notes: z.string().optional(),
-});
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const requestId = getRequestId(request);
 
-/**
- * GET /api/routes - Get all routes for authenticated user
- */
-export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
+      return apiError(
+        requestId,
+        API_ERROR_CODES.UNAUTHORIZED,
+        "Authentication is required",
+        401,
       );
     }
 
-    const routes = await prisma.route.findMany({
+    const route = await prisma.route.findUnique({
       where: {
+        id: params.id,
         userId: session.user.id,
-      },
-      orderBy: {
-        updatedAt: 'desc',
       },
     });
 
-    return NextResponse.json(routes);
-  } catch (error) {
-    console.error('Error fetching routes:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch routes' },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * POST /api/routes - Create or update a route
- */
-export const POST = withValidation(RouteSchema, async (request, validatedData) => {
-  try {
-    const session = await auth();
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
+    if (!route) {
+      return apiError(
+        requestId,
+        API_ERROR_CODES.NOT_FOUND,
+        "Route was not found",
+        404,
       );
     }
 
-    // If ID provided, update existing route
-    if (validatedData.id) {
-
-    const existing = await prisma.route.findFirst({
-        where: {
-            id: validatedData.id,
-            userId: session.user.id,
-        },
-    });
-
-    if (!existing) {
-        return NextResponse.json(
-            { error: "Route not found" },
-            { status: 404 }
-        );
-    }
-
-    const route = await prisma.route.update({
-        where: {
-            id: validatedData.id,
-        },
-        data: {
-          originLat: validatedData.origin.lat,
-          originLng: validatedData.origin.lng,
-          destinationLat: validatedData.destination.lat,
-          destinationLng: validatedData.destination.lng,
-          originName: validatedData.originName,
-          destinationName: validatedData.destinationName,
-          distance: validatedData.distance,
-          duration: validatedData.duration,
-          encodedPolyline: validatedData.encodedPolyline,
-          tripName: validatedData.tripName,
-          notes: validatedData.notes,
-          waypoints: validatedData.waypoints ? JSON.stringify(validatedData.waypoints) : null,
-        },
-      });
-
-      return NextResponse.json(route);
-    }
-
-    // Create new route
-    const route = await prisma.route.create({
-      data: {
-        userId: session.user.id,
-        originLat: validatedData.origin.lat,
-        originLng: validatedData.origin.lng,
-        destinationLat: validatedData.destination.lat,
-        destinationLng: validatedData.destination.lng,
-        originName: validatedData.originName,
-        destinationName: validatedData.destinationName,
-        distance: validatedData.distance,
-        duration: validatedData.duration,
-        encodedPolyline: validatedData.encodedPolyline,
-        tripName: validatedData.tripName,
-        notes: validatedData.notes,
-        waypoints: validatedData.waypoints ? JSON.stringify(validatedData.waypoints) : null,
+    const formattedRoute = {
+      ...route,
+      origin: {
+        lat: route.originLat,
+        lng: route.originLng,
       },
-    });
+      destination: {
+        lat: route.destinationLat,
+        lng: route.destinationLng,
+      },
+      waypoints: route.waypoints
+        ? JSON.parse(route.waypoints as string)
+        : undefined,
+    };
 
-    return NextResponse.json(route, { status: 201 });
+    return apiJson(formattedRoute, requestId);
   } catch (error) {
-    console.error('Error saving route:', error);
-    return NextResponse.json(
-      { error: 'Failed to save route' },
-      { status: 500 }
-    );
-  }
-});
+    logApiError(requestId, "Route fetch failed", error);
 
-/**
- * DELETE /api/routes - Delete a route
- */
-export async function DELETE(request: NextRequest) {
-  try {
-    const session = await auth();
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const { searchParams } = new URL(request.url);
-    const routeId = searchParams.get('id');
-
-    if (!routeId) {
-      return NextResponse.json(
-        { error: 'Route ID required' },
-        { status: 400 }
-      );
-    }
-
-    const existing = await prisma.route.findFirst({
-    where:{
-        id: routeId,
-        userId: session.user.id,
-    }
-});
-
-if(!existing){
-    return NextResponse.json(
-        {error:"Route not found"},
-        {status:404}
-    );
-}
-
-await prisma.route.delete({
-    where:{
-        id: routeId
-    }
-});
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting route:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete route' },
-      { status: 500 }
+    return apiError(
+      requestId,
+      API_ERROR_CODES.INTERNAL_ERROR,
+      "Unable to fetch the route",
+      500,
     );
   }
 }
