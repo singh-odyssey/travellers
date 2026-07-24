@@ -21,6 +21,31 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401 },
+import { NextRequest } from "next/server";
+
+import {
+  API_ERROR_CODES,
+  logApiError,
+} from "@/lib/api-error";
+import { apiError, apiJson } from "@/lib/api-response";
+import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { getRequestId } from "@/lib/request-id";
+
+const VALID_STATUSES = new Set<string>(
+  Object.values(TicketStatus),
+);
+
+export async function GET(request: NextRequest) {
+  const requestId = getRequestId(request);
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return apiError(
+      requestId,
+      API_ERROR_CODES.UNAUTHORIZED,
+      "Authentication is required",
+      401,
     );
   }
 
@@ -34,6 +59,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: "Forbidden" },
         { status: 403 },
+      return apiError(
+        requestId,
+        API_ERROR_CODES.FORBIDDEN,
+        "Administrator access is required",
+        403,
       );
     }
 
@@ -70,6 +100,24 @@ export async function GET(request: NextRequest) {
           : {}),
         ...(cursorWhere ?? {}),
       },
+    if (status && !VALID_STATUSES.has(status)) {
+      return apiError(
+        requestId,
+        API_ERROR_CODES.VALIDATION_ERROR,
+        "The request data is invalid",
+        400,
+        {
+          status: [
+            "Status must be PENDING, VERIFIED, or REJECTED",
+          ],
+        },
+      );
+    }
+
+    const tickets = await prisma.ticket.findMany({
+      where: status
+        ? { status: status as TicketStatus }
+        : {},
       include: {
         user: {
           select: {
@@ -113,6 +161,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { error: "Server error" },
       { status: 500 },
+    return apiJson({ tickets }, requestId);
+  } catch (error) {
+    logApiError(
+      requestId,
+      "Admin ticket listing failed",
+      error,
+    );
+
+    return apiError(
+      requestId,
+      API_ERROR_CODES.INTERNAL_ERROR,
+      "Unable to fetch tickets for review",
+      500,
     );
   }
 }

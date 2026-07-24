@@ -1,8 +1,12 @@
-import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { z } from "zod";
-import { withValidation } from "@/lib/withValidation";
+
+import {
+  API_ERROR_CODES,
+  logApiError,
+} from "@/lib/api-error";
+import { apiError, apiJson } from "@/lib/api-response";
+import { auth } from "@/lib/auth";
 import { uploadFileToCloudinary } from "@/lib/cloudinary-upload";
 import {
   buildTimestampCursorWhere,
@@ -10,6 +14,15 @@ import {
   PaginationError,
   parsePaginationParams,
 } from "@/lib/pagination";
+import prisma from "@/lib/prisma";
+import { getRequestId } from "@/lib/request-id";
+import { withValidation } from "@/lib/withValidation";
+import {
+  applyRateLimitHeaders,
+  checkRateLimit,
+  getRateLimitIdentifier,
+  rateLimitExceededResponse,
+} from "@/lib/rate-limit";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -42,6 +55,18 @@ const ticketSchema = z.object({
       (value) =>
         value instanceof File && value.size > 0,
       "File required",
+  destination: z.string().min(1, "Destination is required"),
+  departureDate: z
+    .string()
+    .refine((date) => !Number.isNaN(Date.parse(date)), {
+      message: "Departure date is invalid",
+    }),
+  file: z
+    .any()
+    .refine((value) => value instanceof File, "File is required")
+    .refine(
+      (value) => value instanceof File && value.size > 0,
+      "File is required",
     )
     .refine(
       (value) =>
@@ -61,6 +86,27 @@ export const POST = withValidation(
   ticketSchema,
   async (_request, data) => {
     const session = await auth();
+  async (_request, data, { requestId }) => {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return apiError(
+        requestId,
+        API_ERROR_CODES.UNAUTHORIZED,
+        "Authentication is required",
+        401,
+      );
+    }
+  const rateLimit = await checkRateLimit({
+    namespace: "tickets:upload",
+    identifier: getRateLimitIdentifier(req, session.user.id),
+    limit: 5,
+    windowSeconds: 60 * 60,
+  });
+
+  if (!rateLimit.allowed) {
+    return rateLimitExceededResponse(rateLimit);
+  }
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -82,6 +128,7 @@ export const POST = withValidation(
           departureDate: new Date(
             data.departureDate,
           ),
+          departureDate: new Date(data.departureDate),
           ticketUrl: uploaded.url,
           status: "PENDING",
         },
@@ -114,6 +161,48 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 401 },
+      return apiJson(
+        { ok: true, ticket },
+        requestId,
+        { status: 201 },
+      );
+    } catch (error) {
+      logApiError(requestId, "Ticket upload failed", error);
+
+      return apiError(
+        requestId,
+        API_ERROR_CODES.INTERNAL_ERROR,
+        "Unable to upload the ticket",
+        500,
+      );
+    }
+    return applyRateLimitHeaders(
+      NextResponse.json({ ok: true, ticket }),
+      rateLimit,
+    ) as NextResponse;
+  } catch (error) {
+    console.error("Ticket upload error:", error);
+    return NextResponse.json(
+  {
+    error:
+      error instanceof Error
+        ? error.message
+        : "Failed to upload ticket",
+  },
+  undefined,
+  { standardizeErrors: true },
+);
+
+export async function GET(request: NextRequest) {
+  const requestId = getRequestId(request);
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return apiError(
+      requestId,
+      API_ERROR_CODES.UNAUTHORIZED,
+      "Authentication is required",
+      401,
     );
   }
 
@@ -161,6 +250,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { error: "Server error" },
       { status: 500 },
+    return apiJson({ tickets }, requestId);
+  } catch (error) {
+    logApiError(requestId, "Ticket listing failed", error);
+
+    return apiError(
+      requestId,
+      API_ERROR_CODES.INTERNAL_ERROR,
+      "Unable to fetch tickets",
+      500,
     );
   }
 }
