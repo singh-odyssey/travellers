@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 
 import {
   API_ERROR_CODES,
@@ -277,6 +276,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json(
       { error: "Failed to delete route" },
       { status: 500 },
+<<<<<<< HEAD
     });
 
     if (!route) {
@@ -312,6 +312,8 @@ export async function DELETE(request: NextRequest) {
       API_ERROR_CODES.INTERNAL_ERROR,
       "Unable to fetch the route",
       500,
+=======
+>>>>>>> a057bee (Fixed ci build error)
     );
   }
 }
