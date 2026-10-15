@@ -113,6 +113,7 @@ model Ticket {
   auditLogs     TicketAuditLog[]
 
   @@index([destination, departureDate])
+  @@index([status, departureDate])
   @@index([userId])
   @@index([verificationStatus])
   @@index([metadataHash])
