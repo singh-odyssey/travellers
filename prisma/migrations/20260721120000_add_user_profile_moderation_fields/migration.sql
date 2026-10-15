@@ -1,8 +1,10 @@
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN "bio" TEXT,
-ADD COLUMN "location" TEXT,
-ADD COLUMN "phone" TEXT,
-ADD COLUMN "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+-- bio, location, phone and isDeleted are already created by the init migration,
+-- so they are guarded with IF NOT EXISTS to let this run on an empty database.
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "bio" TEXT,
+ADD COLUMN IF NOT EXISTS "location" TEXT,
+ADD COLUMN IF NOT EXISTS "phone" TEXT,
+ADD COLUMN IF NOT EXISTS "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN "onboarded" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN "languages" TEXT[] DEFAULT ARRAY[]::TEXT[],
 ADD COLUMN "travelInterests" TEXT[] DEFAULT ARRAY[]::TEXT[],
